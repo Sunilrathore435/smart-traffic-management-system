@@ -3,6 +3,7 @@ package com.smarttraffic.backend.service;
 import com.smarttraffic.backend.dto.AddVehicleRequest;
 import com.smarttraffic.backend.dto.TrafficStatusResponse;
 import com.smarttraffic.backend.engine.AdaptiveTrafficOptimizer;
+import com.smarttraffic.backend.engine.SimulationResult;
 import com.smarttraffic.backend.engine.TrafficEngine;
 import com.smarttraffic.backend.enums.Direction;
 import com.smarttraffic.backend.model.*;
@@ -81,18 +82,20 @@ public class TrafficService {
      */
     public TrafficDecision simulateTraffic() {
 
-        TrafficDecision decision =
+        SimulationResult result =
                 trafficEngine.simulateCycle(intersection);
 
+        TrafficDecision decision = result.getDecision();
+
         // Save only meaningful simulations
-        if (decision.getVehiclesPassed() > 0) {
+        if (result.getVehiclesPassed() > 0) {
 
             historyService.saveSimulation(
-                    buildSimulationRecord(decision)
+                    buildSimulationRecord(result)
             );
 
             intersection.incrementProcessedVehicles(
-                    decision.getVehiclesPassed()
+                    result.getVehiclesPassed()
             );
         }
 
@@ -103,18 +106,34 @@ public class TrafficService {
      * Build simulation history record.
      */
     private TrafficSimulationRecord buildSimulationRecord(
-            TrafficDecision decision) {
+            SimulationResult result) {
+
+        TrafficDecision decision = result.getDecision();
 
         return new TrafficSimulationRecord(
                 intersection.getIntersectionId(),
+
                 decision.getGreenLane(),
+
                 decision.getGreenTime(),
-                decision.getVehiclesPassed(),
+
+                result.getVehiclesPassed(),
+
+                result.getRemainingVehicles(),
+
                 decision.getTrafficScore(),
+
+                decision.getReason(),
+
+                result.getQueueBefore(),
+
+                result.getQueueAfter(),
+
                 decision.getReason()
+                        .toLowerCase()
+                        .contains("emergency")
         );
     }
-
     /**
      * Complete simulation history.
      */

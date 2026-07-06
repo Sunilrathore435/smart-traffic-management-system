@@ -7,28 +7,41 @@ import java.util.UUID;
 
 public class TrafficSimulationRecord {
 
+    // Unique simulation information
     private final String simulationId;
-
     private final LocalDateTime simulationTime;
 
-    private String intersectionId;
+    // Intersection information
+    private final String intersectionId;
 
-    private Direction selectedLane;
+    // Decision
+    private final Direction selectedLane;
+    private final int greenTime;
+    private final double trafficScore;
+    private final String reason;
 
-    private int greenTime;
+    // Execution result
+    private final int vehiclesPassed;
+    private final int remainingVehicles;
 
-    private int vehiclesPassed;
+    // Queue snapshots
+    private final QueueSnapshot queueBefore;
+    private final QueueSnapshot queueAfter;
 
-    private double trafficScore;
+    // Flags
+    private final boolean emergencyTriggered;
 
-    private String reason;
-
-    public TrafficSimulationRecord(String intersectionId,
-                                   Direction selectedLane,
-                                   int greenTime,
-                                   int vehiclesPassed,
-                                   double trafficScore,
-                                   String reason) {
+    public TrafficSimulationRecord(
+            String intersectionId,
+            Direction selectedLane,
+            int greenTime,
+            int vehiclesPassed,
+            int remainingVehicles,
+            double trafficScore,
+            String reason,
+            QueueSnapshot queueBefore,
+            QueueSnapshot queueAfter,
+            boolean emergencyTriggered) {
 
         this.simulationId = UUID.randomUUID().toString();
         this.simulationTime = LocalDateTime.now();
@@ -37,8 +50,12 @@ public class TrafficSimulationRecord {
         this.selectedLane = selectedLane;
         this.greenTime = greenTime;
         this.vehiclesPassed = vehiclesPassed;
+        this.remainingVehicles = remainingVehicles;
         this.trafficScore = trafficScore;
         this.reason = reason;
+        this.queueBefore = queueBefore;
+        this.queueAfter = queueAfter;
+        this.emergencyTriggered = emergencyTriggered;
     }
 
     public String getSimulationId() {
@@ -65,12 +82,28 @@ public class TrafficSimulationRecord {
         return vehiclesPassed;
     }
 
+    public int getRemainingVehicles() {
+        return remainingVehicles;
+    }
+
     public double getTrafficScore() {
         return trafficScore;
     }
 
     public String getReason() {
         return reason;
+    }
+
+    public QueueSnapshot getQueueBefore() {
+        return queueBefore;
+    }
+
+    public QueueSnapshot getQueueAfter() {
+        return queueAfter;
+    }
+
+    public boolean isEmergencyTriggered() {
+        return emergencyTriggered;
     }
 
     @Override
@@ -82,8 +115,12 @@ public class TrafficSimulationRecord {
                 ", selectedLane=" + selectedLane +
                 ", greenTime=" + greenTime +
                 ", vehiclesPassed=" + vehiclesPassed +
+                ", remainingVehicles=" + remainingVehicles +
                 ", trafficScore=" + trafficScore +
+                ", emergencyTriggered=" + emergencyTriggered +
                 ", reason='" + reason + '\'' +
+                ", queueBefore=" + queueBefore +
+                ", queueAfter=" + queueAfter +
                 '}';
     }
 }
