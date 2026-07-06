@@ -3,9 +3,12 @@ package com.smarttraffic.backend.controller;
 import com.smarttraffic.backend.dto.AddVehicleRequest;
 import com.smarttraffic.backend.dto.TrafficStatusResponse;
 import com.smarttraffic.backend.model.TrafficDecision;
+import com.smarttraffic.backend.model.TrafficSimulationRecord;
 import com.smarttraffic.backend.service.TrafficService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/traffic")
@@ -44,6 +47,20 @@ public class TrafficController {
     public TrafficDecision simulateTraffic() {
 
         return trafficService.simulateTraffic();
+
+    }
+
+    @GetMapping("/history")
+    public List<TrafficSimulationRecord> getHistory() {
+
+        return trafficService.getSimulationHistory();
+
+    }
+
+    @GetMapping("/history/latest")
+    public TrafficSimulationRecord getLatestSimulation() {
+
+        return trafficService.getLatestSimulation();
 
     }
 }

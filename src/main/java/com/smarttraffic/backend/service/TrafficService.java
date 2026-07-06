@@ -5,16 +5,17 @@ import com.smarttraffic.backend.dto.TrafficStatusResponse;
 import com.smarttraffic.backend.engine.AdaptiveTrafficOptimizer;
 import com.smarttraffic.backend.engine.TrafficEngine;
 import com.smarttraffic.backend.enums.Direction;
-import com.smarttraffic.backend.model.Intersection;
-import com.smarttraffic.backend.model.TrafficDecision;
-import com.smarttraffic.backend.model.Vehicle;
+import com.smarttraffic.backend.model.*;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class TrafficService {
+
+    private final SimulationHistoryService historyService;
 
     private final Intersection intersection =
             new Intersection(
@@ -29,14 +30,16 @@ public class TrafficService {
     private final AdaptiveTrafficOptimizer optimizer;
 
     public TrafficService(TrafficEngine trafficEngine,
-                          AdaptiveTrafficOptimizer optimizer) {
+                          AdaptiveTrafficOptimizer optimizer,
+                          SimulationHistoryService historyService) {
 
         this.trafficEngine = trafficEngine;
         this.optimizer = optimizer;
+        this.historyService = historyService;
     }
 
     /**
-     * Add vehicle into a lane.
+     * Add a vehicle to the selected lane.
      */
     public void addVehicle(AddVehicleRequest request) {
 
@@ -51,7 +54,7 @@ public class TrafficService {
     }
 
     /**
-     * Current traffic status.
+     * Get current traffic status.
      */
     public TrafficStatusResponse getTrafficStatus() {
 
@@ -74,21 +77,68 @@ public class TrafficService {
     }
 
     /**
-     * Run one simulation cycle.
+     * Execute one simulation cycle.
      */
     public TrafficDecision simulateTraffic() {
 
-        return trafficEngine.simulateCycle(intersection);
+        TrafficDecision decision =
+                trafficEngine.simulateCycle(intersection);
+
+        // Save only meaningful simulations
+        if (decision.getVehiclesPassed() > 0) {
+
+            historyService.saveSimulation(
+                    buildSimulationRecord(decision)
+            );
+
+            intersection.incrementProcessedVehicles(
+                    decision.getVehiclesPassed()
+            );
+        }
+
+        return decision;
+    }
+
+    /**
+     * Build simulation history record.
+     */
+    private TrafficSimulationRecord buildSimulationRecord(
+            TrafficDecision decision) {
+
+        return new TrafficSimulationRecord(
+                intersection.getIntersectionId(),
+                decision.getGreenLane(),
+                decision.getGreenTime(),
+                decision.getVehiclesPassed(),
+                decision.getTrafficScore(),
+                decision.getReason()
+        );
+    }
+
+    /**
+     * Complete simulation history.
+     */
+    public List<TrafficSimulationRecord> getSimulationHistory() {
+
+        return historyService.getAllSimulations();
 
     }
 
     /**
-     * Return current intersection.
+     * Latest simulation.
+     */
+    public TrafficSimulationRecord getLatestSimulation() {
+
+        return historyService.getLatestSimulation();
+
+    }
+
+    /**
+     * Current intersection.
      */
     public Intersection getIntersection() {
 
         return intersection;
 
     }
-
 }
