@@ -1,5 +1,7 @@
 package com.smarttraffic.backend.engine;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.smarttraffic.backend.enums.Direction;
 import com.smarttraffic.backend.enums.SignalStatus;
 import com.smarttraffic.backend.model.*;
@@ -7,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TrafficEngine {
+
+    private static final Logger log =
+            LoggerFactory.getLogger(TrafficEngine.class);
 
     private final TrafficOptimizer trafficOptimizer;
 
@@ -18,7 +23,7 @@ public class TrafficEngine {
      * Executes one complete traffic simulation cycle.
      */
     public SimulationResult simulateCycle(Intersection intersection) {
-
+        log.info("========== Starting Traffic Simulation ==========");
         // STEP 1 : Capture queue BEFORE simulation
         QueueSnapshot beforeSnapshot = captureSnapshot(intersection);
 
@@ -35,21 +40,18 @@ public class TrafficEngine {
 
         intersection.setCurrentGreenLane(decision.getGreenLane());
 
-        System.out.println("\n========================================");
-        System.out.println("QUEUE BEFORE");
-        System.out.println(beforeSnapshot);
-        System.out.println("========================================");
+        log.debug("Queue Before : {}", beforeSnapshot);
 
-        System.out.println("SMART TRAFFIC DECISION");
-        System.out.println("========================================");
-        System.out.println("Green Lane        : " + decision.getGreenLane());
-        System.out.println("Green Time        : " + decision.getGreenTime() + " sec");
-        System.out.println("Vehicles Allowed  : " + decision.getVehiclesAllowed());
-        System.out.println("Traffic Score     : " + decision.getTrafficScore());
-        System.out.println("Reason            : " + decision.getReason());
-        System.out.println("========================================");
+        log.info(
+                "Decision -> Lane: {}, Green Time: {} sec, Vehicles Allowed: {}, Traffic Score: {}, Reason: {}",
+                decision.getGreenLane(),
+                decision.getGreenTime(),
+                decision.getVehiclesAllowed(),
+                decision.getTrafficScore(),
+                decision.getReason()
+        );
 
-        System.out.println("🟢 GREEN SIGNAL -> " + decision.getGreenLane());
+        log.info("🟢 GREEN SIGNAL -> {}", decision.getGreenLane());
 
         int vehiclesPassed = 0;
 
@@ -59,12 +61,10 @@ public class TrafficEngine {
 
             Vehicle vehicle = lane.removeVehicle();
 
-            System.out.println(
-                    "Vehicle Passed : "
-                            + vehicle.getVehicleNumber()
-                            + " ("
-                            + vehicle.getVehicleType()
-                            + ")"
+            log.info(
+                    "Vehicle Passed : {} ({})",
+                    vehicle.getVehicleNumber(),
+                    vehicle.getVehicleType()
             );
 
             vehiclesPassed++;
@@ -73,23 +73,24 @@ public class TrafficEngine {
         // STEP 6 : GREEN -> YELLOW
         lane.setSignalStatus(SignalStatus.YELLOW);
 
-        System.out.println("🟡 YELLOW SIGNAL -> " + decision.getGreenLane());
+        log.info("🟡 YELLOW SIGNAL -> {}", decision.getGreenLane());
 
         // STEP 7 : YELLOW -> RED
         lane.setSignalStatus(SignalStatus.RED);
 
-        System.out.println("🔴 RED SIGNAL -> " + decision.getGreenLane());
+        log.info("🔴 RED SIGNAL -> {}", decision.getGreenLane());
 
         // STEP 8 : Capture queue AFTER simulation
         QueueSnapshot afterSnapshot = captureSnapshot(intersection);
 
-        System.out.println("\n========================================");
-        System.out.println("QUEUE AFTER");
-        System.out.println(afterSnapshot);
-        System.out.println("========================================");
+        log.debug("Queue After : {}", afterSnapshot);
 
         // STEP 9 : Build simulation result
-
+        log.info(
+                "Simulation completed. Vehicles Passed: {}, Remaining: {}",
+                vehiclesPassed,
+                lane.getVehicleCount()
+        );
         return new SimulationResult(
                 decision,
                 beforeSnapshot,

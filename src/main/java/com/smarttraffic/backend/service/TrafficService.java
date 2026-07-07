@@ -1,12 +1,14 @@
 package com.smarttraffic.backend.service;
 
 import com.smarttraffic.backend.dto.AddVehicleRequest;
+import com.smarttraffic.backend.dto.TrafficLiveUpdate;
 import com.smarttraffic.backend.dto.TrafficStatusResponse;
 import com.smarttraffic.backend.engine.AdaptiveTrafficOptimizer;
 import com.smarttraffic.backend.engine.SimulationResult;
 import com.smarttraffic.backend.engine.TrafficEngine;
 import com.smarttraffic.backend.enums.Direction;
 import com.smarttraffic.backend.model.*;
+import com.smarttraffic.backend.websocket.TrafficUpdatePublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,7 +19,7 @@ import java.util.Map;
 public class TrafficService {
 
     private final SimulationHistoryService historyService;
-
+    private final TrafficUpdatePublisher publisher;
     private final Intersection intersection =
             new Intersection(
                     "INT-001",
@@ -32,11 +34,12 @@ public class TrafficService {
 
     public TrafficService(TrafficEngine trafficEngine,
                           AdaptiveTrafficOptimizer optimizer,
-                          SimulationHistoryService historyService) {
+                          SimulationHistoryService historyService,TrafficUpdatePublisher publisher) {
 
         this.trafficEngine = trafficEngine;
         this.optimizer = optimizer;
         this.historyService = historyService;
+        this.publisher = publisher;
     }
 
     /**
@@ -90,12 +93,20 @@ public class TrafficService {
         // Save only meaningful simulations
         if (result.getVehiclesPassed() > 0) {
 
-            historyService.saveSimulation(
-                    buildSimulationRecord(result)
-            );
+            TrafficSimulationRecord record =
+                    buildSimulationRecord(result);
 
+            // Save into MongoDB
+            historyService.saveSimulation(record);
+
+            // Update statistics
             intersection.incrementProcessedVehicles(
                     result.getVehiclesPassed()
+            );
+
+            // Publish live update
+            publisher.publishTrafficUpdate(
+                    buildLiveUpdate(record)
             );
         }
 
@@ -159,5 +170,30 @@ public class TrafficService {
 
         return intersection;
 
+    }
+
+    private TrafficLiveUpdate buildLiveUpdate(
+            TrafficSimulationRecord record) {
+
+        return new TrafficLiveUpdate(
+
+                record.getSelectedLane().name(),
+
+                record.getGreenTime(),
+
+                record.getVehiclesPassed(),
+
+                record.getRemainingVehicles(),
+
+                record.getTrafficScore(),
+
+                record.getReason(),
+
+                record.getQueueBefore(),
+
+                record.getQueueAfter(),
+
+                record.getSimulationTime()
+        );
     }
 }
