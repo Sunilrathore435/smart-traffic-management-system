@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class QueueSnapshot {
 
-    private final Map<Direction, Integer> laneQueues;
+    private Map<Direction, Integer> laneQueues;
 
     public QueueSnapshot() {
         this.laneQueues = new EnumMap<>(Direction.class);
@@ -23,6 +23,10 @@ public class QueueSnapshot {
 
     public Map<Direction, Integer> getLaneQueues() {
         return laneQueues;
+    }
+
+    public void setLaneQueues(Map<Direction, Integer> laneQueues) {
+        this.laneQueues = laneQueues;
     }
 
     @Override

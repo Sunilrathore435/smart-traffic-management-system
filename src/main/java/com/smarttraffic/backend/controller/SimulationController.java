@@ -75,18 +75,23 @@ public class SimulationController {
 
                 settings.getTotalSimulationCycles(),
 
-                trafficService.getIntersection().getProcessedVehicles(),
+                trafficService.getIntersection()
+                        .getTotalVehiclesProcessed(),
 
-                historyService.getAllSimulations().size(),
+                historyService.getSimulationCount(),
 
-                trafficService.getIntersection().getIntersectionId(),
+                trafficService.getIntersection()
+                        .getIntersectionId(),
 
-                trafficService.getIntersection().getIntersectionName(),
+                trafficService.getIntersection()
+                        .getIntersectionName(),
 
-                trafficService.getIntersection().getCurrentGreenLane() == null
+                trafficService.getIntersection()
+                        .getCurrentGreenLane() == null
                         ? "NONE"
                         : trafficService.getIntersection()
-                        .getCurrentGreenLane().name(),
+                        .getCurrentGreenLane()
+                        .name(),
 
                 settings.isRunning()
                         ? SchedulerStatus.RUNNING

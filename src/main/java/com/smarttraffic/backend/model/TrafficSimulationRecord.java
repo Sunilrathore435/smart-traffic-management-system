@@ -1,14 +1,19 @@
 package com.smarttraffic.backend.model;
 
 import com.smarttraffic.backend.enums.Direction;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+
+@Document(collection = "simulation_history")
 public class TrafficSimulationRecord {
 
+
     // Unique simulation information
-    private final String simulationId;
+    @Id
+    private String simulationId;
     private final LocalDateTime simulationTime;
 
     // Intersection information

@@ -12,7 +12,7 @@ public class SimulationStatusResponse {
 
     private long processedVehicles;
 
-    private int historyRecords;
+    private long historyRecords;
 
     private String intersectionId;
 
@@ -30,7 +30,7 @@ public class SimulationStatusResponse {
             long schedulerIntervalMs,
             long totalSimulationCycles,
             long processedVehicles,
-            int historyRecords,
+            long historyRecords,
             String intersectionId,
             String intersectionName,
             String currentGreenLane,
@@ -63,7 +63,7 @@ public class SimulationStatusResponse {
         return processedVehicles;
     }
 
-    public int getHistoryRecords() {
+    public long getHistoryRecords() {
         return historyRecords;
     }
 

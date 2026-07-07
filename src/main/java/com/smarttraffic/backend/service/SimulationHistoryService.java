@@ -1,33 +1,37 @@
 package com.smarttraffic.backend.service;
 
 import com.smarttraffic.backend.model.TrafficSimulationRecord;
+import com.smarttraffic.backend.repository.TrafficSimulationRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
 public class SimulationHistoryService {
 
-    private final List<TrafficSimulationRecord> history =
-            new ArrayList<>();
+    private final TrafficSimulationRepository repository;
+
+    public SimulationHistoryService(
+            TrafficSimulationRepository repository) {
+
+        this.repository = repository;
+    }
 
     /**
-     * Save one simulation.
+     * Save one simulation into MongoDB.
      */
     public void saveSimulation(TrafficSimulationRecord record) {
 
-        history.add(record);
+        repository.save(record);
 
     }
 
     /**
-     * Return complete history.
+     * Return complete simulation history.
      */
     public List<TrafficSimulationRecord> getAllSimulations() {
 
-        return Collections.unmodifiableList(history);
+        return repository.findAll();
 
     }
 
@@ -36,29 +40,25 @@ public class SimulationHistoryService {
      */
     public TrafficSimulationRecord getLatestSimulation() {
 
-        if (history.isEmpty()) {
-            return null;
-        }
-
-        return history.get(history.size() - 1);
+        return repository.findTopByOrderBySimulationTimeDesc();
 
     }
 
     /**
-     * Clear history.
+     * Delete all simulation history.
      */
     public void clearHistory() {
 
-        history.clear();
+        repository.deleteAll();
 
     }
 
     /**
      * Number of simulations.
      */
-    public int getSimulationCount() {
+    public long getSimulationCount() {
 
-        return history.size();
+        return repository.count();
 
     }
 
