@@ -1,0 +1,71 @@
+.navbar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:28px 36px;
+
+    border-bottom:1px solid var(--color-border);
+
+    background:var(--background-surface);
+
+}
+
+.title{
+
+    font-size:2rem;
+
+    color:var(--color-text);
+
+    font-weight:700;
+
+}
+
+.subtitle{
+
+    margin-top:6px;
+
+    color:var(--color-text-secondary);
+
+}
+
+.statusContainer{
+
+    display:flex;
+
+    gap:18px;
+
+    align-items:center;
+
+}
+
+.status{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:10px 18px;
+
+    border-radius:var(--radius-md);
+
+    background:var(--background-card);
+
+    color:var(--status-online);
+
+}
+
+.clock{
+
+    font-size:1.1rem;
+
+    font-weight:700;
+
+    color:var(--color-primary);
+
+}

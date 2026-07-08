@@ -112,7 +112,7 @@
     --animation-fast: 150ms;
     --animation-normal: 300ms;
     --animation-slow: 600ms;
-
+    --pulse-duration: 2s;
     /* ==========================================
    BRAND COLORS
 ========================================== */
@@ -125,4 +125,10 @@
 
     --opacity-disabled: 0.5;
     --opacity-muted: 0.7;
+
+    /* ==========================================
+   EFFECTS
+========================================== */
+
+    --hover-lift: -4px;
 }
