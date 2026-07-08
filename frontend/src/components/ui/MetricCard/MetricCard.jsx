@@ -1,4 +1,6 @@
+import AnimatedCounter from "../AnimatedCounter/AnimatedCounter";
 import GlassCard from "../GlassCard";
+
 import styles from "./MetricCard.module.css";
 
 function MetricCard({
@@ -6,9 +8,14 @@ function MetricCard({
                         value,
                         subtitle,
                         icon,
+                        prefix = "",
+                        suffix = "",
+                        duration = 1200,
                         className = "",
                     }) {
+
     return (
+
         <GlassCard className={`${styles.card} ${className}`}>
 
             <div className={styles.header}>
@@ -18,15 +25,29 @@ function MetricCard({
                     <p className={styles.title}>
                         {title}
                     </p>
-
                     <h2 className={styles.value}>
-                        {value}
+                        {typeof value === "number" ? (
+                            <AnimatedCounter
+                                value={value}
+                                prefix={prefix}
+                                suffix={suffix}
+                                duration={duration}
+                            />
+                        ) : (
+                            <>
+                                {prefix}
+                                {value}
+                                {suffix}
+                            </>
+                        )}
                     </h2>
 
                     {subtitle && (
+
                         <p className={styles.subtitle}>
                             {subtitle}
                         </p>
+
                     )}
 
                 </div>
@@ -38,7 +59,9 @@ function MetricCard({
             </div>
 
         </GlassCard>
+
     );
+
 }
 
 export default MetricCard;

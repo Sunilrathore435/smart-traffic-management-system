@@ -1,0 +1,80 @@
+.canvas{
+
+    flex:1;
+
+    min-height:320px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:24px;
+
+    border-radius:var(--radius-lg);
+
+    border:1px dashed var(--color-border);
+
+    background:
+            linear-gradient(
+                    180deg,
+                    rgba(0,229,255,.03),
+                    transparent
+            );
+
+    text-align:center;
+
+}
+
+.icon{
+
+    font-size:70px;
+
+    color:var(--color-primary);
+
+    animation:float 3s ease-in-out infinite;
+
+}
+
+.canvas h3{
+
+    font-size:var(--font-xl);
+
+}
+
+.canvas p{
+
+    color:var(--color-text-secondary);
+
+}
+
+.canvas > div:last-child{
+
+    width:70%;
+
+}
+
+@keyframes float{
+
+    0%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-8px);
+
+    }
+
+    100%{
+
+        transform:translateY(0);
+
+    }
+
+}

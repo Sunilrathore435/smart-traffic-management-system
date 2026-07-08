@@ -1,0 +1,11 @@
+.counter{
+
+    font-size:inherit;
+
+    font-weight:inherit;
+
+    color:inherit;
+
+    transition:var(--transition-normal);
+
+}

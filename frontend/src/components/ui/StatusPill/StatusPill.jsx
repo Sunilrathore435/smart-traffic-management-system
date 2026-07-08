@@ -1,23 +1,45 @@
 import styles from "./StatusPill.module.css";
 
 function StatusPill({
+
                         label,
+
+                        children,
+
                         status = "online",
-                        className = "",
-                        ...props
+
+                        pulse = true,
+
+                        className = ""
+
                     }) {
 
+    const text = label ?? children;
+
+    // Fallback if an unknown status is passed
+    const variant = styles[status] ? status : "online";
+
     return (
+
         <div
-            className={`${styles.pill} ${styles[status]} ${className}`}
-            {...props}
+            className={[
+                styles.pill,
+                styles[variant],
+                pulse && styles.pulse,
+                className,
+            ]
+                .filter(Boolean)
+                .join(" ")}
         >
 
             <span className={styles.dot}></span>
 
-            <span>{label}</span>
+            <span className={styles.label}>
+                {text}
+            </span>
 
         </div>
+
     );
 
 }

@@ -1,0 +1,57 @@
+.container{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:22px;
+
+}
+
+.heading{
+
+    color:var(--color-text-secondary);
+
+    font-size:var(--font-sm);
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+}
+
+.row{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+.top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.top span{
+
+    color:var(--color-text);
+
+    font-weight:500;
+
+}
+
+.top strong{
+
+    color:var(--color-primary);
+
+    font-size:var(--font-sm);
+
+}

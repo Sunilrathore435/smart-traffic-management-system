@@ -7,13 +7,14 @@ import AnalyticsPage from "../pages/Analytics/AnalyticsPage";
 import HistoryPage from "../pages/History/HistoryPage";
 import SettingsPage from "../pages/Settings/SettingsPage";
 import NotFoundPage from "../pages/NotFound/NotFoundPage";
+import UIPlayground from "../pages/UIPlayground";
 
 function AppRouter() {
     return (
         <BrowserRouter>
 
             <Routes>
-
+                <Route path="/ui" element={<UIPlayground />} />
                 <Route
                     path="/"
                     element={<Navigate to="/dashboard" replace />}

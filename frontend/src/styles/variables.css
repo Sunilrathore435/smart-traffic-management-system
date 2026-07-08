@@ -131,4 +131,42 @@
 ========================================== */
 
     --hover-lift: -4px;
+
+    /* ==========================================
+    PROGRESS BAR
+ ========================================== */
+
+    --progress-height: 12px;
+
+    --progress-radius: 999px;
+
+    --progress-track: rgba(255,255,255,.08);
+
+    --progress-start: #00BCD4;
+
+    --progress-middle: #00E5FF;
+
+    --progress-end: #8EF7FF;
+
+    --progress-glow-small: 0 0 8px rgba(0,229,255,.40);
+
+    --progress-glow-large: 0 0 18px rgba(0,229,255,.25);
+
+    --progress-animation: 1.5s ease;
+
+    --progress-shine-duration: 2.5s;
+
+    /* ==========================================
+   GLOW EFFECTS
+========================================== */
+
+    --glow-primary-small: 0 0 8px rgba(0,229,255,.40);
+
+    --glow-primary-medium: 0 0 18px rgba(0,229,255,.25);
+
+    --glow-success: 0 0 15px rgba(34,197,94,.35);
+
+    --glow-danger: 0 0 15px rgba(239,68,68,.35);
+
+    --glow-warning: 0 0 15px rgba(245,158,11,.35);
 }
