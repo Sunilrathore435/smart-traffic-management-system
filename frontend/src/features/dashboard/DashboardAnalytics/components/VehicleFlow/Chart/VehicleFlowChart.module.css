@@ -1,0 +1,114 @@
+.chart{
+
+    width:100%;
+
+    height:360px;
+
+    position:relative;
+
+    padding:0 8px;
+
+}
+
+/* ==========================
+   Recharts Tooltip
+========================== */
+
+.chart :global(.recharts-tooltip-wrapper){
+
+    outline:none !important;
+
+    z-index:100;
+
+    transition:transform .25s ease;
+
+}
+
+/* ==========================
+   Bars
+========================== */
+
+.chart :global(.recharts-bar-rectangle){
+
+    transition:
+            transform .25s ease,
+            filter .25s ease,
+            opacity .25s ease;
+
+    cursor:pointer;
+
+}
+
+.chart :global(.recharts-bar-rectangle:hover){
+
+    filter:brightness(1.12);
+
+}
+
+/* ==========================
+   Grid
+========================== */
+
+.chart :global(.recharts-cartesian-grid-horizontal line){
+
+    stroke:rgba(255,255,255,.045);
+
+    stroke-dasharray:4 6;
+
+}
+
+.chart :global(.recharts-cartesian-grid-vertical line){
+
+    display:none;
+
+}
+
+/* ==========================
+   Axis
+========================== */
+
+.chart :global(.recharts-cartesian-axis-tick-value){
+
+    fill:#94A3B8;
+
+    font-size:14px;
+
+    font-weight:500;
+
+}
+
+.chart :global(.recharts-cartesian-axis-line){
+
+    display:none;
+
+}
+
+.chart :global(.recharts-cartesian-axis-tick-line){
+
+    display:none;
+
+}
+
+/* ==========================
+   Responsive
+========================== */
+
+@media (max-width:1200px){
+
+    .chart{
+
+        height:320px;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .chart{
+
+        height:260px;
+
+    }
+
+}

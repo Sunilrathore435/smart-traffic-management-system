@@ -1,0 +1,170 @@
+.row{
+
+    display:grid;
+
+    grid-template-columns:160px 1fr 140px;
+
+    align-items:center;
+
+    gap:22px;
+
+    transition:all .25s ease;
+
+}
+
+.row:hover{
+
+    transform:translateX(4px);
+
+}
+
+.left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    min-width:160px;
+
+}
+
+/* ==========================
+   Lane Icon
+========================== */
+
+.icon{
+
+    color:#C7D0DD;
+
+    font-size:18px;
+
+    transition:.25s;
+
+}
+
+.row:hover .icon{
+
+    color:var(--color-primary);
+
+}
+
+/* ==========================
+   Lane Name
+========================== */
+
+.lane{
+
+    color:var(--color-text);
+
+    font-size:16px;
+
+    font-weight:600;
+
+    letter-spacing:.2px;
+
+    white-space:nowrap;
+
+}
+
+/* ==========================
+   Progress
+========================== */
+
+.center{
+
+    width:100%;
+
+}
+
+.track{
+
+    width:100%;
+
+    height:12px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.09);
+
+    overflow:hidden;
+
+    position:relative;
+
+}
+
+.fill{
+
+    height:100%;
+
+    border-radius:999px;
+
+    transition:
+            width .8s ease,
+            filter .25s ease,
+            box-shadow .25s ease;
+
+}
+
+.row:hover .fill{
+
+    filter:brightness(1.08);
+
+    box-shadow:0 0 14px currentColor;
+
+}
+
+/* ==========================
+   Right Section
+========================== */
+
+.right{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:flex-end;
+
+    gap:18px;
+
+    min-width:140px;
+
+}
+
+/* ==========================
+   Percentage
+========================== */
+
+.percent{
+
+    font-size:24px;
+
+    font-weight:700;
+
+    width:62px;
+
+    text-align:right;
+
+    line-height:1;
+
+}
+
+/* ==========================
+   Vehicles
+========================== */
+
+.vehicles{
+
+    color:#A0AEC0;
+
+    font-size:15px;
+
+    min-width:90px;
+
+    text-align:left;
+
+    white-space:nowrap;
+
+}

@@ -1,0 +1,187 @@
+.hero{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    padding:36px 0;
+
+    transition:transform .35s ease;
+
+}
+
+.hero:hover{
+
+    transform:translateY(-3px);
+
+}
+
+/* ==========================
+   Time
+========================== */
+
+.time{
+
+    margin:0;
+
+    font-size:56px;
+
+    font-weight:800;
+
+    color:#8B5CF6;
+
+    letter-spacing:-1px;
+
+    line-height:1;
+
+    animation:timeGlow 3s infinite ease-in-out;
+
+}
+
+/* ==========================
+   Vehicles
+========================== */
+
+.vehicleRow{
+
+    display:flex;
+
+    align-items:flex-end;
+
+    gap:10px;
+
+    margin-top:22px;
+
+}
+
+.count{
+
+    font-size:74px;
+
+    font-weight:800;
+
+    color:#FFFFFF;
+
+    line-height:1;
+
+    transition:
+            transform .35s ease,
+            text-shadow .35s ease;
+
+}
+
+.hero:hover .count{
+
+    transform:scale(1.04);
+
+    text-shadow:0 0 18px rgba(139,92,246,.30);
+
+}
+
+.unit{
+
+    margin-bottom:12px;
+
+    font-size:18px;
+
+    color:#94A3B8;
+
+    font-weight:500;
+
+}
+
+/* ==========================
+   Busy Badge
+========================== */
+
+.badge{
+
+    margin-top:28px;
+
+    padding:10px 24px;
+
+    border-radius:999px;
+
+    border:1px solid rgba(255,179,0,.25);
+
+    background:rgba(255,179,0,.10);
+
+    color:#FFB300;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    letter-spacing:.5px;
+
+    box-shadow:0 0 16px rgba(255,179,0,.08);
+
+    animation:busyPulse 2.2s infinite;
+
+    transition:.3s;
+
+}
+
+.badge:hover{
+
+    transform:scale(1.05);
+
+}
+
+/* ==========================
+   Animations
+========================== */
+
+@keyframes timeGlow{
+
+    0%{
+
+        text-shadow:0 0 8px rgba(139,92,246,.25);
+
+    }
+
+    50%{
+
+        text-shadow:
+                0 0 18px rgba(139,92,246,.55),
+                0 0 32px rgba(139,92,246,.20);
+
+    }
+
+    100%{
+
+        text-shadow:0 0 8px rgba(139,92,246,.25);
+
+    }
+
+}
+
+@keyframes busyPulse{
+
+    0%{
+
+        box-shadow:0 0 0 rgba(255,179,0,.15);
+
+    }
+
+    50%{
+
+        box-shadow:0 0 18px rgba(255,179,0,.35);
+
+    }
+
+    100%{
+
+        box-shadow:0 0 0 rgba(255,179,0,.15);
+
+    }
+
+}
