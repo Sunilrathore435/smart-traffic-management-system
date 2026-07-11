@@ -1,4 +1,7 @@
-import { FaMapMarkedAlt } from "react-icons/fa";
+import {
+    FaMapMarkedAlt,
+    FaEllipsisV
+} from "react-icons/fa";
 
 import StatusPill from "../../../../../components/ui/StatusPill";
 
@@ -10,28 +13,46 @@ function MapHeader() {
 
         <header className={styles.header}>
 
-            <div>
+            <div className={styles.left}>
 
-                <h2 className={styles.title}>
+                <div className={styles.icon}>
 
                     <FaMapMarkedAlt />
 
-                    Live Traffic Map
+                </div>
 
-                </h2>
+                <div>
 
-                <p className={styles.subtitle}>
+                    <h2 className={styles.title}>
 
-                    Real-Time City Monitoring
+                        Live Traffic Map
 
-                </p>
+                    </h2>
+
+                    <p className={styles.subtitle}>
+
+                        Real-Time City Monitoring
+
+                    </p>
+
+                </div>
 
             </div>
 
-            <StatusPill
-                label="LIVE"
-                status="online"
-            />
+            <div className={styles.actions}>
+
+                <StatusPill
+                    label="LIVE"
+                    status="online"
+                />
+
+                <button className={styles.menu}>
+
+                    <FaEllipsisV />
+
+                </button>
+
+            </div>
 
         </header>
 

@@ -1,0 +1,73 @@
+.content{
+
+    display:grid;
+
+    grid-template-columns:
+        minmax(180px,220px)
+        minmax(0,1.8fr)
+        minmax(260px,320px)
+        minmax(130px,170px);
+
+    align-items:start;
+
+    gap:clamp(16px,2vw,28px);
+
+    width:100%;
+
+    margin:16px 0;
+
+}
+
+/* ===========================
+   Large Desktop
+=========================== */
+
+@media (max-width:1600px){
+
+    .content{
+
+        grid-template-columns:
+            180px
+            minmax(0,1.7fr)
+            280px
+            150px;
+
+    }
+
+}
+
+/* ===========================
+   Laptop
+=========================== */
+
+@media (max-width:1400px){
+
+    .content{
+
+        grid-template-columns:
+            160px
+            minmax(0,1fr)
+            260px
+            140px;
+
+        gap:20px;
+
+    }
+
+}
+
+/* ===========================
+   Tablet
+=========================== */
+
+@media (max-width:1200px){
+
+    .content{
+
+        grid-template-columns:1fr;
+
+        gap:22px;
+
+    }
+
+}

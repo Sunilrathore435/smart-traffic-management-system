@@ -1,65 +1,437 @@
-.sidebar {
-    width: 280px;
-    background: var(--background-surface);
-    border-right: 1px solid var(--color-border);
+/* ==========================================
+   Sidebar
+========================================== */
+
+.sidebar{
+
+    position: sticky;
+
+    top: 0;
+
+    width: 250px;
+
+    min-width: 250px;
+
+    height: 100vh;
+
     display: flex;
+
     flex-direction: column;
-    justify-content: space-between;
-    padding: var(--space-xl);
+
+    background: #101625;
+
+    border-right: 1px solid rgba(255,255,255,.06);
+
+    overflow-y: auto;
+
+    overflow-x: hidden;
+
+    flex-shrink: 0;
+
 }
 
-.logo h2 {
-    color: var(--color-primary);
-    margin-bottom: 6px;
+/* ==========================================
+   Scrollbar
+========================================== */
+
+.sidebar::-webkit-scrollbar{
+
+    width: 6px;
+
 }
 
-.logo span {
-    color: var(--color-text-secondary);
-    font-size: var(--font-sm);
+.sidebar::-webkit-scrollbar-track{
+
+    background: transparent;
+
 }
 
-.navigation {
+.sidebar::-webkit-scrollbar-thumb{
+
+    background: rgba(255,255,255,.08);
+
+    border-radius: 999px;
+
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover{
+
+    background: rgba(0,229,255,.22);
+
+}
+
+/* ==========================================
+   Logo
+========================================== */
+
+.logo{
+
     display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 26px 22px;
+
+    border-bottom: 1px solid rgba(255,255,255,.06);
+
+}
+
+.logoIcon{
+
+    width: 48px;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: rgba(0,229,255,.08);
+
+    border: 1px solid rgba(0,229,255,.16);
+
+    color: #00E5FF;
+
+    font-size: 22px;
+
+    box-shadow: 0 0 18px rgba(0,229,255,.08);
+
+}
+
+.logo h2{
+
+    margin: 0;
+
+    color: #FFFFFF;
+
+    font-size: 27px;
+
+    font-weight: 800;
+
+    letter-spacing: .3px;
+
+}
+
+.logo p{
+
+    margin-top: 4px;
+
+    color: #94A3B8;
+
+    font-size: 12px;
+
+    line-height: 1.45;
+
+}
+
+/* ==========================================
+   Navigation
+========================================== */
+
+.navigation{
+
+    flex: 1;
+
+    display: flex;
+
     flex-direction: column;
-    gap: 10px;
-    margin-top: 40px;
+
+    gap: 8px;
+
+    padding: 20px 14px;
+
 }
 
-.link {
+/* ==========================================
+   Links
+========================================== */
+
+.link{
+
+    height: 56px;
+
     display: flex;
+
     align-items: center;
-    gap: 12px;
-    color: var(--color-text-secondary);
-    padding: 14px;
-    border-radius: var(--radius-md);
-    transition: var(--transition-fast);
+
+    gap: 14px;
+
+    padding: 0 16px;
+
+    border-radius: 14px;
+
+    text-decoration: none;
+
+    color: #A7B4CF;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    transition: all .25s ease;
+
+    position: relative;
+
 }
 
-.link:hover {
-    background: var(--background-card);
-    color: var(--color-primary);
+.link:hover{
+
+    color: #00E5FF;
+
+    background: rgba(0,229,255,.05);
+
+    transform: translateX(4px);
+
 }
 
-.active {
-    background: var(--background-card);
-    color: var(--color-primary);
-    box-shadow: var(--shadow-glow);
+/* ==========================================
+   Active Link
+========================================== */
+
+.active{
+
+    color: #00E5FF;
+
+    background: rgba(0,229,255,.08);
+
+    border-left: 3px solid #00E5FF;
+
+    box-shadow:
+            inset 0 0 0 1px rgba(0,229,255,.08),
+            0 0 20px rgba(0,229,255,.08);
+
 }
 
-.footer {
+/* ==========================================
+   Icon
+========================================== */
+
+.icon{
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 11px;
+
     display: flex;
-    gap: 12px;
+
+    justify-content: center;
+
     align-items: center;
-    padding-top: 20px;
-    border-top: 1px solid var(--color-border);
+
+    background: rgba(255,255,255,.04);
+
+    color: inherit;
+
+    font-size: 16px;
+
+    transition: .25s;
+
 }
 
-.footer svg {
-    color: var(--status-online);
-    font-size: 24px;
+.link:hover .icon{
+
+    background: rgba(0,229,255,.08);
+
+    transform: scale(1.05);
+
 }
 
-.footer p {
-    color: var(--status-online);
-    font-size: var(--font-sm);
+.active .icon{
+
+    background: rgba(0,229,255,.12);
+
+}
+
+/* ==========================================
+   Footer
+========================================== */
+
+.footer{
+
+    margin-top: auto;
+
+    padding: 22px;
+
+    border-top: 1px solid rgba(255,255,255,.06);
+
+    background: linear-gradient(
+            180deg,
+            transparent,
+            rgba(255,255,255,.015)
+    );
+
+}
+
+/* ==========================================
+   Footer Header
+========================================== */
+
+.footerHeader{
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+.footerHeader svg{
+
+    font-size: 22px;
+
+    color: #22C55E;
+
+}
+
+.footerHeader strong{
+
+    display: block;
+
+    color: #FFFFFF;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+}
+
+.footerHeader p{
+
+    margin-top: 4px;
+
+    color: #94A3B8;
+
+    font-size: 12px;
+
+}
+
+/* ==========================================
+   Status
+========================================== */
+
+.status{
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 16px;
+
+    color: #22C55E;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+}
+
+.status svg{
+
+    font-size: 9px;
+
+    animation: pulse 2s infinite;
+
+}
+
+/* ==========================================
+   Tech Stack
+========================================== */
+
+.techStack{
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 18px;
+
+}
+
+.techStack span{
+
+    padding: 6px 11px;
+
+    border-radius: 999px;
+
+    background: rgba(255,255,255,.05);
+
+    border: 1px solid rgba(255,255,255,.04);
+
+    color: #9FB0C9;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    transition: .25s;
+
+}
+
+.techStack span:hover{
+
+    background: rgba(0,229,255,.08);
+
+    color: #00E5FF;
+
+}
+
+/* ==========================================
+   Live Pulse
+========================================== */
+
+@keyframes pulse{
+
+    0%,100%{
+
+        opacity:1;
+
+    }
+
+    50%{
+
+        opacity:.35;
+
+    }
+
+}
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width:1200px){
+
+    .sidebar{
+
+        width:220px;
+
+        min-width:220px;
+
+    }
+
+    .logo h2{
+
+        font-size:24px;
+
+    }
+
+    .link{
+
+        font-size:14px;
+
+    }
+
 }

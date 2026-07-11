@@ -1,0 +1,151 @@
+.header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+
+    gap:24px;
+
+    margin-bottom:32px;
+
+}
+
+.left h1{
+
+    font-size:2rem;
+
+    font-weight:700;
+
+    color:var(--color-text);
+
+    margin-bottom:8px;
+
+}
+
+.left p{
+
+    color:var(--color-text-secondary);
+
+    line-height:1.6;
+
+    max-width:650px;
+
+}
+
+.status{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+.badge{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:12px 18px;
+
+    border-radius:16px;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid var(--color-border);
+
+    min-width:170px;
+
+}
+
+.badge svg{
+
+    color:var(--color-primary);
+
+    font-size:20px;
+
+}
+
+.badge strong{
+
+    display:block;
+
+    color:var(--color-text);
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.badge small{
+
+    color:var(--color-text-secondary);
+
+    font-size:12px;
+
+}
+
+.live{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px 18px;
+
+    border-radius:16px;
+
+    background:rgba(34,197,94,.08);
+
+    border:1px solid rgba(34,197,94,.25);
+
+    color:#22C55E;
+
+    font-weight:700;
+
+}
+
+.live svg{
+
+    font-size:10px;
+
+    animation:pulse 1.4s infinite;
+
+}
+
+@keyframes pulse{
+
+    0%{
+
+        opacity:.4;
+
+        transform:scale(.9);
+
+    }
+
+    50%{
+
+        opacity:1;
+
+        transform:scale(1.2);
+
+    }
+
+    100%{
+
+        opacity:.4;
+
+        transform:scale(.9);
+
+    }
+
+}

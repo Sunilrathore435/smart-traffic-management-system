@@ -1,0 +1,251 @@
+.wrapper{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+/* =========================
+   Priority Badge
+========================= */
+
+.priority{
+
+    padding:6px 14px;
+
+    border-radius:999px;
+
+    background:rgba(255,176,32,.12);
+
+    border:1px solid rgba(255,176,32,.18);
+
+    color:#FFB020;
+
+    font-size:.8rem;
+
+    font-weight:700;
+
+    letter-spacing:.3px;
+
+    transition:.25s;
+
+}
+
+.priority:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 0 14px rgba(255,176,32,.15);
+
+}
+
+/* =========================
+   Junction Box
+========================= */
+
+.map{
+
+    position:relative;
+
+    width:clamp(145px,11vw,170px);
+
+    aspect-ratio:1;
+
+    border-radius:16px;
+
+    background:#181C2B;
+
+    border:1px solid rgba(255,255,255,.06);
+
+    overflow:hidden;
+
+    transition:.3s;
+
+}
+
+.map:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 12px 28px rgba(0,229,255,.10);
+
+}
+
+/* Roads */
+
+.vertical{
+
+    position:absolute;
+
+    inset:0 auto 0 50%;
+
+    transform:translateX(-50%);
+
+    width:36px;
+
+    background:#2A3043;
+
+}
+
+.horizontal{
+
+    position:absolute;
+
+    inset:50% 0 auto 0;
+
+    transform:translateY(-50%);
+
+    height:36px;
+
+    background:#2A3043;
+
+}
+
+/* Lane markings */
+
+.vertical::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:2px;
+
+    height:100%;
+
+    background:repeating-linear-gradient(
+            to bottom,
+            #D9D9D9 0 7px,
+            transparent 7px 16px
+    );
+
+}
+
+.horizontal::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    width:100%;
+
+    height:2px;
+
+    background:repeating-linear-gradient(
+            to right,
+            #D9D9D9 0 7px,
+            transparent 7px 16px
+    );
+
+}
+
+/* Center */
+
+.center{
+
+    position:absolute;
+
+    left:50%;
+
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    width:44px;
+
+    height:44px;
+
+    border-radius:50%;
+
+    border:2px solid #6B7280;
+
+    background:#20263A;
+
+    box-shadow:0 0 12px rgba(0,229,255,.08);
+
+}
+
+/* Cars */
+
+.car{
+
+    position:absolute;
+
+    width:8px;
+
+    height:14px;
+
+    border-radius:3px;
+
+    background:#00E5FF;
+
+    box-shadow:0 0 8px rgba(0,229,255,.8);
+
+}
+
+.top{
+
+    top:14px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+}
+
+.bottom{
+
+    bottom:14px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+}
+
+.left{
+
+    left:14px;
+
+    top:50%;
+
+    transform:translateY(-50%) rotate(90deg);
+
+}
+
+.right{
+
+    right:14px;
+
+    top:50%;
+
+    transform:translateY(-50%) rotate(90deg);
+
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width:768px){
+
+    .map{
+
+        width:140px;
+
+    }
+
+}

@@ -1,0 +1,192 @@
+/* ==========================================
+   Road Base
+========================================== */
+
+.road{
+
+    position:absolute;
+
+    overflow:hidden;
+
+    background:#2E3444;
+
+    box-shadow:
+            inset 0 0 20px rgba(0,0,0,.45);
+
+}
+
+/* ==========================================
+   Asphalt Texture
+========================================== */
+
+.texture{
+
+    position:absolute;
+
+    inset:0;
+
+    opacity:.15;
+
+    background-image:
+
+            radial-gradient(circle,#ffffff 1px,transparent 1px);
+
+    background-size:12px 12px;
+
+}
+
+/* ==========================================
+   Horizontal Road
+========================================== */
+
+.horizontal{
+
+    left:5%;
+
+    right:5%;
+
+    top:50%;
+
+    height:120px;
+
+    transform:translateY(-50%);
+
+}
+
+/* ==========================================
+   Vertical Road
+========================================== */
+
+.vertical{
+
+    top:5%;
+
+    bottom:5%;
+
+    left:50%;
+
+    width:120px;
+
+    transform:translateX(-50%);
+
+}
+
+/* ==========================================
+   Lane Divider
+========================================== */
+
+.divider{
+
+    position:absolute;
+
+    opacity:.9;
+
+}
+
+/* Horizontal */
+
+.horizontal .divider{
+
+    left:0;
+
+    right:0;
+
+    height:3px;
+
+    background:
+
+            repeating-linear-gradient(
+
+                    to right,
+
+                    #FACC15 0 18px,
+
+                    transparent 18px 34px
+
+            );
+
+}
+
+/* Vertical */
+
+.vertical .divider{
+
+    top:0;
+
+    bottom:0;
+
+    width:3px;
+
+    background:
+
+            repeating-linear-gradient(
+
+                    to bottom,
+
+                    #FACC15 0 18px,
+
+                    transparent 18px 34px
+
+            );
+
+}
+
+/* ==========================================
+   Lane Positions
+========================================== */
+
+.horizontal .first{
+
+    top:30%;
+
+}
+
+.horizontal .center{
+
+    top:50%;
+
+}
+
+.horizontal .last{
+
+    top:70%;
+
+}
+
+.vertical .first{
+
+    left:30%;
+
+}
+
+.vertical .center{
+
+    left:50%;
+
+}
+
+.vertical .last{
+
+    left:70%;
+
+}
+
+/* ==========================================
+   Road Border
+========================================== */
+
+.horizontal{
+
+    border-top:4px solid #555D70;
+
+    border-bottom:4px solid #555D70;
+
+}
+
+.vertical{
+
+    border-left:4px solid #555D70;
+
+    border-right:4px solid #555D70;
+
+}

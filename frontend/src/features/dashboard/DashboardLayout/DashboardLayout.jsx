@@ -5,6 +5,7 @@ import DashboardAnalytics from "../DashboardAnalytics";
 import DashboardTimeline from "../DashboardTimeline";
 
 import styles from "./DashboardLayout.module.css";
+import RecentEvents from "../RecentEvents/index.js";
 
 function DashboardLayout() {
 
@@ -45,6 +46,7 @@ function DashboardLayout() {
                 <DashboardTimeline />
 
             </div>
+
 
         </section>
 

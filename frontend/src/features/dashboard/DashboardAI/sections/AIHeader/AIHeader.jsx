@@ -2,7 +2,15 @@ import StatusPill from "../../../../../components/ui/StatusPill";
 
 import styles from "./AIHeader.module.css";
 
-function AIHeader() {
+function AIHeader({
+
+                      status = "online",
+
+                      version = "v2.4.0",
+
+                      mode = "Adaptive AI"
+
+                  }) {
 
     return (
 
@@ -22,17 +30,25 @@ function AIHeader() {
 
                 </p>
 
+                <small className={styles.mode}>
+
+                    {mode}
+
+                </small>
+
             </div>
 
             <div className={styles.statusGroup}>
 
                 <StatusPill
-                    label="ONLINE"
-                    status="online"
+                    label={status.toUpperCase()}
+                    status={status}
                 />
 
                 <span className={styles.version}>
-                    v2.4.0
+
+                    {version}
+
                 </span>
 
             </div>

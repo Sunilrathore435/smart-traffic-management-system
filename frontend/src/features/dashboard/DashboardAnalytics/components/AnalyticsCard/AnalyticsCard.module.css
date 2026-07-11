@@ -4,11 +4,11 @@
 
     flex-direction:column;
 
-    gap:var(--space-lg);
+    gap:clamp(16px,1.5vw,var(--space-lg));
 
     height:100%;
 
-    min-height:620px;   /* same height for Density & Peak */
+    min-height:clamp(420px,55vh,520px);
 
 }
 
@@ -24,7 +24,7 @@
 
     align-items:flex-start;
 
-    gap:20px;
+    gap:16px;
 
 }
 
@@ -34,7 +34,7 @@
 
     align-items:center;
 
-    gap:16px;
+    gap:14px;
 
     flex:1;
 
@@ -58,11 +58,11 @@
 
 .icon{
 
-    width:48px;
+    width:44px;
 
-    height:48px;
+    height:44px;
 
-    border-radius:14px;
+    border-radius:12px;
 
     display:flex;
 
@@ -72,7 +72,7 @@
 
     flex-shrink:0;
 
-    font-size:20px;
+    font-size:18px;
 
     color:var(--color-primary);
 
@@ -80,8 +80,7 @@
 
     border:1px solid rgba(0,229,255,.15);
 
-    box-shadow:
-            0 0 18px rgba(0,229,255,.08);
+    box-shadow:0 0 12px rgba(0,229,255,.08);
 
 }
 
@@ -95,7 +94,7 @@
 
     color:var(--color-text);
 
-    font-size:var(--font-lg);
+    font-size:clamp(1rem,1.1vw,1.2rem);
 
     font-weight:700;
 
@@ -109,11 +108,11 @@
 
 .subtitle{
 
-    margin:6px 0 0;
+    margin:4px 0 0;
 
     color:var(--color-text-secondary);
 
-    font-size:var(--font-xs);
+    font-size:.78rem;
 
     line-height:1.4;
 
@@ -129,7 +128,7 @@
 
     align-items:center;
 
-    gap:12px;
+    gap:10px;
 
     flex-shrink:0;
 
@@ -163,8 +162,20 @@
 
     flex-direction:column;
 
-    align-items:stretch;
-
     justify-content:flex-start;
+
+}
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width:1200px){
+
+    .card{
+
+        min-height:auto;
+
+    }
 
 }

@@ -1,7 +1,9 @@
+import History from "../../features/history";
+
 function HistoryPage() {
-    return (
-        <h1>History</h1>
-    );
+
+    return <History />;
+
 }
 
 export default HistoryPage;

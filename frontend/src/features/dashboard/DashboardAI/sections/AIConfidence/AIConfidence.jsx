@@ -2,7 +2,24 @@ import ProgressBar from "../../../../../components/ui/ProgressBar";
 
 import styles from "./AIConfidence.module.css";
 
-function AIConfidence() {
+function AIConfidence({
+
+                          value = 98,
+
+                          prediction = 99.3,
+
+                          lastPrediction = "0.8 sec ago"
+
+                      }) {
+
+    const label =
+        value >= 95
+            ? "Excellent"
+            : value >= 85
+                ? "Good"
+                : value >= 70
+                    ? "Average"
+                    : "Low";
 
     return (
 
@@ -15,8 +32,8 @@ function AIConfidence() {
             </h3>
 
             <ProgressBar
-                value={98}
-                label="Excellent"
+                value={value}
+                label={label}
                 animated
                 glow
             />
@@ -33,7 +50,7 @@ function AIConfidence() {
 
                     <strong>
 
-                        99.3%
+                        {prediction}%
 
                     </strong>
 
@@ -49,7 +66,7 @@ function AIConfidence() {
 
                     <strong>
 
-                        0.8 sec ago
+                        {lastPrediction}
 
                     </strong>
 

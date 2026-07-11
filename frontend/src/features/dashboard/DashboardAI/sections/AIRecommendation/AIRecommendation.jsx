@@ -2,22 +2,106 @@ import {
     FaLightbulb,
     FaClock,
     FaGasPump,
-    FaChartLine
+    FaChartLine,
+    FaTrafficLight
 } from "react-icons/fa";
 
 import styles from "./AIRecommendation.module.css";
 
-function AIRecommendation() {
+function AIRecommendation({
+
+                              queues = {
+
+                                  north: 0,
+                                  south: 0,
+                                  east: 0,
+                                  west: 0
+
+                              },
+
+                              currentLane = "north",
+
+                              greenTime = 8,
+
+                              fuelSaving = 0,
+
+                              congestion = 0,
+
+                              emergency = false
+
+                          }) {
+
+    // =====================================
+    // Recommendation Lane
+    // =====================================
+
+    const busiestLane = emergency
+
+        ? currentLane.toLowerCase()
+
+        : Object.keys(queues).reduce(
+
+            (a, b) =>
+
+                queues[a] >= queues[b]
+
+                    ? a
+
+                    : b
+
+        );
+
+    // =====================================
+    // AI Metrics
+    // =====================================
+
+    const reduction = Math.max(
+
+        0,
+
+        Math.min(
+
+            100,
+
+            100 - congestion
+
+        )
+
+    );
 
     return (
 
         <section className={styles.container}>
 
-            <h3 className={styles.heading}>
+            <div className={styles.header}>
 
-                AI RECOMMENDATION
+                <h3 className={styles.heading}>
 
-            </h3>
+                    AI RECOMMENDATION
+
+                </h3>
+
+                <div className={styles.badge}>
+
+                    <FaTrafficLight />
+
+                    <span>
+
+                        {
+
+                            emergency
+
+                                ? "Emergency Override"
+
+                                : "Adaptive AI"
+
+                        }
+
+                    </span>
+
+                </div>
+
+            </div>
 
             <div className={styles.card}>
 
@@ -25,11 +109,37 @@ function AIRecommendation() {
 
                     <FaLightbulb className={styles.icon} />
 
-                    <strong>
+                    <div>
 
-                        Extend North Green Signal
+                        <strong>
 
-                    </strong>
+                            {
+
+                                emergency
+
+                                    ? `Emergency Priority → ${busiestLane.toUpperCase()}`
+
+                                    : `Extend ${busiestLane.toUpperCase()} Green Signal`
+
+                            }
+
+                        </strong>
+
+                        <span>
+
+                            {
+
+                                emergency
+
+                                    ? "Emergency vehicle detected. AI has overridden normal optimization."
+
+                                    : "AI optimized based on live traffic density."
+
+                            }
+
+                        </span>
+
+                    </div>
 
                 </div>
 
@@ -39,9 +149,17 @@ function AIRecommendation() {
 
                         <FaChartLine />
 
-                        <span>Delay Reduction</span>
+                        <span>
 
-                        <strong>32%</strong>
+                            Traffic Reduction
+
+                        </span>
+
+                        <strong>
+
+                            {reduction}%
+
+                        </strong>
 
                     </div>
 
@@ -49,9 +167,17 @@ function AIRecommendation() {
 
                         <FaGasPump />
 
-                        <span>Fuel Saving</span>
+                        <span>
 
-                        <strong>14%</strong>
+                            Fuel Saving
+
+                        </span>
+
+                        <strong>
+
+                            {fuelSaving}%
+
+                        </strong>
 
                     </div>
 
@@ -59,9 +185,17 @@ function AIRecommendation() {
 
                         <FaClock />
 
-                        <span>Next Review</span>
+                        <span>
 
-                        <strong>18 sec</strong>
+                            Next Review
+
+                        </span>
+
+                        <strong>
+
+                            {greenTime}s
+
+                        </strong>
 
                     </div>
 

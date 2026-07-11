@@ -1,0 +1,76 @@
+.arrow{
+
+    position:absolute;
+
+    width:28px;
+
+    height:28px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:rgba(255,255,255,.55);
+
+    font-size:16px;
+
+    z-index:18;
+
+    transition:.3s;
+
+}
+
+.arrow:hover{
+
+    color:#00E5FF;
+
+    transform:scale(1.15);
+
+}
+
+/* ==========================
+   Positions
+========================== */
+
+.north{
+
+    top:33%;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+}
+
+.south{
+
+    bottom:33%;
+
+    left:50%;
+
+    transform:translateX(-50%) rotate(180deg);
+
+}
+
+.east{
+
+    top:50%;
+
+    right:33%;
+
+    transform:translateY(-50%);
+
+}
+
+.west{
+
+    top:50%;
+
+    left:33%;
+
+    transform:translateY(-50%) rotate(180deg);
+
+}
+

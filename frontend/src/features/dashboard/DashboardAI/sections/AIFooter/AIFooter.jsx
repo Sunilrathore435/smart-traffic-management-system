@@ -1,21 +1,39 @@
 import {
     FaBolt,
-    FaClock
+    FaClock,
+    FaServer,
+    FaWifi
 } from "react-icons/fa";
 
 import StatusPill from "../../../../../components/ui/StatusPill";
 
 import styles from "./AIFooter.module.css";
 
-function AIFooter() {
+function AIFooter({
+
+                      status = "online",
+
+                      responseTime = "12 ms",
+
+                      lastSync = "Just Now",
+
+                      backend = "CONNECTED",
+
+                      websocket = "ONLINE"
+
+                  }) {
 
     return (
 
         <footer className={styles.footer}>
 
             <StatusPill
-                label="AI ACTIVE"
-                status="online"
+                label={
+                    status === "online"
+                        ? "AI ACTIVE"
+                        : "AI OFFLINE"
+                }
+                status={status}
             />
 
             <div className={styles.info}>
@@ -24,7 +42,11 @@ function AIFooter() {
 
                     <FaBolt />
 
-                    <span>12 ms</span>
+                    <span>
+
+                        {responseTime}
+
+                    </span>
 
                 </div>
 
@@ -32,7 +54,35 @@ function AIFooter() {
 
                     <FaClock />
 
-                    <span>Just Now</span>
+                    <span>
+
+                        {lastSync}
+
+                    </span>
+
+                </div>
+
+                <div className={styles.item}>
+
+                    <FaServer />
+
+                    <span>
+
+                        {backend}
+
+                    </span>
+
+                </div>
+
+                <div className={styles.item}>
+
+                    <FaWifi />
+
+                    <span>
+
+                        {websocket}
+
+                    </span>
 
                 </div>
 

@@ -7,7 +7,13 @@ import TrendBadge from "../../../../../../components/ui/TrendBadge";
 
 import styles from "./VehicleFlowHeader.module.css";
 
-function VehicleFlowHeader() {
+function VehicleFlowHeader({ analytics }) {
+
+    const throughput =
+        analytics?.throughput ?? 0;
+
+    const flowPercentage =
+        analytics?.flowPercentage ?? 0;
 
     return (
 
@@ -16,9 +22,7 @@ function VehicleFlowHeader() {
             <div className={styles.left}>
 
                 <div className={styles.icon}>
-
                     <FaChartLine />
-
                 </div>
 
                 <div className={styles.info}>
@@ -29,11 +33,11 @@ function VehicleFlowHeader() {
 
                     <div className={styles.subtitle}>
 
-                        <span>Last 6 Days</span>
+                        <span>Real-Time</span>
 
                         <span className={styles.dot}></span>
 
-                        <span>Live</span>
+                        <span>Live Analytics</span>
 
                     </div>
 
@@ -44,17 +48,15 @@ function VehicleFlowHeader() {
             <div className={styles.actions}>
 
                 <TrendBadge
-                    value="18%"
-                    label="vs Yesterday"
+                    value={`↗ ${flowPercentage}%`}
+                    label={`${throughput} veh/min`}
                 />
 
                 <button
                     className={styles.menu}
                     aria-label="More"
                 >
-
                     <FaEllipsisVertical />
-
                 </button>
 
             </div>

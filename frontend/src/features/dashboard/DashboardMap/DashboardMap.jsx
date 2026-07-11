@@ -1,11 +1,13 @@
 import GlassCard from "../../../components/ui/GlassCard";
 
 import MapHeader from "./sections/MapHeader";
-import MapCanvas from "./sections/MapCanvas";
 import LaneSummary from "./sections/LaneSummary";
 import MapFooter from "./sections/MapFooter";
 
+
+
 import styles from "./DashboardMap.module.css";
+import CityMap from "../../map/index.js";
 
 function DashboardMap() {
 
@@ -15,7 +17,7 @@ function DashboardMap() {
 
             <MapHeader />
 
-            <MapCanvas />
+            <CityMap />
 
             <LaneSummary />
 

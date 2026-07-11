@@ -1,6 +1,8 @@
+import Analytics from "../../features/analytics/index.js";
+
 function AnalyticsPage() {
     return (
-        <h1>Analytics</h1>
+        <Analytics />
     );
 }
 

@@ -1,89 +1,130 @@
 import { NavLink } from "react-router-dom";
 import {
-    FaChartBar,
-    FaCog,
-    FaHistory,
     FaHome,
-    FaRobot
+    FaChartBar,
+    FaHistory,
+    FaCog,
+    FaRobot,
+    FaCircle
 } from "react-icons/fa";
 
 import styles from "./Sidebar.module.css";
 
 function Sidebar() {
 
+    const menu = [
+
+        {
+            title: "Mission Control",
+            path: "/dashboard",
+            icon: <FaHome />
+        },
+
+        {
+            title: "Traffic Intelligence",
+            path: "/analytics",
+            icon: <FaChartBar />
+        },
+
+        {
+            title: "Operation Logs",
+            path: "/history",
+            icon: <FaHistory />
+        },
+
+        {
+            title: "System Configuration",
+            path: "/settings",
+            icon: <FaCog />
+        }
+
+    ];
+
     return (
 
         <aside className={styles.sidebar}>
 
+            {/* Logo */}
+
             <div className={styles.logo}>
 
-                <h2>🚦 SCTCC</h2>
-
-                <span>Smart Traffic Control</span>
-
-            </div>
-
-            <nav className={styles.navigation}>
-
-                <NavLink
-                    to="/dashboard"
-                    className={({ isActive }) =>
-                        isActive
-                            ? `${styles.link} ${styles.active}`
-                            : styles.link
-                    }
-                >
-                    <FaHome />
-                    <span>Mission Control</span>
-                </NavLink>
-
-                <NavLink
-                    to="/analytics"
-                    className={({ isActive }) =>
-                        isActive
-                            ? `${styles.link} ${styles.active}`
-                            : styles.link
-                    }
-                >
-                    <FaChartBar />
-                    <span>Traffic Intelligence</span>
-                </NavLink>
-
-                <NavLink
-                    to="/history"
-                    className={({ isActive }) =>
-                        isActive
-                            ? `${styles.link} ${styles.active}`
-                            : styles.link
-                    }
-                >
-                    <FaHistory />
-                    <span>Operation Logs</span>
-                </NavLink>
-
-                <NavLink
-                    to="/settings"
-                    className={({ isActive }) =>
-                        isActive
-                            ? `${styles.link} ${styles.active}`
-                            : styles.link
-                    }
-                >
-                    <FaCog />
-                    <span>System Configuration</span>
-                </NavLink>
-
-            </nav>
-
-            <div className={styles.footer}>
-
-                <FaRobot />
+                <div className={styles.logoIcon}>
+                    🚦
+                </div>
 
                 <div>
 
-                    <strong>TRAFIQ AI</strong>
+                    <h2>SCTCC</h2>
 
-                    <p>System Online</p>
+                    <p>
+                        Smart City Traffic Command Center
+                    </p>
+
+                </div>
+
+            </div>
+
+            {/* Navigation */}
+
+            <nav className={styles.navigation}>
+
+                {menu.map((item) => (
+
+                    <NavLink
+                        key={item.path}
+                        to={item.path}
+                        className={({ isActive }) =>
+                            isActive
+                                ? `${styles.link} ${styles.active}`
+                                : styles.link
+                        }
+                    >
+
+                        <div className={styles.icon}>
+                            {item.icon}
+                        </div>
+
+                        <span>{item.title}</span>
+
+                    </NavLink>
+
+                ))}
+
+            </nav>
+
+            {/* Footer */}
+
+            <div className={styles.footer}>
+
+                <div className={styles.footerHeader}>
+
+                    <FaRobot />
+
+                    <div>
+
+                        <strong>TRAFIQ AI</strong>
+
+                        <p>Version 2.4.0</p>
+
+                    </div>
+
+                </div>
+
+                <div className={styles.status}>
+
+                    <FaCircle />
+
+                    <span>System Online</span>
+
+                </div>
+
+                <div className={styles.techStack}>
+
+                    <span>Backend</span>
+
+                    <span>MongoDB</span>
+
+                    <span>Socket</span>
 
                 </div>
 
@@ -92,6 +133,7 @@ function Sidebar() {
         </aside>
 
     );
+
 }
 
 export default Sidebar;

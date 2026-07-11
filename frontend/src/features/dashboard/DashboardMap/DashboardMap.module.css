@@ -1,11 +1,11 @@
 .container{
 
-    min-height:900px;
-
     display:flex;
 
     flex-direction:column;
 
-    gap:32px;
+    gap:24px;
+
+    min-height:min(70vh, 750px);
 
 }

@@ -1,0 +1,71 @@
+.grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:22px;
+
+}
+
+.card{
+
+    padding:24px;
+
+    border-radius:18px;
+
+    background:#171F2C;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+    transition:.25s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.icon{
+
+    width:52px;
+
+    height:52px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:14px;
+
+    background:rgba(0,229,255,.08);
+
+    color:#00E5FF;
+
+    font-size:22px;
+
+}
+
+.card h2{
+
+    color:white;
+
+    font-size:34px;
+
+}
+
+.card span{
+
+    color:#94A3B8;
+
+}

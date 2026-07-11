@@ -1,4 +1,8 @@
-import { FaClock, FaWifi } from "react-icons/fa";
+import {
+    FaClock,
+    FaWifi,
+    FaSyncAlt
+} from "react-icons/fa";
 
 import StatusPill from "../../../../../components/ui/StatusPill";
 
@@ -10,26 +14,62 @@ function MapFooter() {
 
         <footer className={styles.footer}>
 
-            <StatusPill
-                label="CONNECTED"
-                status="online"
-            />
+            <div className={styles.left}>
+
+                <StatusPill
+                    label="CONNECTED"
+                    status="online"
+                />
+
+            </div>
 
             <div className={styles.info}>
 
                 <div className={styles.item}>
 
-                    <FaWifi />
+                    <div className={styles.icon}>
+                        <FaWifi />
+                    </div>
 
-                    <span>WebSocket</span>
+                    <div>
+
+                        <p>Connection</p>
+
+                        <span>WebSocket</span>
+
+                    </div>
 
                 </div>
 
                 <div className={styles.item}>
 
-                    <FaClock />
+                    <div className={styles.icon}>
+                        <FaClock />
+                    </div>
 
-                    <span>Updated Just Now</span>
+                    <div>
+
+                        <p>Last Sync</p>
+
+                        <span>Just Now</span>
+
+                    </div>
+
+                </div>
+
+                <div className={styles.item}>
+
+                    <div className={styles.icon}>
+                        <FaSyncAlt className={styles.rotate}/>
+                    </div>
+
+                    <div>
+
+                        <p>Refresh</p>
+
+                        <span>1 sec</span>
+
+                    </div>
 
                 </div>
 

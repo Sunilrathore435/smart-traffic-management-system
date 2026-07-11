@@ -1,93 +1,67 @@
 import GlassCard from "../../../../../components/ui/GlassCard";
-
 import styles from "./AnalyticsCard.module.css";
 
 function AnalyticsCard({
 
                            title,
-
                            subtitle = "",
-
                            icon = null,
-
                            action = null,
-
                            children,
-
                            className = "",
 
                        }) {
+
+    const hasHeader = title || subtitle || icon || action;
 
     return (
 
         <GlassCard className={`${styles.card} ${className}`}>
 
-            {/* =========================
-                Header
-            ========================= */}
+            {hasHeader && (
+                <>
+                    <header className={styles.header}>
 
-            <header className={styles.header}>
+                        <div className={styles.left}>
 
-                <div className={styles.left}>
+                            {icon && (
+                                <div className={styles.icon}>
+                                    {icon}
+                                </div>
+                            )}
 
-                    {icon && (
+                            <div className={styles.text}>
 
-                        <div className={styles.icon}>
+                                {title && (
+                                    <h3 className={styles.title}>
+                                        {title}
+                                    </h3>
+                                )}
 
-                            {icon}
+                                {subtitle && (
+                                    <p className={styles.subtitle}>
+                                        {subtitle}
+                                    </p>
+                                )}
+
+                            </div>
 
                         </div>
 
-                    )}
-
-                    <div className={styles.text}>
-
-                        <h3 className={styles.title}>
-
-                            {title}
-
-                        </h3>
-
-                        {subtitle && (
-
-                            <p className={styles.subtitle}>
-
-                                {subtitle}
-
-                            </p>
-
+                        {action && (
+                            <div className={styles.action}>
+                                {action}
+                            </div>
                         )}
 
-                    </div>
+                    </header>
 
-                </div>
-
-                {action && (
-
-                    <div className={styles.action}>
-
-                        {action}
-
-                    </div>
-
-                )}
-
-            </header>
-
-            {/* =========================
-                Divider
-            ========================= */}
-
-            <div className={styles.divider}></div>
-
-            {/* =========================
-                Content
-            ========================= */}
+                    <div className={styles.divider}></div>
+                </>
+            )}
 
             <div className={styles.content}>
-
                 {children}
-
             </div>
 
         </GlassCard>

@@ -9,32 +9,56 @@ import StatusPill from "../../../../../components/ui/StatusPill";
 
 import styles from "./AISystemStatus.module.css";
 
-function AISystemStatus() {
+function AISystemStatus({
+
+                            vehicles = 0,
+
+                            currentLane = "-",
+
+                            emergency = false,
+
+                            aiStatus = "ACTIVE"
+
+                        }) {
 
     const systems = [
 
         {
             icon: <FaDatabase />,
             title: "Queue Analysis",
-            status: "COMPLETE"
+            value: `${vehicles} Vehicles`,
+            status: "online",
+            label: "LIVE"
         },
 
         {
             icon: <FaChartLine />,
             title: "Density Prediction",
-            status: "COMPLETE"
+            value: "Running",
+            status: "online",
+            label: "ACTIVE"
         },
 
         {
             icon: <FaTrafficLight />,
-            title: "Signal Optimizer",
-            status: "ACTIVE"
+            title: "Green Signal",
+            value: currentLane.toUpperCase(),
+            status: "online",
+            label: aiStatus
         },
 
         {
             icon: <FaAmbulance />,
             title: "Emergency Monitor",
-            status: "READY"
+            value: emergency
+                ? "Priority Enabled"
+                : "No Emergency",
+            status: emergency
+                ? "warning"
+                : "online",
+            label: emergency
+                ? "ALERT"
+                : "READY"
         }
 
     ];
@@ -44,38 +68,58 @@ function AISystemStatus() {
         <section className={styles.container}>
 
             <h3 className={styles.heading}>
+
                 SYSTEM STATUS
+
             </h3>
 
             <div className={styles.list}>
 
-                {systems.map((item) => (
+                {
 
-                    <div
-                        key={item.title}
-                        className={styles.row}
-                    >
+                    systems.map((item) => (
 
-                        <div className={styles.left}>
+                        <div
+                            key={item.title}
+                            className={styles.row}
+                        >
 
-                            <span className={styles.icon}>
-                                {item.icon}
-                            </span>
+                            <div className={styles.left}>
 
-                            <span>
-                                {item.title}
-                            </span>
+                                <span className={styles.icon}>
+
+                                    {item.icon}
+
+                                </span>
+
+                                <div>
+
+                                    <strong>
+
+                                        {item.title}
+
+                                    </strong>
+
+                                    <p className={styles.value}>
+
+                                        {item.value}
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <StatusPill
+                                label={item.label}
+                                status={item.status}
+                            />
 
                         </div>
 
-                        <StatusPill
-                            label={item.status}
-                            status="online"
-                        />
+                    ))
 
-                    </div>
-
-                ))}
+                }
 
             </div>
 

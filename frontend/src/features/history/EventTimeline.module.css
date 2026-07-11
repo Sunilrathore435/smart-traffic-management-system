@@ -1,0 +1,64 @@
+.timeline{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+    margin-top:10px;
+
+}
+.emptyState{
+
+    margin-top:24px;
+
+    min-height:320px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:18px;
+
+    background:linear-gradient(
+
+            180deg,
+
+            rgba(255,255,255,.03),
+
+            rgba(255,255,255,.015)
+
+    );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:24px;
+
+}
+
+.icon{
+
+    font-size:72px;
+
+    color:#64748B;
+
+}
+
+.emptyState h2{
+
+    font-size:2rem;
+
+}
+
+.emptyState p{
+
+    color:var(--color-text-secondary);
+
+    font-size:1.05rem;
+
+}

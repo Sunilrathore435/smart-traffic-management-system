@@ -1,76 +1,128 @@
-import {
-    FaChartLine,
-    FaTrafficLight,
-    FaClock,
-    FaBrain
-} from "react-icons/fa";
+import { useEffect, useState } from "react";
 
 import AnalyticsCard from "./components/AnalyticsCard";
 import TrafficDensity from "./components/TrafficDensityChart";
 import PeakHourCard from "./components/PeakHourCard";
 import AIInsightCard from "./components/AIInsightCard";
-import styles from "./DashboardAnalytics.module.css";
 import VehicleFlow from "./components/VehicleFlow";
 
+import { SimulationEngine } from "../../traffic";
+
+import styles from "./DashboardAnalytics.module.css";
+
 function DashboardAnalytics() {
+
+    const [simulation, setSimulation] = useState(
+
+        SimulationEngine.getState()
+
+    );
+
+    useEffect(() => {
+
+        const listener = (state) => {
+
+            setSimulation(state);
+
+        };
+
+        SimulationEngine.subscribe(listener);
+
+        SimulationEngine.start();
+
+        return () => {
+
+            SimulationEngine.unsubscribe(listener);
+
+        };
+
+    }, []);
 
     return (
 
         <section className={styles.container}>
 
             <h2 className={styles.heading}>
+
                 📊 Traffic Analytics
-                Real-Time City Intelligence
+
+                <span>
+
+                     Real-Time City Intelligence
+
+                </span>
+
             </h2>
 
             <div className={styles.grid}>
-
-                {/* Vehicle Flow */}
 
                 <div className={styles.flow}>
 
                     <AnalyticsCard>
 
-                        <VehicleFlow />
+                        <VehicleFlow
+
+                            analytics={simulation.analytics}
+
+                            vehicles={simulation.vehicles}
+
+                            signals={simulation.signals}
+
+                        />
 
                     </AnalyticsCard>
 
                 </div>
-
-                {/* Traffic Density */}
 
                 <div className={styles.density}>
-                    <AnalyticsCard >
 
-                        <TrafficDensity />
+                    <AnalyticsCard>
+
+                        <TrafficDensity
+
+                            analytics={simulation.analytics}
+
+                            vehicles={simulation.vehicles}
+
+                        />
 
                     </AnalyticsCard>
 
                 </div>
-
-                {/* Peak Hour */}
 
                 <div className={styles.peak}>
 
                     <AnalyticsCard>
 
-                        <PeakHourCard />
+                        <PeakHourCard
+
+                            analytics={simulation.analytics}
+
+                            ai={simulation.ai}
+
+                            emergency={simulation.emergency}
+
+                        />
 
                     </AnalyticsCard>
 
                 </div>
 
-                {/* AI Optimizer */}
-
                 <div className={styles.ai}>
 
-                    <AnalyticsCard
-                        title="AI Traffic Optimizer"
-                        subtitle="Real-Time AI Recommendation"
-                        icon={<FaBrain />}
-                    >
+                    <AnalyticsCard>
 
-                        <AIInsightCard />
+                        <AIInsightCard
+
+                            analytics={simulation.analytics}
+
+                            ai={simulation.ai}
+
+                            emergency={simulation.emergency}
+
+                            signals={simulation.signals}
+
+                        />
 
                     </AnalyticsCard>
 

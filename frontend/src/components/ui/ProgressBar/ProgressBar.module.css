@@ -1,10 +1,12 @@
-.wrapper {
+.wrapper{
 
-    display: flex;
+    display:flex;
 
-    flex-direction: column;
+    flex-direction:column;
 
-    gap: 12px;
+    gap:10px;
+
+    width:100%;
 
 }
 
@@ -12,21 +14,21 @@
    Track
 ========================================== */
 
-.track {
+.track{
 
-    width: 100%;
+    width:100%;
 
-    height: var(--progress-height);
+    height:var(--progress-height);
 
-    background: var(--progress-track);
+    background:var(--progress-track);
 
-    border-radius: var(--progress-radius);
+    border-radius:var(--progress-radius);
 
-    overflow: hidden;
+    overflow:hidden;
 
-    position: relative;
+    position:relative;
 
-    border: 1px solid rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.06);
 
 }
 
@@ -34,26 +36,26 @@
    Fill
 ========================================== */
 
-.fill {
+.fill{
 
-    height: 100%;
+    height:100%;
 
-    width: 0;
+    width:0;
 
-    border-radius: inherit;
+    border-radius:inherit;
 
-    background: linear-gradient(
+    background:linear-gradient(
             90deg,
             var(--progress-start),
             var(--progress-middle),
             var(--progress-end)
     );
 
-    transition: width var(--progress-animation);
+    transition:width var(--progress-animation);
 
-    position: relative;
+    position:relative;
 
-    overflow: hidden;
+    overflow:hidden;
 
 }
 
@@ -61,7 +63,7 @@
    Glow
 ========================================== */
 
-.glow {
+.glow{
 
     box-shadow:
             var(--progress-glow-small),
@@ -70,47 +72,43 @@
 }
 
 /* ==========================================
-   Moving Shine
+   Shine
 ========================================== */
 
-.animated::after {
+.animated::after{
 
-    content: "";
+    content:"";
 
-    position: absolute;
+    position:absolute;
 
-    inset: 0;
+    inset:0;
 
-    width: 35%;
+    width:35%;
 
-    transform: translateX(-150%);
+    transform:translateX(-150%);
 
-    background: linear-gradient(
+    background:linear-gradient(
             90deg,
             transparent,
             rgba(255,255,255,.45),
             transparent
     );
 
-    animation: shine var(--progress-shine-duration) linear infinite;
+    animation:shine var(--progress-shine-duration) linear infinite;
 
 }
 
-/* ==========================================
-   Shine Animation
-========================================== */
+@keyframes shine{
 
-@keyframes shine {
+    from{
 
-    from {
-
-        transform: translateX(-150%);
+        transform:translateX(-150%);
 
     }
 
-    to {
+    to{
 
-        transform: translateX(420%);
+        transform:translateX(420%);
 
     }
 
@@ -120,42 +118,36 @@
    Footer
 ========================================== */
 
-.info {
+.info{
 
-    display: flex;
+    display:flex;
 
-    justify-content: space-between;
+    justify-content:space-between;
 
-    align-items: center;
+    align-items:center;
 
-}
-
-/* ==========================================
-   Label
-========================================== */
-
-.label {
-
-    color: var(--color-text-secondary);
-
-    font-size: var(--font-sm);
-
-    font-weight: 500;
+    min-height:20px;
 
 }
 
-/* ==========================================
-   Value
-========================================== */
+.label{
 
-.value {
+    color:var(--color-text-secondary);
 
-    color: var(--color-primary);
+    font-size:var(--font-sm);
 
-    font-size: var(--font-sm);
+    font-weight:500;
 
-    font-weight: 700;
+}
 
-    letter-spacing: .3px;
+.value{
+
+    color:var(--color-primary);
+
+    font-size:var(--font-sm);
+
+    font-weight:700;
+
+    letter-spacing:.3px;
 
 }

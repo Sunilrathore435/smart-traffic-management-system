@@ -1,0 +1,171 @@
+.wrapper{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:clamp(16px,1.5vw,22px);
+
+    padding:clamp(18px,1.5vw,24px);
+
+    border-radius:18px;
+
+    border:1px solid rgba(255,255,255,.07);
+
+    background:linear-gradient(
+            180deg,
+            rgba(255,255,255,.03),
+            rgba(255,255,255,.015)
+    );
+
+    backdrop-filter:blur(12px);
+
+    transition:.3s ease;
+
+}
+
+.wrapper:hover{
+
+    transform:translateY(-2px);
+
+    border-color:rgba(0,229,255,.18);
+
+    box-shadow:0 12px 28px rgba(0,229,255,.08);
+
+}
+
+/* ===========================
+   Heading
+=========================== */
+
+.heading{
+
+    margin:0 0 4px;
+
+    color:#FFFFFF;
+
+    font-size:clamp(1rem,1.2vw,1.2rem);
+
+    font-weight:700;
+
+}
+
+/* ===========================
+   Row
+=========================== */
+
+.row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:16px;
+
+    transition:.25s;
+
+}
+
+.row:hover{
+
+    transform:translateX(3px);
+
+}
+
+/* ===========================
+   Left
+=========================== */
+
+.left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.icon{
+
+    font-size:clamp(18px,1.5vw,22px);
+
+    transition:.25s;
+
+}
+
+.row:hover .icon{
+
+    transform:scale(1.08);
+
+}
+
+.label{
+
+    color:#E2E8F0;
+
+    font-size:clamp(.85rem,.95vw,.95rem);
+
+    font-weight:500;
+
+    line-height:1.35;
+
+}
+
+/* ===========================
+   Value
+=========================== */
+
+.value{
+
+    font-size:clamp(2rem,2.2vw,2.5rem);
+
+    font-weight:800;
+
+    line-height:1;
+
+    letter-spacing:-0.5px;
+
+    transition:.25s;
+
+}
+
+.row:hover .value{
+
+    transform:scale(1.03);
+
+}
+
+/* ===========================
+   Divider
+=========================== */
+
+.row:not(:last-child){
+
+    padding-bottom:14px;
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width:768px){
+
+    .wrapper{
+
+        padding:18px;
+
+    }
+
+    .row{
+
+        gap:12px;
+
+    }
+
+}

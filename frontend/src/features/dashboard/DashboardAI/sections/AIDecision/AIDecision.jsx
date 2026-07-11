@@ -7,32 +7,42 @@ import {
 
 import styles from "./AIDecision.module.css";
 
-function AIDecision() {
+function AIDecision({
+
+                        currentLane = "North",
+
+                        greenDuration = 8,
+
+                        reduction = 32,
+
+                        priority = "NORMAL"
+
+                    }) {
 
     const decision = [
 
         {
             icon: <FaTrafficLight />,
-            label: "Target Signal",
-            value: "North Intersection"
+            label: "Current Green",
+            value: currentLane.toUpperCase()
         },
 
         {
             icon: <FaClock />,
             label: "Green Duration",
-            value: "18 Seconds"
+            value: `${greenDuration}s`
         },
 
         {
             icon: <FaChartLine />,
-            label: "Expected Reduction",
-            value: "32%"
+            label: "Traffic Reduction",
+            value: `${reduction}%`
         },
 
         {
             icon: <FaCheckCircle />,
             label: "Priority",
-            value: "NORMAL"
+            value: priority
         }
 
     ];
@@ -43,7 +53,7 @@ function AIDecision() {
 
             <h3 className={styles.heading}>
 
-                CURRENT DECISION
+                AI DECISION
 
             </h3>
 
@@ -51,7 +61,7 @@ function AIDecision() {
 
                 {
 
-                    decision.map(item => (
+                    decision.map((item) => (
 
                         <div
                             key={item.label}

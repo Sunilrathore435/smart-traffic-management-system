@@ -1,0 +1,131 @@
+.footer{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-top:18px;
+
+    padding-top:20px;
+
+    border-top:1px solid rgba(255,255,255,.06);
+
+}
+
+.left{
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:28px;
+
+}
+
+.item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    transition:.3s;
+
+}
+
+.item:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.icon{
+
+    width:42px;
+
+    height:42px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:rgba(0,229,255,.08);
+
+    border:1px solid rgba(0,229,255,.14);
+
+    color:#00E5FF;
+
+    font-size:16px;
+
+    transition:.3s;
+
+}
+
+.item:hover .icon{
+
+    transform:scale(1.08);
+
+    box-shadow:0 0 18px rgba(0,229,255,.15);
+
+}
+
+.item p{
+
+    margin:0;
+
+    color:#94A3B8;
+
+    font-size:12px;
+
+}
+
+.item span{
+
+    display:block;
+
+    margin-top:3px;
+
+    color:#FFFFFF;
+
+    font-size:15px;
+
+    font-weight:600;
+
+}
+
+.rotate{
+
+    animation:spin 3s linear infinite;
+
+}
+
+@keyframes spin{
+
+    from{
+
+        transform:rotate(0deg);
+
+    }
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}

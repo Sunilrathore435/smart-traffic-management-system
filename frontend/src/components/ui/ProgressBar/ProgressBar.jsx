@@ -7,6 +7,7 @@ function ProgressBar({
                          animated = true,
                          glow = true,
                          showValue = true,
+                         showFooter = true,
                          className = "",
                      }) {
 
@@ -39,25 +40,39 @@ function ProgressBar({
 
             </div>
 
-            <div className={styles.info}>
+            {showFooter && (
 
-                {label && (
-                    <span className={styles.label}>
-                        {label}
-                    </span>
-                )}
+                <div className={styles.info}>
 
-                {showValue && (
-                    <span className={styles.value}>
-                        <AnimatedCounter
-                            value={progress}
-                            suffix="%"
-                            duration={1500}
-                        />
-                    </span>
-                )}
+                    {label ? (
 
-            </div>
+                        <span className={styles.label}>
+                            {label}
+                        </span>
+
+                    ) : (
+
+                        <span></span>
+
+                    )}
+
+                    {showValue && (
+
+                        <span className={styles.value}>
+
+                            <AnimatedCounter
+                                value={progress}
+                                suffix="%"
+                                duration={1500}
+                            />
+
+                        </span>
+
+                    )}
+
+                </div>
+
+            )}
 
         </div>
 

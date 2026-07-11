@@ -5,18 +5,8 @@ import {
     XAxis,
     YAxis,
     CartesianGrid,
-    Tooltip,
-    Cell
+    Tooltip
 } from "recharts";
-
-const data = [
-    { day: "Mon", vehicles: 180 },
-    { day: "Tue", vehicles: 245 },
-    { day: "Wed", vehicles: 210 },
-    { day: "Thu", vehicles: 300 },
-    { day: "Fri", vehicles: 340 },
-    { day: "Sat", vehicles: 275 },
-];
 
 function CustomTooltip({ active, payload, label }) {
 
@@ -43,7 +33,7 @@ function CustomTooltip({ active, payload, label }) {
                     marginBottom: 10
                 }}
             >
-                🚗 {label}
+                🕒 {label}
             </div>
 
             <div
@@ -52,7 +42,7 @@ function CustomTooltip({ active, payload, label }) {
                     fontSize: 13
                 }}
             >
-                Vehicles
+                Vehicles Passed
             </div>
 
             <div
@@ -74,7 +64,7 @@ function CustomTooltip({ active, payload, label }) {
                     marginTop: 10
                 }}
             >
-                ● Live Traffic
+                ● Live Simulation
             </div>
 
         </div>
@@ -83,7 +73,17 @@ function CustomTooltip({ active, payload, label }) {
 
 }
 
-function VehicleFlowChart() {
+function VehicleFlowChart({ analytics }) {
+
+    const data = analytics?.trafficHistory?.length
+
+        ? analytics.trafficHistory
+
+        : [
+
+            { time: "--:--", vehicles: 0 }
+
+        ];
 
     return (
 
@@ -95,12 +95,11 @@ function VehicleFlowChart() {
             <BarChart
                 data={data}
                 barCategoryGap="8%"
-                barGap={2}
                 margin={{
                     top: 20,
                     right: 15,
                     left: 10,
-                    bottom: 0,
+                    bottom: 0
                 }}
             >
 
@@ -140,11 +139,10 @@ function VehicleFlowChart() {
                 />
 
                 <XAxis
-                    dataKey="day"
+                    dataKey="time"
                     tick={{
                         fill: "#A7B4C8",
-                        fontSize: 14,
-                        fontWeight: 500,
+                        fontSize: 14
                     }}
                     tickLine={false}
                     axisLine={false}
@@ -152,8 +150,8 @@ function VehicleFlowChart() {
 
                 <YAxis
                     tick={{
-                        fill:"#94A3B8",
-                        fontSize:14
+                        fill: "#94A3B8",
+                        fontSize: 14
                     }}
                     tickLine={false}
                     axisLine={false}
@@ -161,28 +159,18 @@ function VehicleFlowChart() {
 
                 <Tooltip
                     cursor={{
-                        fill:"rgba(255,255,255,.03)"
+                        fill: "rgba(255,255,255,.03)"
                     }}
                     content={<CustomTooltip />}
                 />
 
                 <Bar
                     dataKey="vehicles"
-                    barSize={102}
-                    radius={[20, 20, 0, 0]}
-                    animationDuration={1200}
-                >
-
-                    {data.map((_, index) => (
-
-                        <Cell
-                            key={index}
-                            fill="url(#vehicleGradient)"
-                        />
-
-                    ))}
-
-                </Bar>
+                    fill="url(#vehicleGradient)"
+                    radius={[20,20,0,0]}
+                    isAnimationActive={false}
+                    maxBarSize={70}
+                />
 
             </BarChart>
 

@@ -1,0 +1,229 @@
+/* ==========================================
+   Vehicle Wrapper
+========================================== */
+
+.vehicle{
+
+    position:absolute;
+
+    z-index:20;
+
+    transition:all .04s linear;
+
+}
+
+/* ==========================================
+   Lane Positions + Animation
+========================================== */
+.stopped{
+
+    filter:brightness(.75);
+
+    transition:.2s;
+
+}
+
+/* ==========================================
+   Vehicle
+========================================== */
+
+.car{
+
+    position:relative;
+
+    width:34px;
+
+    height:18px;
+
+    border-radius:8px;
+
+    box-shadow:
+            0 6px 14px rgba(0,0,0,.35);
+
+    transition:transform .3s;
+
+}
+
+/* Roof */
+
+.car::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:2px;
+
+    left:6px;
+
+    width:22px;
+
+    height:8px;
+
+    border-radius:4px;
+
+    background:rgba(255,255,255,.28);
+
+}
+
+/* Wheels */
+
+.car::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:5px;
+
+    bottom:-2px;
+
+    width:24px;
+
+    height:4px;
+
+    background:#111827;
+
+    border-radius:4px;
+
+}
+
+/* ==========================================
+   Window
+========================================== */
+
+.window{
+
+    position:absolute;
+
+    top:4px;
+
+    left:9px;
+
+    width:14px;
+
+    height:5px;
+
+    border-radius:3px;
+
+    background:#DDF6FF;
+
+}
+
+/* ==========================================
+   Headlight
+========================================== */
+
+.headlight{
+
+    position:absolute;
+
+    right:-2px;
+
+    top:6px;
+
+    width:5px;
+
+    height:5px;
+
+    border-radius:50%;
+
+    background:#FFF;
+
+    box-shadow:
+            0 0 8px #FFF,
+            0 0 14px rgba(255,255,255,.8);
+
+}
+
+/* ==========================================
+   Colors
+========================================== */
+
+.cyan{
+
+    background:#22D3EE;
+
+}
+
+.green{
+
+    background:#22C55E;
+
+}
+
+.orange{
+
+    background:#F59E0B;
+
+}
+
+.red{
+
+    background:#EF4444;
+
+}
+
+/* ==========================================
+   Vehicle Hover
+========================================== */
+
+.vehicle:hover .car{
+
+    transform:scale(1.08);
+
+}
+
+/* ==========================================
+   Animations
+========================================== */
+
+
+
+.vehicle:nth-child(1){
+
+    animation-delay:0s;
+
+}
+
+.vehicle:nth-child(2){
+
+    animation-delay:.8s;
+
+}
+
+.vehicle:nth-child(3){
+
+    animation-delay:1.6s;
+
+}
+
+.vehicle:nth-child(4){
+
+    animation-delay:2.2s;
+
+}
+
+.vehicle:nth-child(5){
+
+    animation-delay:3s;
+
+}
+
+.vehicle:nth-child(6){
+
+    animation-delay:3.8s;
+
+}
+
+.vehicle:nth-child(7){
+
+    animation-delay:4.6s;
+
+}
+
+.vehicle:nth-child(8){
+
+    animation-delay:5.4s;
+
+}

@@ -1,0 +1,216 @@
+/* ==========================
+   Header
+========================== */
+
+.header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:clamp(18px,1.8vw,24px);
+
+}
+
+.left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+.info{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+/* ==========================
+   Brain Icon
+========================== */
+
+.icon{
+
+    width:clamp(46px,3vw,54px);
+
+    height:clamp(46px,3vw,54px);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:16px;
+
+    background:rgba(0,229,255,.08);
+
+    border:1px solid rgba(0,229,255,.15);
+
+    color:#00E5FF;
+
+    font-size:clamp(18px,1.4vw,22px);
+
+    box-shadow:0 8px 18px rgba(0,229,255,.08);
+
+    transition:
+            transform .3s ease,
+            box-shadow .3s ease;
+
+}
+
+.icon:hover{
+
+    transform:rotate(-8deg) scale(1.05);
+
+    box-shadow:0 12px 24px rgba(0,229,255,.16);
+
+}
+
+/* ==========================
+   Title
+========================== */
+
+.title{
+
+    margin:0;
+
+    color:#FFFFFF;
+
+    font-size:clamp(1.4rem,1.8vw,1.8rem);
+
+    font-weight:700;
+
+    line-height:1.1;
+
+}
+
+/* ==========================
+   Subtitle
+========================== */
+
+.subtitle{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-top:6px;
+
+    color:#94A3B8;
+
+    font-size:clamp(.78rem,.9vw,.9rem);
+
+    font-weight:500;
+
+}
+
+.dot{
+
+    width:7px;
+
+    height:7px;
+
+    border-radius:50%;
+
+    background:#22C55E;
+
+    box-shadow:0 0 8px rgba(34,197,94,.7);
+
+    animation:livePulse 2s infinite;
+
+}
+
+/* ==========================
+   Menu
+========================== */
+
+.menu{
+
+    width:40px;
+
+    height:40px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:rgba(255,255,255,.05);
+
+    color:#94A3B8;
+
+    cursor:pointer;
+
+    transition:
+            transform .25s ease,
+            background .25s ease,
+            color .25s ease;
+
+}
+
+.menu:hover{
+
+    transform:rotate(90deg);
+
+    background:rgba(255,255,255,.08);
+
+    color:#FFFFFF;
+
+}
+
+/* ==========================
+   Animation
+========================== */
+
+@keyframes livePulse{
+
+    0%,100%{
+
+        opacity:1;
+
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        opacity:.45;
+
+        transform:scale(.85);
+
+    }
+
+}
+
+/* ==========================
+   Responsive
+========================== */
+
+@media (max-width:768px){
+
+    .header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:14px;
+
+    }
+
+}

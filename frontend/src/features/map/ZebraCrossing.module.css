@@ -1,0 +1,104 @@
+/* ==========================================
+   Zebra Crossing
+========================================== */
+
+.crossing{
+
+    position:absolute;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:5px;
+
+    padding:4px;
+
+    z-index:18;
+
+}
+
+.crossing span{
+
+    width:10px;
+
+    height:30px;
+
+    border-radius:3px;
+
+    background:linear-gradient(
+            180deg,
+            #FFFFFF,
+            #E5E7EB
+    );
+
+    box-shadow:
+            0 2px 6px rgba(0,0,0,.25);
+
+    opacity:.95;
+
+}
+
+/* ===========================
+   North
+=========================== */
+
+.north{
+
+    top:34%;
+
+    left:50%;
+
+    transform:
+            translateX(-50%)
+            rotate(90deg);
+
+}
+
+/* ===========================
+   South
+=========================== */
+
+.south{
+
+    bottom:34%;
+
+    left:50%;
+
+    transform:
+            translateX(-50%)
+            rotate(90deg);
+
+}
+
+/* ===========================
+   East
+=========================== */
+
+.east{
+
+    right:34%;
+
+    top:50%;
+
+    transform:
+            translateY(-50%);
+
+}
+
+/* ===========================
+   West
+=========================== */
+
+.west{
+
+    left:34%;
+
+    top:50%;
+
+    transform:
+            translateY(-50%);
+
+}

@@ -4,17 +4,23 @@ import VehicleFlowFooter from "./Footer";
 
 import styles from "./VehicleFlow.module.css";
 
-function VehicleFlow() {
+function VehicleFlow({ analytics }) {
 
     return (
 
         <div className={styles.wrapper}>
 
-            <VehicleFlowHeader />
+            <VehicleFlowHeader
+                analytics={analytics}
+            />
 
-            <VehicleFlowChart />
+            <VehicleFlowChart
+                analytics={analytics}
+            />
 
-            <VehicleFlowFooter />
+            <VehicleFlowFooter
+                analytics={analytics}
+            />
 
         </div>
 

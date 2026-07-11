@@ -5,78 +5,62 @@ import {
 
 import styles from "./VehicleFlowFooter.module.css";
 
-function VehicleFlowFooter() {
+function VehicleFlowFooter({ analytics }) {
+
+    const total =
+        analytics?.vehiclesPassed ?? 0;
+
+    const throughput =
+        analytics?.throughput ?? 0;
 
     return (
 
         <div className={styles.footer}>
 
-            {/* Left */}
-
             <div className={styles.left}>
 
                 <div className={styles.icon}>
-
                     <FaCarSide />
-
                 </div>
 
                 <div className={styles.content}>
 
                     <p className={styles.label}>
-
-                        Today's Total
-
+                        Vehicles Passed
                     </p>
 
                     <h2 className={styles.value}>
-
-                        481
-
+                        {total}
                     </h2>
 
                     <span className={styles.unit}>
-
                         Vehicles
-
                     </span>
 
                 </div>
 
             </div>
 
-            {/* Divider */}
-
             <div className={styles.divider}></div>
-
-            {/* Right */}
 
             <div className={styles.right}>
 
                 <div className={styles.icon}>
-
                     <FaChartLine />
-
                 </div>
 
                 <div className={styles.content}>
 
                     <p className={styles.label}>
-
-                        Daily Average
-
+                        Throughput
                     </p>
 
                     <h2 className={styles.value}>
-
-                        80
-
+                        {throughput}
                     </h2>
 
                     <span className={styles.unit}>
-
-                        Vehicles
-
+                        veh/min
                     </span>
 
                 </div>

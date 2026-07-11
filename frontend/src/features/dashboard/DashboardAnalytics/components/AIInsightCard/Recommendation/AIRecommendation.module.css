@@ -1,0 +1,231 @@
+.wrapper{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    max-width:480px;
+
+    width:100%;
+
+    padding-right:clamp(8px,1vw,16px);
+
+}
+
+/* ==========================
+   Left
+========================== */
+
+.left{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:14px;
+
+}
+
+.priority{
+
+    padding:6px 14px;
+
+    border-radius:999px;
+
+    background:rgba(255,170,0,.12);
+
+    border:1px solid rgba(255,170,0,.20);
+
+    color:#FFB020;
+
+    font-size:.82rem;
+
+    font-weight:700;
+
+    letter-spacing:.3px;
+
+    box-shadow:0 0 12px rgba(255,170,0,.08);
+
+    transition:.3s;
+
+}
+
+.priority:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.map{
+
+    width:150px;
+
+    height:135px;
+
+    border-radius:16px;
+
+    background:linear-gradient(
+            180deg,
+            rgba(255,255,255,.03),
+            rgba(255,255,255,.015)
+    );
+
+    border:1px solid rgba(255,255,255,.06);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:58px;
+
+}
+
+/* ==========================
+   Right
+========================== */
+
+.right{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.title{
+
+    font-size:clamp(2rem,2vw,2.6rem);
+
+    font-weight:800;
+
+    letter-spacing:-.5px;
+
+    margin-bottom:4px;
+
+}
+
+.description{
+
+    margin:14px 0;
+
+    font-size:1rem;
+
+    line-height:1.6;
+
+    color:#CBD5E1;
+
+}
+
+.description strong{
+
+    color:#22C55E;
+
+    font-weight:700;
+
+}
+
+.reasonTag{
+
+    margin-top:8px;
+
+    width:max-content;
+
+    padding:6px 12px;
+
+    border-radius:10px;
+
+    background:rgba(0,229,255,.08);
+
+    color:#00E5FF;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    font-size:.82rem;
+
+    font-weight:600;
+
+}
+
+.reason{
+
+    margin-top:12px;
+
+    font-size:1rem;
+
+    line-height:1.6;
+
+    color:#D6DCE8;
+
+}
+
+.seconds{
+
+    color:#25D7FF;
+
+    font-weight:800;
+
+}
+
+/* ==========================
+   Responsive
+========================== */
+
+@media (max-width:1200px){
+
+    .wrapper{
+
+        max-width:100%;
+
+        padding-right:0;
+
+    }
+
+    .map{
+
+        width:130px;
+
+        height:120px;
+
+        font-size:50px;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .title{
+
+        font-size:1.8rem;
+
+    }
+
+    .description{
+
+        font-size:.95rem;
+
+    }
+
+    .map{
+
+        width:110px;
+
+        height:100px;
+
+        font-size:42px;
+
+    }
+
+}

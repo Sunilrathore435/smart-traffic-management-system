@@ -1,7 +1,19 @@
+import Settings from "../../features/settings";
+
+import styles from "./SettingsPage.module.css";
+
 function SettingsPage() {
+
     return (
-        <h1>Settings</h1>
+
+        <main className={styles.page}>
+
+            <Settings />
+
+        </main>
+
     );
+
 }
 
 export default SettingsPage;
