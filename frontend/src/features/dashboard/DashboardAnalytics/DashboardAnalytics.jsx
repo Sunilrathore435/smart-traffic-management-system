@@ -13,9 +13,7 @@ import styles from "./DashboardAnalytics.module.css";
 function DashboardAnalytics() {
 
     const [simulation, setSimulation] = useState(
-
         SimulationEngine.getState()
-
     );
 
     useEffect(() => {
@@ -27,8 +25,6 @@ function DashboardAnalytics() {
         };
 
         SimulationEngine.subscribe(listener);
-
-        SimulationEngine.start();
 
         return () => {
 
@@ -99,6 +95,8 @@ function DashboardAnalytics() {
                             analytics={simulation.analytics}
 
                             ai={simulation.ai}
+
+                            vehicles={simulation.vehicles}
 
                             emergency={simulation.emergency}
 

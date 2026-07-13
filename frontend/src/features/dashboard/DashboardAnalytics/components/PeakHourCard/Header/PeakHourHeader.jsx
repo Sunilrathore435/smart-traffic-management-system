@@ -5,7 +5,27 @@ import {
 
 import styles from "./PeakHourHeader.module.css";
 
-function PeakHourHeader() {
+function PeakHourHeader({
+
+                            analytics
+
+                        }) {
+
+    const avgQueue = Math.round(
+        Object.values(analytics?.laneCongestion || {})
+            .reduce((sum, value) => sum + value, 0) / 4
+    );
+
+    let status = "Low Traffic";
+    let statusClass = styles.low;
+
+    if (avgQueue >= 6) {
+        status = "Peak Traffic";
+        statusClass = styles.high;
+    } else if (avgQueue >= 3) {
+        status = "Moderate Traffic";
+        statusClass = styles.medium;
+    }
 
     return (
 
@@ -14,20 +34,26 @@ function PeakHourHeader() {
             <div className={styles.left}>
 
                 <div className={styles.icon}>
+
                     <FaClock />
+
                 </div>
 
                 <div>
 
                     <h2 className={styles.title}>
+
                         Peak Hour
+
                     </h2>
 
-                    <div className={styles.subtitle}>
+                    <div className={`${styles.subtitle} ${statusClass}`}>
 
-                        Today's Peak Traffic
+                        <span>{status}</span>
 
                         <span className={styles.dot}></span>
+
+                        <span>Live</span>
 
                     </div>
 
@@ -35,8 +61,16 @@ function PeakHourHeader() {
 
             </div>
 
-            <button className={styles.menu}>
+            <button
+
+                className={styles.menu}
+
+                aria-label="More"
+
+            >
+
                 <FaEllipsisV />
+
             </button>
 
         </header>

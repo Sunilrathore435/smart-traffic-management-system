@@ -7,7 +7,45 @@ import TrendBadge from "../../../../../../components/ui/TrendBadge";
 
 import styles from "./TrafficDensityHeader.module.css";
 
-function TrafficDensityHeader() {
+function TrafficDensityHeader({
+
+                                  analytics
+
+                              }) {
+
+    const congestion =
+
+        analytics?.laneCongestion ||
+
+        {
+
+            north: 0,
+
+            east: 0,
+
+            south: 0,
+
+            west: 0
+
+        };
+
+    const values = Object.values(congestion);
+
+    const averageDensity = values.length
+
+        ? Math.round(
+
+            values.reduce(
+
+                (sum, value) => sum + value,
+
+                0
+
+            ) / values.length
+
+        )
+
+        : 0;
 
     return (
 
@@ -46,13 +84,19 @@ function TrafficDensityHeader() {
             <div className={styles.actions}>
 
                 <TrendBadge
-                    value="64%"
+
+                    value={`${averageDensity}%`}
+
                     label="Avg Density"
+
                 />
 
                 <button
+
                     className={styles.menu}
+
                     aria-label="More"
+
                 >
 
                     <FaEllipsisVertical />

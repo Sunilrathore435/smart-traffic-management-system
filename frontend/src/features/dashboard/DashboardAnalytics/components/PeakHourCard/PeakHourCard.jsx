@@ -1,19 +1,50 @@
 import PeakHourHeader from "./Header";
-
+import PeakHourHero from "./Hero";
+import PeakHourStats from "./Stats";
 
 import styles from "./PeakHourCard.module.css";
-import PeakHourHero from "./Hero/index.js";
-import PeakHourStats from "./Stats/index.js";
 
-function PeakHourCard() {
+function PeakHourCard({
+
+                          analytics,
+
+                          ai,
+
+                          emergency,
+
+                          vehicles
+
+                      }) {
 
     return (
 
         <div className={styles.wrapper}>
 
-            <PeakHourHeader />
-           <PeakHourHero />
-            <PeakHourStats />
+            <PeakHourHeader
+
+                analytics={analytics}
+
+            />
+
+            <PeakHourHero
+
+                analytics={analytics}
+
+                ai={ai}
+
+                emergency={emergency}
+
+                vehicles={vehicles}
+
+
+            />
+
+            <PeakHourStats
+
+                analytics={analytics}
+
+            />
+
         </div>
 
     );

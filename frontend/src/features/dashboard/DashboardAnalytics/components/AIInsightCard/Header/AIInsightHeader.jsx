@@ -5,7 +5,29 @@ import {
 
 import styles from "./AIInsightHeader.module.css";
 
-function AIInsightHeader() {
+function AIInsightHeader({ analytics }) {
+
+    const prediction =
+        analytics?.prediction || {};
+
+    const confidence =
+        prediction.confidence || 0;
+
+    let status = "Learning";
+    let statusClass = styles.low;
+
+    if (confidence >= 95) {
+
+        status = "OPTIMAL";
+        statusClass = styles.high;
+
+    }
+    else if (confidence >= 80) {
+
+        status = "ANALYZING";
+        statusClass = styles.medium;
+
+    }
 
     return (
 
@@ -23,13 +45,13 @@ function AIInsightHeader() {
                         AI Traffic Optimizer
                     </h2>
 
-                    <div className={styles.subtitle}>
+                    <div className={`${styles.subtitle} ${statusClass}`}>
 
-                        <span>Real-Time AI Recommendation</span>
+                        <span>{status}</span>
 
                         <span className={styles.dot}></span>
 
-                        <span>LIVE</span>
+                        <span>{confidence}% Confidence</span>
 
                     </div>
 
@@ -37,7 +59,10 @@ function AIInsightHeader() {
 
             </div>
 
-            <button className={styles.menu}>
+            <button
+                className={styles.menu}
+                aria-label="More"
+            >
                 <FaEllipsisV />
             </button>
 

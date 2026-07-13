@@ -62,27 +62,25 @@ class SignalEngine {
     }
 
     // =====================================
-    // AI Chooses Lane
-    // =====================================
+// AI Chooses Lane
+// =====================================
 
     chooseLane(vehicles) {
 
-        const emergency =
-            EmergencyEngine.getStatus();
+        // Always update AI decision first
+        const decision =
+            AIEngine.analyze(vehicles);
 
-        // Emergency always has priority
+        // Emergency override
+        if (decision.emergency) {
 
-        if (emergency.active) {
-
-            this.setPhase(emergency.lane);
+            this.setPhase(decision.lane);
 
             return;
 
         }
 
-        const decision =
-            AIEngine.analyze(vehicles);
-
+        // Normal AI
         this.setPhase(decision.lane);
 
     }

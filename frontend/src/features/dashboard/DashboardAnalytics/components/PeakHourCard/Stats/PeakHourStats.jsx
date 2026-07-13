@@ -6,7 +6,31 @@ import {
 
 import styles from "./PeakHourStats.module.css";
 
-function PeakHourStats() {
+function PeakHourStats({ analytics }) {
+
+    const throughput =
+        analytics?.throughput || 0;
+
+    const vehiclesPassed =
+        analytics?.vehiclesPassed || 0;
+
+    const congestion =
+        analytics?.congestion || 0;
+
+    const averagePeak = Math.round(
+        vehiclesPassed * 0.75
+    );
+
+    const todayTotal =
+        vehiclesPassed;
+
+    const vsAverage = Math.round(
+        throughput / 2
+    );
+
+    const vsOffPeak = (
+        throughput / 20
+    ).toFixed(1);
 
     return (
 
@@ -19,21 +43,34 @@ function PeakHourStats() {
                 <div className={styles.card}>
 
                     <h3 className={styles.green}>
+
                         <FaArrowUp />
-                        18%
+
+                        {vsAverage}%
+
                     </h3>
 
-                    <span>vs Average</span>
+                    <span>
+
+                        vs Average
+
+                    </span>
 
                 </div>
 
                 <div className={styles.card}>
 
                     <h3 className={styles.blue}>
-                        1.8x
+
+                        {vsOffPeak}x
+
                     </h3>
 
-                    <span>vs Off-Peak</span>
+                    <span>
+
+                        vs Off-Peak
+
+                    </span>
 
                 </div>
 
@@ -49,9 +86,17 @@ function PeakHourStats() {
 
                     <div>
 
-                        <p>Average Peak</p>
+                        <p>
 
-                        <h4>301 Vehicles</h4>
+                            Average Peak
+
+                        </p>
+
+                        <h4>
+
+                            {averagePeak} Vehicles
+
+                        </h4>
 
                     </div>
 
@@ -65,9 +110,17 @@ function PeakHourStats() {
 
                     <div>
 
-                        <p>Today's Total</p>
+                        <p>
 
-                        <h4>481 Vehicles</h4>
+                            Today's Total
+
+                        </p>
+
+                        <h4>
+
+                            {todayTotal} Vehicles
+
+                        </h4>
 
                     </div>
 

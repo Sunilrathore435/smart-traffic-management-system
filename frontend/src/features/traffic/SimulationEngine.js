@@ -290,16 +290,34 @@ class SimulationEngine {
     }
 
     // =====================================
-    // Emergency Trigger
-    // =====================================
+// Emergency Trigger
+// =====================================
 
     triggerEmergency(lane) {
 
+        // Activate emergency
         EmergencyEngine.activate(lane);
 
+        // Force signal to emergency lane
+        SignalEngine.setGreenLane(lane);
+
+        // Recalculate AI immediately
+        SignalEngine.chooseLane(
+            VehicleEngine.getVehicles()
+        );
+
+        // Refresh analytics
         AnalyticsEngine.registerEmergency();
 
-        SignalEngine.setGreenLane(lane);
+        AnalyticsEngine.update(
+
+            VehicleEngine.getVehicles(),
+
+            SignalEngine.getSignals(),
+
+            SignalEngine.getDecision()
+
+        );
 
         this.lastSignalChange = Date.now();
 
@@ -308,8 +326,8 @@ class SimulationEngine {
     }
 
     // =====================================
-    // Clear Emergency
-    // =====================================
+// Clear Emergency
+// =====================================
 
     clearEmergency() {
 
@@ -318,6 +336,16 @@ class SimulationEngine {
         SignalEngine.chooseLane(
 
             VehicleEngine.getVehicles()
+
+        );
+
+        AnalyticsEngine.update(
+
+            VehicleEngine.getVehicles(),
+
+            SignalEngine.getSignals(),
+
+            SignalEngine.getDecision()
 
         );
 
@@ -334,6 +362,8 @@ class SimulationEngine {
     subscribe(listener) {
 
         this.listeners.push(listener);
+
+        listener(this.getState());
 
     }
 
@@ -358,6 +388,12 @@ class SimulationEngine {
 
             signals:
                 SignalEngine.getSignals(),
+
+            currentGreen:
+                SignalEngine.getCurrentGreen(),
+
+            phase:
+                SignalEngine.getCurrentPhase(),
 
             vehicles:
                 VehicleEngine.getVehicles(),

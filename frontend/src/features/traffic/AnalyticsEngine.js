@@ -352,36 +352,37 @@ class AnalyticsEngine {
     // =====================================
     // AI Prediction
     // =====================================
-
     getPrediction() {
 
-        let recommendation =
-            "Traffic Flow Normal";
+        let recommendation = "Traffic Flow Normal";
 
         if (this.stats.congestion > 70) {
 
-            recommendation =
-                "Increase Green Time";
+            recommendation = "Increase Green Time";
+
+        }
+        else if (this.stats.congestion > 40) {
+
+            recommendation = "Monitor Queue";
 
         }
 
-        else if (
+        // Dynamic confidence
+        const confidence = Math.round(
 
-            this.stats.congestion > 40
+            80 +
 
-        ) {
+            (this.stats.fuelSaving * 0.15) -
 
-            recommendation =
-                "Monitor Queue";
+            (this.stats.congestion * 0.10)
 
-        }
+        );
 
         return {
 
-            congestion:
-            this.stats.congestion,
+            congestion: this.stats.congestion,
 
-            confidence: 98,
+            confidence: Math.max(60, Math.min(99, confidence)),
 
             recommendation
 

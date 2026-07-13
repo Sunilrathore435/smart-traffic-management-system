@@ -237,3 +237,31 @@
     }
 
 }
+.emergency{
+
+    color:#FF4D4F;
+
+    font-weight:700;
+
+    text-shadow:
+            0 0 10px rgba(255,77,79,.6);
+
+    animation:emergencyBlink 1s infinite;
+
+}
+
+@keyframes emergencyBlink{
+
+    0%,100%{
+
+        opacity:1;
+
+    }
+
+    50%{
+
+        opacity:.45;
+
+    }
+
+}

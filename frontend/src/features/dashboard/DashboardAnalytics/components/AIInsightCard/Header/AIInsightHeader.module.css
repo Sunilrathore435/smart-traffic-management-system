@@ -214,3 +214,45 @@
     }
 
 }
+
+.low{
+
+    color:#F59E0B;
+
+}
+
+.medium{
+
+    color:#22C55E;
+
+}
+
+.high{
+
+    color:#00E5FF;
+
+}
+
+.low .dot{
+
+    background:#F59E0B;
+
+    box-shadow:0 0 10px rgba(245,158,11,.7);
+
+}
+
+.medium .dot{
+
+    background:#22C55E;
+
+    box-shadow:0 0 10px rgba(34,197,94,.7);
+
+}
+
+.high .dot{
+
+    background:#00E5FF;
+
+    box-shadow:0 0 10px rgba(0,229,255,.7);
+
+}

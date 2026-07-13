@@ -5,19 +5,45 @@ import AIConfidence from "../Confidence";
 
 import styles from "./AIContent.module.css";
 
-function AIContent() {
+function AIContent({
+
+                       analytics,
+
+                       ai,
+
+                       emergency,
+
+                       signals
+
+                   }) {
 
     return (
 
         <section className={styles.content}>
 
-            <AIJunction />
+            <AIJunction
+                analytics={analytics}
+                ai={ai}
+                emergency={emergency}
+            />
 
-            <AIRecommendation />
+            <AIRecommendation
+                analytics={analytics}
+                ai={ai}
+                emergency={emergency}
+            />
 
-            <AIMetrics />
+            <AIMetrics
+                analytics={analytics}
+                ai={ai}
+                emergency={emergency}
+            />
 
-            <AIConfidence />
+            <AIConfidence
+                analytics={analytics}
+                ai={ai}
+                emergency={emergency}
+            />
 
         </section>
 

@@ -1,8 +1,68 @@
 import styles from "./AIConfidence.module.css";
 
-function AIConfidence() {
+function AIConfidence({
 
-    const percentage = 98;
+                          analytics,
+
+                          ai,
+
+                          emergency
+
+                      }) {
+
+    const percentage =
+
+        emergency?.active
+
+            ? 100
+
+            : ai?.confidence ||
+
+            analytics?.prediction?.confidence ||
+
+            0;
+
+    let status = "Low";
+
+    if (emergency?.active) {
+
+        status = "Emergency Override";
+
+    }
+
+    else if (percentage >= 95) {
+
+        status = "Excellent";
+
+    }
+
+    else if (percentage >= 85) {
+
+        status = "Very High";
+
+    }
+
+    else if (percentage >= 70) {
+
+        status = "High";
+
+    }
+
+    else if (percentage >= 50) {
+
+        status = "Moderate";
+
+    }
+
+    const radius = 52;
+
+    const circumference = 2 * Math.PI * radius;
+
+    const offset =
+
+        circumference -
+
+        (circumference * percentage) / 100;
 
     return (
 
@@ -13,32 +73,58 @@ function AIConfidence() {
                 <svg viewBox="0 0 120 120">
 
                     <circle
+
                         className={styles.bg}
+
                         cx="60"
+
                         cy="60"
-                        r="52"
+
+                        r={radius}
+
                     />
 
                     <circle
+
                         className={styles.progress}
+
                         cx="60"
+
                         cy="60"
-                        r="52"
+
+                        r={radius}
+
                         style={{
-                            strokeDasharray: 327,
-                            strokeDashoffset: 327 - (327 * percentage) / 100
+
+                            strokeDasharray: circumference,
+
+                            strokeDashoffset: offset
+
                         }}
+
                     />
 
                 </svg>
 
                 <div className={styles.center}>
 
-                    <h2>{percentage}%</h2>
+                    <h2>
 
-                    <span>AI Confidence</span>
+                        {percentage}%
 
-                    <small>Very High</small>
+                    </h2>
+
+                    <span>
+
+                        AI Confidence
+
+                    </span>
+
+                    <small>
+
+                        {status}
+
+                    </small>
 
                 </div>
 
