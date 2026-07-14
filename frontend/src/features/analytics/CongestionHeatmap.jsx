@@ -1,59 +1,62 @@
-import { useEffect, useState } from "react";
-
-import AnalyticsEngine from "../traffic/AnalyticsEngine";
-
 import styles from "./CongestionHeatmap.module.css";
 
-function CongestionHeatmap() {
+function CongestionHeatmap({
 
-    const [lanes, setLanes] = useState([]);
+                               analytics = {}
 
-    useEffect(() => {
+                           }) {
 
-        const update = () => {
+    const congestion =
 
-            const congestion =
-                AnalyticsEngine.getLaneCongestion();
+        analytics.laneCongestion ||
 
-            const data = [
+        {
 
-                {
-                    name: "North",
-                    value: congestion.north
-                },
+            north: 0,
 
-                {
-                    name: "East",
-                    value: congestion.east
-                },
+            east: 0,
 
-                {
-                    name: "South",
-                    value: congestion.south
-                },
+            south: 0,
 
-                {
-                    name: "West",
-                    value: congestion.west
-                }
-
-            ];
-
-            setLanes(data);
+            west: 0
 
         };
 
-        AnalyticsEngine.subscribe(update);
+    const lanes = [
 
-        update();
+        {
 
-        return () => {
+            name: "North",
 
-            AnalyticsEngine.unsubscribe(update);
+            value: congestion.north
 
-        };
+        },
 
-    }, []);
+        {
+
+            name: "East",
+
+            value: congestion.east
+
+        },
+
+        {
+
+            name: "South",
+
+            value: congestion.south
+
+        },
+
+        {
+
+            name: "West",
+
+            value: congestion.west
+
+        }
+
+    ];
 
     return (
 
@@ -69,7 +72,7 @@ function CongestionHeatmap() {
 
                 <span>
 
-                    Live
+                    LIVE
 
                 </span>
 

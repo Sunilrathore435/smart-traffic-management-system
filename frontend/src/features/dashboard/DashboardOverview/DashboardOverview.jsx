@@ -8,71 +8,60 @@ import {
 
 import MetricCard from "../../../components/ui/MetricCard";
 
-import { SimulationEngine } from "../../traffic";
-import EmergencyEngine from "../../traffic/EmergencyEngine";
-
+import BackendSimulationEngine from "../../traffic/BackendSimulationEngine";
 
 import styles from "./DashboardOverview.module.css";
 
 function DashboardOverview() {
 
-    const [state, setState] = useState({
-
-        vehicles: [],
-        signals: {},
-        ai: {}
-
-    });
-
-    const [emergency, setEmergency] = useState(
-        EmergencyEngine.getStatus()
+    const [state, setState] = useState(
+        BackendSimulationEngine.getState()
     );
 
     useEffect(() => {
 
-        const listener = (simulation) => {
+        const listener = (dashboard) => {
 
-            setState(simulation);
-
-            setEmergency(
-                EmergencyEngine.getStatus()
-            );
+            setState(dashboard);
 
         };
 
-        SimulationEngine.subscribe(listener);
+        BackendSimulationEngine.subscribe(listener);
 
-        SimulationEngine.start();
+        BackendSimulationEngine.start();
 
         return () => {
 
-            SimulationEngine.unsubscribe(listener);
+            BackendSimulationEngine.unsubscribe(listener);
 
         };
 
     }, []);
 
-    // ===========================
-    // Live Metrics
-    // ===========================
+    // ==========================================
+    // Live Dashboard Data
+    // ==========================================
 
-    const totalVehicles = state.vehicles.length;
+    const totalVehicles =
+        state.analytics?.totalVehiclesProcessed ?? 0;
 
-    const activeSignals =
-        Object.values(state.signals)
-            .filter(signal => signal === "green")
-            .length;
+    const activeSignals = 1;
 
     const currentGreenLane =
-        Object.keys(state.signals)
-            .find(lane => state.signals[lane] === "green") || "-";
+        state.signal?.currentGreenLane ?? "-";
 
     const aiConfidence =
-        state.ai?.confidence || 98;
+        state.analytics?.prediction?.confidence ?? 99;
+
+    const emergency =
+        state.emergency || {
+            active: false,
+            lane: "NONE"
+        };
 
     const emergencyStatus =
         emergency.active
-            ? emergency.lane.toUpperCase()
+            ? emergency.lane
             : "OFF";
 
     return (
@@ -84,13 +73,13 @@ function DashboardOverview() {
                 <MetricCard
                     title="Total Vehicles"
                     value={totalVehicles}
-                    subtitle="Live Vehicles"
+                    subtitle="Processed Vehicles"
                     icon={<FaCarSide />}
                 />
 
                 <MetricCard
                     title="Green Signal"
-                    value={currentGreenLane.toUpperCase()}
+                    value={currentGreenLane}
                     subtitle={`${activeSignals} Active`}
                     icon={<FaTrafficLight />}
                 />
@@ -134,11 +123,15 @@ function DashboardOverview() {
 
                     <span className={styles.status}>
 
-            {emergency.active
-                ? `ACTIVE • ${emergency.lane.toUpperCase()}`
-                : "STANDBY"}
+                        {
+                            emergency.active
 
-        </span>
+                                ? `ACTIVE • ${emergency.lane}`
+
+                                : "STANDBY"
+                        }
+
+                    </span>
 
                 </div>
 
@@ -146,39 +139,57 @@ function DashboardOverview() {
 
                     <button
                         className={`${styles.laneButton}
-            ${emergency.lane === "north" && emergency.active ? styles.active : ""}`}
-                        onClick={() => SimulationEngine.triggerEmergency("north")}
+                        ${emergency.active && emergency.lane === "NORTH"
+                            ? styles.active
+                            : ""}`}
+                        onClick={() =>
+                            BackendSimulationEngine.triggerEmergency("north")
+                        }
                     >
                         ⬆ North
                     </button>
 
                     <button
                         className={`${styles.laneButton}
-            ${emergency.lane === "east" && emergency.active ? styles.active : ""}`}
-                        onClick={() => SimulationEngine.triggerEmergency("east")}
+                        ${emergency.active && emergency.lane === "EAST"
+                            ? styles.active
+                            : ""}`}
+                        onClick={() =>
+                            BackendSimulationEngine.triggerEmergency("east")
+                        }
                     >
                         ➡ East
                     </button>
 
                     <button
                         className={`${styles.laneButton}
-            ${emergency.lane === "south" && emergency.active ? styles.active : ""}`}
-                        onClick={() => SimulationEngine.triggerEmergency("south")}
+                        ${emergency.active && emergency.lane === "SOUTH"
+                            ? styles.active
+                            : ""}`}
+                        onClick={() =>
+                            BackendSimulationEngine.triggerEmergency("south")
+                        }
                     >
                         ⬇ South
                     </button>
 
                     <button
                         className={`${styles.laneButton}
-            ${emergency.lane === "west" && emergency.active ? styles.active : ""}`}
-                        onClick={() => SimulationEngine.triggerEmergency("west")}
+                        ${emergency.active && emergency.lane === "WEST"
+                            ? styles.active
+                            : ""}`}
+                        onClick={() =>
+                            BackendSimulationEngine.triggerEmergency("west")
+                        }
                     >
                         ⬅ West
                     </button>
 
                     <button
                         className={styles.clear}
-                        onClick={() => SimulationEngine.clearEmergency()}
+                        onClick={() =>
+                            BackendSimulationEngine.clearEmergency()
+                        }
                     >
                         ✕ Clear Priority
                     </button>
@@ -186,6 +197,7 @@ function DashboardOverview() {
                 </div>
 
             </div>
+
         </>
 
     );

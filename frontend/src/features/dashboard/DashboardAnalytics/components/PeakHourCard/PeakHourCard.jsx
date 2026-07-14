@@ -8,11 +8,9 @@ function PeakHourCard({
 
                           analytics,
 
-                          ai,
+                          timestamp,
 
-                          emergency,
-
-                          vehicles
+                          emergency
 
                       }) {
 
@@ -30,12 +28,7 @@ function PeakHourCard({
 
                 analytics={analytics}
 
-                ai={ai}
-
-                emergency={emergency}
-
-                vehicles={vehicles}
-
+                timestamp={timestamp}
 
             />
 

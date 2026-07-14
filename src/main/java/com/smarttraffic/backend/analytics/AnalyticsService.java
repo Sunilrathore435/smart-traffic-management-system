@@ -28,15 +28,11 @@ public class AnalyticsService {
 
         if (records.isEmpty()) {
 
-            return new AnalyticsResponse(
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    "NONE",
-                    0
-            );
+            AnalyticsResponse response = new AnalyticsResponse();
+
+            response.setBusiestLane("NONE");
+
+            return response;
         }
 
         long totalSimulations = records.size();
@@ -59,20 +55,23 @@ public class AnalyticsService {
         long emergencyVehiclesHandled =
                 calculateEmergencyVehicles(records);
 
+
         String busiestLane =
                 findMostUsedLane(records);
 
-        return new AnalyticsResponse(
-                totalSimulations,
-                totalVehiclesProcessed,
-                averageGreenTime,
-                averageVehiclesPassed,
-                averageTrafficScore,
-                busiestLane,
-                emergencyVehiclesHandled
-        );
-    }
 
+        AnalyticsResponse response = new AnalyticsResponse();
+
+        response.setTotalSimulations(totalSimulations);
+        response.setTotalVehiclesProcessed(totalVehiclesProcessed);
+        response.setAverageGreenTime(averageGreenTime);
+        response.setAverageVehiclesPassed(averageVehiclesPassed);
+        response.setAverageTrafficScore(averageTrafficScore);
+        response.setBusiestLane(busiestLane);
+        response.setEmergencyVehiclesHandled(emergencyVehiclesHandled);
+
+        return response;
+    }
     /**
      * Calculate total processed vehicles.
      */
@@ -153,7 +152,6 @@ public class AnalyticsService {
 
         return total;
     }
-
     /**
      * Find the most frequently selected lane.
      */

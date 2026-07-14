@@ -12,7 +12,11 @@ function AIInsightCard({
 
                            emergency,
 
-                           signals
+                           signal,
+
+                           simulation,
+
+                           timestamp
 
                        }) {
 
@@ -27,16 +31,25 @@ function AIInsightCard({
             />
 
             <AIContent
+
                 analytics={analytics}
+
                 ai={ai}
+
                 emergency={emergency}
-                signals={signals}
+
+                signal={signal}
+
             />
 
             <AIFooter
-                analytics={analytics}
-                ai={ai}
+
+                simulation={simulation}
+
                 emergency={emergency}
+
+                timestamp={timestamp}
+
             />
 
         </div>

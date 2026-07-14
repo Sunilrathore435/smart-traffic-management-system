@@ -4,8 +4,6 @@ function AIConfidence({
 
                           analytics,
 
-                          ai,
-
                           emergency
 
                       }) {
@@ -16,11 +14,7 @@ function AIConfidence({
 
             ? 100
 
-            : ai?.confidence ||
-
-            analytics?.prediction?.confidence ||
-
-            0;
+            : analytics?.prediction?.confidence ?? 0;
 
     let status = "Low";
 
@@ -73,35 +67,21 @@ function AIConfidence({
                 <svg viewBox="0 0 120 120">
 
                     <circle
-
                         className={styles.bg}
-
                         cx="60"
-
                         cy="60"
-
                         r={radius}
-
                     />
 
                     <circle
-
                         className={styles.progress}
-
                         cx="60"
-
                         cy="60"
-
                         r={radius}
-
                         style={{
-
                             strokeDasharray: circumference,
-
                             strokeDashoffset: offset
-
                         }}
-
                     />
 
                 </svg>

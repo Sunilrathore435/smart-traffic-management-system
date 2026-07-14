@@ -1,42 +1,20 @@
-import { useEffect, useState } from "react";
-
 import {
     FaBrain,
     FaLightbulb,
     FaCheckCircle
 } from "react-icons/fa";
 
-import AnalyticsEngine from "../traffic/AnalyticsEngine";
-
 import styles from "./AIInsights.module.css";
 
-function AIInsights() {
+function AIInsights({
 
-    const [stats, setStats] = useState(
-        AnalyticsEngine.getStats()
-    );
+                        analytics = {},
 
-    useEffect(() => {
+                        ai = {},
 
-        const update = () => {
+                        emergency = {}
 
-            setStats(
-                AnalyticsEngine.getStats()
-            );
-
-        };
-
-        AnalyticsEngine.subscribe(update);
-
-        update();
-
-        return () => {
-
-            AnalyticsEngine.unsubscribe(update);
-
-        };
-
-    }, []);
+                    }) {
 
     const insights = [
 
@@ -44,12 +22,12 @@ function AIInsights() {
 
             title: "Congestion",
 
-            value: `${stats.congestion}%`,
+            value: `${analytics.congestion ?? 0}%`,
 
             message:
-                stats.congestion > 70
+                analytics.congestion > 70
                     ? "High traffic detected"
-                    : stats.congestion > 40
+                    : analytics.congestion > 40
                         ? "Moderate traffic"
                         : "Traffic flowing smoothly"
 
@@ -57,12 +35,12 @@ function AIInsights() {
 
         {
 
-            title: "Average Wait",
+            title: "Throughput",
 
-            value: `${stats.averageWait}s`,
+            value: `${analytics.throughput ?? 0}/min`,
 
             message:
-                "Average vehicle waiting time"
+                "Vehicles cleared every minute"
 
         },
 
@@ -70,7 +48,7 @@ function AIInsights() {
 
             title: "Fuel Saving",
 
-            value: `${stats.fuelSaving}%`,
+            value: `${analytics.fuelSaving ?? 0}%`,
 
             message:
                 "Estimated optimization"
@@ -79,12 +57,12 @@ function AIInsights() {
 
         {
 
-            title: "Throughput",
+            title: "AI Decision",
 
-            value: `${stats.throughput}/min`,
+            value: ai.selectedLane || "-",
 
             message:
-                "Vehicles cleared every minute"
+                ai.reason || "Adaptive optimization"
 
         }
 
@@ -167,7 +145,15 @@ function AIInsights() {
 
                 <FaCheckCircle />
 
-                AI Optimizer Running Normally
+                {
+
+                    emergency.active
+
+                        ? "Emergency Override Active"
+
+                        : "AI Optimizer Running Normally"
+
+                }
 
             </footer>
 

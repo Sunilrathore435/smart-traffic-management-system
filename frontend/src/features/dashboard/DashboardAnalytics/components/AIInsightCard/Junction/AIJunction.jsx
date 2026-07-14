@@ -3,26 +3,32 @@ import styles from "./AIJunction.module.css";
 function AIJunction({
 
                         analytics,
+
                         ai,
+
                         emergency
 
                     }) {
 
-    const prediction = analytics?.prediction || {};
-    const congestion = prediction.congestion || 0;
-    const ranking = analytics?.ranking || [];
+    const congestion = analytics?.congestion ?? 0;
 
     // =====================================
     // Active Lane
     // =====================================
 
-    const activeLane =
+    const activeLane = (
 
         emergency?.active
+
             ? emergency.lane
-            : ai?.lane ||
-            ranking[0]?.name ||
-            "north";
+
+            : ai?.selectedLane ||
+
+            analytics?.busiestLane ||
+
+            "NORTH"
+
+    ).toLowerCase();
 
     // =====================================
     // Priority
@@ -53,20 +59,22 @@ function AIJunction({
     }
 
     const badgeClass = emergency?.active
+
         ? styles.priorityEmergency
+
         : congestion >= 70
+
             ? styles.priorityHigh
+
             : congestion >= 40
+
                 ? styles.priorityMedium
+
                 : styles.priorityLow;
 
     return (
 
         <div className={styles.wrapper}>
-
-            {/* ==========================
-                Status Header
-            =========================== */}
 
             <div className={styles.header}>
 
@@ -86,32 +94,20 @@ function AIJunction({
 
             </div>
 
-            {/* ==========================
-                Smart Junction
-            =========================== */}
-
             <div className={styles.map}>
-
-                {/* Roads */}
 
                 <div className={styles.vertical}></div>
 
                 <div className={styles.horizontal}></div>
 
-                {/* Lane Divider */}
-
                 <div className={styles.verticalLine}></div>
 
                 <div className={styles.horizontalLine}></div>
-
-                {/* Crosswalks */}
 
                 <div className={`${styles.crosswalk} ${styles.crossTop}`}></div>
                 <div className={`${styles.crosswalk} ${styles.crossBottom}`}></div>
                 <div className={`${styles.crosswalk} ${styles.crossLeft}`}></div>
                 <div className={`${styles.crosswalk} ${styles.crossRight}`}></div>
-
-                {/* Junction */}
 
                 <div className={styles.center}>
 
@@ -121,59 +117,21 @@ function AIJunction({
 
                 </div>
 
-                {/* =====================
-                    Vehicles
-                ====================== */}
-
                 {activeLane === "north" && (
-
-                    <span
-                        className={`
-                            ${styles.car}
-                            ${styles.top}
-                            ${emergency?.active ? styles.carEmergency : ""}
-                        `}
-                    />
-
+                    <span className={`${styles.car} ${styles.top} ${emergency?.active ? styles.carEmergency : ""}`} />
                 )}
 
                 {activeLane === "south" && (
-
-                    <span
-                        className={`
-                            ${styles.car}
-                            ${styles.bottom}
-                            ${emergency?.active ? styles.carEmergency : ""}
-                        `}
-                    />
-
+                    <span className={`${styles.car} ${styles.bottom} ${emergency?.active ? styles.carEmergency : ""}`} />
                 )}
 
                 {activeLane === "east" && (
-
-                    <span
-                        className={`
-                            ${styles.car}
-                            ${styles.right}
-                            ${emergency?.active ? styles.carEmergency : ""}
-                        `}
-                    />
-
+                    <span className={`${styles.car} ${styles.right} ${emergency?.active ? styles.carEmergency : ""}`} />
                 )}
 
                 {activeLane === "west" && (
-
-                    <span
-                        className={`
-                            ${styles.car}
-                            ${styles.left}
-                            ${emergency?.active ? styles.carEmergency : ""}
-                        `}
-                    />
-
+                    <span className={`${styles.car} ${styles.left} ${emergency?.active ? styles.carEmergency : ""}`} />
                 )}
-
-                {/* Active Lane Glow */}
 
                 <div
                     className={`
@@ -191,10 +149,6 @@ function AIJunction({
                 />
 
             </div>
-
-            {/* ==========================
-                Footer
-            =========================== */}
 
             <div className={styles.footer}>
 

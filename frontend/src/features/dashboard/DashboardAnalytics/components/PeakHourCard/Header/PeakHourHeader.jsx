@@ -11,20 +11,44 @@ function PeakHourHeader({
 
                         }) {
 
-    const avgQueue = Math.round(
-        Object.values(analytics?.laneCongestion || {})
-            .reduce((sum, value) => sum + value, 0) / 4
-    );
+    const laneCongestion = analytics?.laneCongestion ?? {};
+
+    const values = Object.values(laneCongestion);
+
+    const avgQueue = values.length
+
+        ? Math.round(
+
+            values.reduce(
+
+                (sum, value) => sum + value,
+
+                0
+
+            ) / values.length
+
+        )
+
+        : 0;
 
     let status = "Low Traffic";
+
     let statusClass = styles.low;
 
     if (avgQueue >= 6) {
+
         status = "Peak Traffic";
+
         statusClass = styles.high;
-    } else if (avgQueue >= 3) {
+
+    }
+
+    else if (avgQueue >= 3) {
+
         status = "Moderate Traffic";
+
         statusClass = styles.medium;
+
     }
 
     return (
@@ -49,11 +73,19 @@ function PeakHourHeader({
 
                     <div className={`${styles.subtitle} ${statusClass}`}>
 
-                        <span>{status}</span>
+                        <span>
+
+                            {status}
+
+                        </span>
 
                         <span className={styles.dot}></span>
 
-                        <span>Live</span>
+                        <span>
+
+                            Live
+
+                        </span>
 
                     </div>
 
@@ -62,11 +94,8 @@ function PeakHourHeader({
             </div>
 
             <button
-
                 className={styles.menu}
-
                 aria-label="More"
-
             >
 
                 <FaEllipsisV />

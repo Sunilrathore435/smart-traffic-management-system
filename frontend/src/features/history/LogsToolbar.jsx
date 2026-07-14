@@ -4,7 +4,7 @@ import {
     FaTrash
 } from "react-icons/fa";
 
-import HistoryEngine from "./HistoryEngine";
+import { historyApi } from "../../services/api";
 
 import styles from "./LogsToolbar.module.css";
 
@@ -16,27 +16,36 @@ function LogsToolbar({
 
                          filter,
 
-                         setFilter
+                         setFilter,
+
+                         reloadHistory
 
                      }) {
 
-    const clearLogs = () => {
+    const clearLogs = async () => {
 
-        if (
-
-            !window.confirm(
-
-                "Clear all operation logs?"
-
-            )
-
-        ) {
-
+        if (!window.confirm(
+            "Clear all simulation history?"
+        )) {
             return;
+        }
+
+        try {
+
+            await historyApi.clear();
+
+            reloadHistory();
 
         }
 
-        HistoryEngine.clear();
+        catch (error) {
+
+            console.error(
+                "Failed to clear history",
+                error
+            );
+
+        }
 
     };
 
@@ -52,24 +61,17 @@ function LogsToolbar({
 
                     type="text"
 
-                    placeholder="Search events by title, description, category, or severity..."
+                    placeholder="Search by lane, reason or emergency..."
 
                     value={search}
 
-                    onChange={(event)=>
-
-                        setSearch(
-
-                            event.target.value
-
-                        )
-
+                    onChange={(event) =>
+                        setSearch(event.target.value)
                     }
 
                 />
 
             </div>
-
 
             <select
 
@@ -77,52 +79,22 @@ function LogsToolbar({
 
                 value={filter}
 
-                onChange={(event)=>
-
-                    setFilter(
-
-                        event.target.value
-
-                    )
-
+                onChange={(event) =>
+                    setFilter(event.target.value)
                 }
 
             >
 
                 <option value="ALL">
-
                     All Events
-
                 </option>
 
-                <option value="AI">
-
-                    AI
-
+                <option value="SIMULATION">
+                    Simulation
                 </option>
 
                 <option value="EMERGENCY">
-
                     Emergency
-
-                </option>
-
-                <option value="SYSTEM">
-
-                    System
-
-                </option>
-
-                <option value="ANALYTICS">
-
-                    Analytics
-
-                </option>
-
-                <option value="BACKEND">
-
-                    Backend
-
                 </option>
 
             </select>
@@ -149,9 +121,7 @@ function LogsToolbar({
 
             </button>
 
-
         </section>
-
 
     );
 

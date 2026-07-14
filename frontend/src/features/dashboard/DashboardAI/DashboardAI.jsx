@@ -9,58 +9,70 @@ import AIConfidence from "./sections/AIConfidence";
 import AIRecommendation from "./sections/AIRecommendation";
 import AIFooter from "./sections/AIFooter";
 
-import { SimulationEngine } from "../../traffic";
+import BackendSimulationEngine from "../../traffic/BackendSimulationEngine";
+import SettingsEngine from "../../settings/SettingsEngine";
 
 import styles from "./DashboardAI.module.css";
-import SettingsEngine from "../../settings/SettingsEngine.js";
 
 function DashboardAI() {
 
-    const [simulation, setSimulation] = useState(
-
-        SimulationEngine.getState()
-
+    const [dashboard, setDashboard] = useState(
+        BackendSimulationEngine.getState()
     );
 
     useEffect(() => {
 
         const listener = (state) => {
 
-            setSimulation(state);
+            setDashboard(state);
 
         };
 
-        SimulationEngine.subscribe(listener);
+        BackendSimulationEngine.subscribe(listener);
 
-        SimulationEngine.start();
+        BackendSimulationEngine.start();
 
         return () => {
 
-            SimulationEngine.unsubscribe(listener);
+            BackendSimulationEngine.unsubscribe(listener);
 
         };
 
     }, []);
 
+    // ==========================================
+    // Backend Data
+    // ==========================================
+
+    const analytics = dashboard.analytics || {};
+
+    const ai = dashboard.ai || {};
+
+    const signal = dashboard.signal || {};
+
+    const emergency = dashboard.emergency || {
+
+        active: false,
+
+        lane: "NONE"
+
+    };
+
     const currentGreenLane =
 
-        simulation.emergency?.active
+        emergency.active
 
-            ? simulation.emergency.lane
+            ? emergency.lane
 
-            : Object.keys(simulation.signals).find(
-
-            lane => simulation.signals[lane] === "green"
-
-        ) || "-";
+            : signal.currentGreenLane || "-";
 
     const vehicleCount =
-        simulation.vehicles.length;
+
+        signal.totalWaitingVehicles || 0;
+
     const queues =
 
-        simulation.ai?.queues ||
-
-        {
+        signal.laneQueues || {
 
             north: 0,
 
@@ -75,42 +87,56 @@ function DashboardAI() {
     return (
 
         <GlassCard className={styles.container}>
-            <AIHeader />
+
+            <AIHeader
+
+                status={
+                    dashboard.simulation?.simulationRunning
+                        ? "online"
+                        : "offline"
+                }
+
+                version="v2.4.0"
+
+                mode={
+                    emergency.active
+                        ? "Emergency Override"
+                        : "Adaptive AI"
+                }
+
+            />
 
             <AISystemStatus
                 vehicles={vehicleCount}
                 currentLane={currentGreenLane}
-                emergency={simulation.emergency.active}
+                emergency={emergency.active}
                 aiStatus={
-                    simulation.emergency?.active
+                    emergency.active
                         ? "EMERGENCY"
                         : "ACTIVE"
+                }
+                recommendation={
+                    ai.reason ||
+                    analytics.prediction?.recommendation ||
+                    "Traffic Flow Normal"
                 }
             />
 
             <AIDecision
                 currentLane={currentGreenLane}
-                greenDuration={
-                    simulation.ai?.greenTime || 8
-                }
-                reduction={
-                    simulation.analytics?.fuelSaving || 0
-                }
+                greenDuration={ai.greenTime || 10}
+                trafficScore={ai.trafficScore || 0}
                 priority={
-                    simulation.emergency?.active
+                    emergency.active
                         ? "EMERGENCY"
                         : "NORMAL"
-                }
-                emergency={
-                    simulation.emergency?.active
                 }
             />
 
             <AIConfidence
-                value={simulation.ai?.confidence || 98}
-
-                prediction={simulation.ai?.confidence || 98}
-                lastPrediction="Live"
+                value={analytics.prediction?.confidence ?? 99}
+                prediction={analytics.prediction?.confidence ?? 99}
+                lastPrediction={new Date(dashboard.timestamp).toLocaleTimeString()}
             />
 
             <AIRecommendation
@@ -119,22 +145,42 @@ function DashboardAI() {
 
                 currentLane={currentGreenLane}
 
-                greenTime={simulation.ai?.greenTime || 8}
+                greenTime={
 
-                fuelSaving={simulation.analytics?.fuelSaving || 0}
+                    ai.greenTime || 10
 
-                congestion={simulation.analytics?.congestion || 0}
+                }
 
-                emergency={simulation.emergency?.active || false}
+                fuelSaving={
+
+                    analytics.fuelSaving || 0
+
+                }
+
+                congestion={
+
+                    analytics.congestion || 0
+
+                }
+
+                emergency={
+
+                    emergency.active
+
+                }
 
             />
 
             <AIFooter
-                status="online"
-                responseTime={`${simulation.analytics.averageWait} ms`}
-                lastSync="Live"
+                status={
+                    dashboard.simulation?.simulationRunning
+                        ? "online"
+                        : "offline"
+                }
+                responseTime="<100 ms"
+                lastSync={new Date(dashboard.timestamp).toLocaleTimeString()}
                 backend={
-                    SettingsEngine.getSettings().backendStatus
+                    dashboard.simulation?.schedulerStatus || "CONNECTED"
                 }
                 websocket="ONLINE"
             />

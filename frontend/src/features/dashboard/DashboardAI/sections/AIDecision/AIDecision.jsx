@@ -9,11 +9,11 @@ import styles from "./AIDecision.module.css";
 
 function AIDecision({
 
-                        currentLane = "North",
+                        currentLane = "NORTH",
 
-                        greenDuration = 8,
+                        greenDuration = 10,
 
-                        reduction = 32,
+                        trafficScore = 0,
 
                         priority = "NORMAL"
 
@@ -23,20 +23,20 @@ function AIDecision({
 
         {
             icon: <FaTrafficLight />,
-            label: "Current Green",
+            label: "Selected Lane",
             value: currentLane.toUpperCase()
         },
 
         {
             icon: <FaClock />,
-            label: "Green Duration",
+            label: "Green Time",
             value: `${greenDuration}s`
         },
 
         {
             icon: <FaChartLine />,
-            label: "Traffic Reduction",
-            value: `${reduction}%`
+            label: "Traffic Score",
+            value: trafficScore.toFixed(1)
         },
 
         {
@@ -61,7 +61,7 @@ function AIDecision({
 
                 {
 
-                    decision.map((item) => (
+                    decision.map(item => (
 
                         <div
                             key={item.label}

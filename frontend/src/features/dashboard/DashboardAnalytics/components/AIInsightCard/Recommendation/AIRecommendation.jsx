@@ -12,12 +12,6 @@ function AIRecommendation({
 
                           }) {
 
-    const prediction =
-        analytics?.prediction || {};
-
-    const ranking =
-        analytics?.ranking || [];
-
     // =====================================
     // Active Lane
     // =====================================
@@ -28,11 +22,11 @@ function AIRecommendation({
 
             ? emergency.lane
 
-            : ai?.lane ||
+            : ai?.selectedLane ||
 
-            ranking[0]?.name ||
+            analytics?.busiestLane ||
 
-            "north";
+            "NORTH";
 
     // =====================================
     // Green Time
@@ -40,11 +34,9 @@ function AIRecommendation({
 
     const greenTime =
 
-        ai?.greenTime ||
+        ai?.greenTime ??
 
-        analytics?.averageGreenTime ||
-
-        8;
+        Math.round(analytics?.averageGreenTime ?? 10);
 
     // =====================================
     // Recommendation
@@ -56,50 +48,25 @@ function AIRecommendation({
 
             ? "Emergency Override Active"
 
-            : prediction.recommendation ||
+            : ai?.reason ||
+
+            analytics?.prediction?.recommendation ||
 
             "Traffic Flow Normal";
-
-    // =====================================
-    // Congestion
-    // =====================================
-
-    const congestion =
-        analytics?.congestion || 0;
 
     // =====================================
     // Reason
     // =====================================
 
-    let reason = "";
+    const reason =
 
-    if (emergency?.active) {
+        emergency?.active
 
-        reason =
-            `Emergency vehicle detected on ${activeLane.toUpperCase()} lane. AI immediately granted highest priority.`;
+            ? `Emergency vehicle detected on ${activeLane}. AI has overridden normal optimization.`
 
-    }
+            : ai?.reason ||
 
-    else if (congestion >= 70) {
-
-        reason =
-            `Heavy congestion detected on ${activeLane.toUpperCase()} lane. AI recommends extending the green signal.`;
-
-    }
-
-    else if (congestion >= 40) {
-
-        reason =
-            `Moderate traffic detected on ${activeLane.toUpperCase()} lane. AI is monitoring queue growth.`;
-
-    }
-
-    else {
-
-        reason =
-            "Traffic is flowing normally across all junctions.";
-
-    }
+            "Traffic optimization running normally.";
 
     return (
 
@@ -107,7 +74,7 @@ function AIRecommendation({
 
             <h2 className={styles.title}>
 
-                {activeLane.toUpperCase()} Junction
+                {activeLane} Junction
 
             </h2>
 

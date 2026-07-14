@@ -20,9 +20,7 @@ const laneColors = {
 
 function TrafficDensity({
 
-                            analytics,
-
-                            vehicles = []
+                            analytics
 
                         }) {
 
@@ -30,9 +28,7 @@ function TrafficDensity({
 
         const congestion =
 
-            analytics?.laneCongestion ||
-
-            {
+            analytics?.laneCongestion ?? {
 
                 north: 0,
 
@@ -44,15 +40,17 @@ function TrafficDensity({
 
             };
 
-        const totalVehicles =
+        const total =
 
-            Math.max(
+            Object.values(congestion)
 
-                vehicles.length,
+                .reduce(
 
-                1
+                    (sum, value) => sum + value,
 
-            );
+                    0
+
+                );
 
         return [
 
@@ -66,27 +64,21 @@ function TrafficDensity({
 
         ].map(lane => {
 
-            const vehicleCount =
+            const count =
 
-                vehicles.filter(
+                congestion[lane] ?? 0;
 
-                    vehicle =>
+            const percentage =
 
-                        vehicle.lane === lane
+                total === 0
 
-                ).length;
+                    ? 0
 
-            const percentage = Math.round(
+                    : Math.round(
 
-                (
+                        (count / total) * 100
 
-                    congestion[lane] /
-
-                    totalVehicles
-
-                ) * 100
-
-            );
+                    );
 
             return {
 
@@ -96,7 +88,7 @@ function TrafficDensity({
 
                 percentage,
 
-                vehicles: vehicleCount,
+                vehicles: count,
 
                 color: laneColors[lane]
 
@@ -104,13 +96,7 @@ function TrafficDensity({
 
         });
 
-    }, [
-
-        analytics,
-
-        vehicles
-
-    ]);
+    }, [analytics]);
 
     return (
 
@@ -151,8 +137,6 @@ function TrafficDensity({
             <TrafficDensityFooter
 
                 analytics={analytics}
-
-                vehicles={vehicles}
 
             />
 

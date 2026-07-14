@@ -1,37 +1,64 @@
-import StatusPill from "../components/ui/StatusPill";
+import { useDashboard } from "./../hooks";
 
 function UIPlayground() {
+
+    const {
+
+        dashboard,
+
+        loading,
+
+        error
+
+    } = useDashboard();
+
+    if (loading) {
+
+        return <h1>Loading Dashboard...</h1>;
+
+    }
+
+    if (error) {
+
+        return (
+
+            <div>
+
+                <h2>API Error</h2>
+
+                <pre>{error.message}</pre>
+
+            </div>
+
+        );
+
+    }
 
     return (
 
         <div
             style={{
-                padding: 40,
-                display: "flex",
-                flexDirection: "column",
-                gap: 20,
+                padding: 30,
+                color: "white",
+                fontFamily: "monospace"
             }}
         >
 
-            <StatusPill
-                label="ONLINE"
-                status="online"
-            />
+            <h2>Dashboard API Test ✅</h2>
 
-            <StatusPill
-                label="WARNING"
-                status="warning"
-            />
+            <pre>
 
-            <StatusPill
-                label="OFFLINE"
-                status="offline"
-            />
+                {JSON.stringify(
 
-            <StatusPill
-                label="MONITORING"
-                status="info"
-            />
+                    dashboard,
+
+                    null,
+
+                    2
+
+                )}
+
+            </pre>
 
         </div>
 

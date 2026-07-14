@@ -13,7 +13,7 @@ function AIContent({
 
                        emergency,
 
-                       signals
+                       signal
 
                    }) {
 

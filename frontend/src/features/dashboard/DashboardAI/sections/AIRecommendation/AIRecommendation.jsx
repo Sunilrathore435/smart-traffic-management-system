@@ -32,14 +32,14 @@ function AIRecommendation({
                           }) {
 
     // =====================================
-    // Recommendation Lane
+    // AI Recommended Lane
     // =====================================
 
-    const busiestLane = emergency
+    const recommendedLane =
 
-        ? currentLane.toLowerCase()
+        currentLane ||
 
-        : Object.keys(queues).reduce(
+        Object.keys(queues).reduce(
 
             (a, b) =>
 
@@ -52,22 +52,38 @@ function AIRecommendation({
         );
 
     // =====================================
-    // AI Metrics
+    // Dynamic Metrics
     // =====================================
 
-    const reduction = Math.max(
+    const reduction = emergency
 
-        0,
+        ? 100
 
-        Math.min(
+        : Math.max(
 
-            100,
+            15,
 
-            100 - congestion
+            Math.round(100 - congestion)
 
-        )
+        );
 
-    );
+    const nextReview = emergency
+
+        ? "Immediate"
+
+        : `${greenTime}s`;
+
+    const title = emergency
+
+        ? `Emergency Priority → ${recommendedLane.toUpperCase()}`
+
+        : `Extend ${recommendedLane.toUpperCase()} Green Signal`;
+
+    const description = emergency
+
+        ? "Emergency vehicle detected. AI has overridden normal traffic optimization to provide immediate right-of-way."
+
+        : "AI recommendation generated from live traffic density, queue length and adaptive signal optimization.";
 
     return (
 
@@ -113,29 +129,13 @@ function AIRecommendation({
 
                         <strong>
 
-                            {
-
-                                emergency
-
-                                    ? `Emergency Priority → ${busiestLane.toUpperCase()}`
-
-                                    : `Extend ${busiestLane.toUpperCase()} Green Signal`
-
-                            }
+                            {title}
 
                         </strong>
 
                         <span>
 
-                            {
-
-                                emergency
-
-                                    ? "Emergency vehicle detected. AI has overridden normal optimization."
-
-                                    : "AI optimized based on live traffic density."
-
-                            }
+                            {description}
 
                         </span>
 
@@ -193,7 +193,7 @@ function AIRecommendation({
 
                         <strong>
 
-                            {greenTime}s
+                            {nextReview}
 
                         </strong>
 

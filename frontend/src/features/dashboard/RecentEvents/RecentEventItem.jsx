@@ -1,37 +1,38 @@
 import {
-
-    FaBrain,
-    FaAmbulance,
-    FaChartLine,
-    FaServer,
-    FaDatabase
-
-} from "react-icons/fa";
+    FaTrafficLight,
+    FaClock,
+    FaGaugeHigh
+} from "react-icons/fa6";
 
 import styles from "./RecentEventItem.module.css";
+import {FaAmbulance} from "react-icons/fa";
 
 function RecentEventItem({ event }) {
 
-    const icons = {
+    const emergency = event.emergencyTriggered;
 
-        AI: <FaBrain />,
+    const icon = emergency
+        ? <FaAmbulance />
+        : <FaTrafficLight />;
 
-        EMERGENCY: <FaAmbulance />,
+    const iconClass = emergency
+        ? styles.emergency
+        : styles.signal;
 
-        ANALYTICS: <FaChartLine />,
+    const title = emergency
+        ? `Emergency Priority • ${event.selectedLane}`
+        : `${event.selectedLane} Signal Activated`;
 
-        SYSTEM: <FaServer />,
+    const description =
+        `${event.vehiclesPassed} vehicle(s) passed • Green ${event.greenTime}s`;
 
-        BACKEND: <FaDatabase />
-
-    };
-
-    const type = event.category || event.type;
-
-    const icon = icons[type] || <FaServer />;
-
-    const iconClass =
-        styles[type?.toLowerCase()] || styles.system;
+    const time = new Date(
+        event.simulationTime
+    ).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+    });
 
     return (
 
@@ -46,24 +47,36 @@ function RecentEventItem({ event }) {
             <div className={styles.content}>
 
                 <h4>
-
-                    {event.title}
-
+                    {title}
                 </h4>
 
                 <p>
-
-                    {event.description}
-
+                    {description}
                 </p>
+
+                <small className={styles.reason}>
+                    {event.reason}
+                </small>
 
             </div>
 
-            <span className={styles.time}>
+            <div className={styles.meta}>
 
-                {event.time}
+                <span className={styles.time}>
+                    {time}
+                </span>
 
-            </span>
+                <span className={styles.execution}>
+                    <FaClock />
+                    {event.executionTimeMs ?? 0} ms
+                </span>
+
+                <span className={styles.score}>
+                    <FaGaugeHigh />
+                    {event.trafficScore.toFixed(1)}
+                </span>
+
+            </div>
 
         </article>
 

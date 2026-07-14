@@ -4,33 +4,47 @@ function PeakHourHero({
 
                           analytics,
 
-                          vehicles = []
+                          timestamp
 
                       }) {
 
-
+    // =====================================
+    // Backend Values
+    // =====================================
 
     const totalVehicles =
-        vehicles.length;
 
-    const currentTime =
-        new Date().toLocaleTimeString([], {
+        analytics?.totalVehiclesProcessed ?? 0;
+
+    const currentTime = timestamp
+
+        ? new Date(timestamp).toLocaleTimeString([], {
 
             hour: "2-digit",
 
             minute: "2-digit"
 
-        });
+        })
 
+        : "--:--";
+
+    const congestion =
+
+        analytics?.congestion ?? 0;
+
+    // =====================================
+    // Traffic Level
+    // =====================================
 
     let trafficLevel = "LOW";
 
-    if (totalVehicles >= 30) {
+    if (congestion >= 70) {
 
         trafficLevel = "BUSY";
 
     }
-    else if (totalVehicles >= 15) {
+
+    else if (congestion >= 40) {
 
         trafficLevel = "MODERATE";
 

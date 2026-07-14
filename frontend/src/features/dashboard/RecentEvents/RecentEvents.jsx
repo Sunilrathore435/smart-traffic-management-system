@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-import HistoryEngine from "../../history/HistoryEngine";
+import { historyApi } from "../../../services/api";
 import RecentEventItem from "./RecentEventItem";
 
 import styles from "./RecentEvents.module.css";
@@ -11,27 +11,41 @@ function RecentEvents() {
 
     const navigate = useNavigate();
 
-    const [events, setEvents] = useState(
-        HistoryEngine.getEvents()
-    );
+    const [events, setEvents] = useState([]);
 
     useEffect(() => {
 
-        const listener = (history) => {
+        loadHistory();
+
+        const timer = setInterval(
+
+            loadHistory,
+
+            3000
+
+        );
+
+        return () => clearInterval(timer);
+
+    }, []);
+
+    async function loadHistory() {
+
+        try {
+
+            const history = await historyApi.getAll();
 
             setEvents(history);
 
-        };
+        }
 
-        HistoryEngine.subscribe(listener);
+        catch (error) {
 
-        return () => {
+            console.error("Failed to load recent events", error);
 
-            HistoryEngine.unsubscribe(listener);
+        }
 
-        };
-
-    }, []);
+    }
 
     return (
 
@@ -42,15 +56,11 @@ function RecentEvents() {
                 <div>
 
                     <h2>
-
                         📋 Recent Events
-
                     </h2>
 
                     <p>
-
                         Latest traffic activities
-
                     </p>
 
                 </div>
@@ -68,57 +78,40 @@ function RecentEvents() {
             </header>
 
             {
+                events.length === 0 ? (
 
-                events.length === 0 ?
+                    <div className={styles.empty}>
 
-                    (
+                        <h3>
+                            No Recent Events
+                        </h3>
 
-                        <div className={styles.empty}>
+                        <p>
+                            Waiting for simulation...
+                        </p>
 
-                            <h3>
+                    </div>
 
-                                No Recent Events
+                ) : (
 
-                            </h3>
+                    <div className={styles.list}>
 
-                            <p>
+                        {
+                            events
+                                .slice(0, 5)
+                                .map(event => (
 
-                                Waiting for simulation...
+                                    <RecentEventItem
+                                        key={event.simulationId}
+                                        event={event}
+                                    />
 
-                            </p>
+                                ))
+                        }
 
-                        </div>
+                    </div>
 
-                    )
-
-                    :
-
-                    (
-
-                        <div className={styles.list}>
-
-                            {
-
-                                events
-                                    .slice(0, 5)
-                                    .map(event => (
-
-                                        <RecentEventItem
-
-                                            key={event.id}
-
-                                            event={event}
-
-                                        />
-
-                                    ))
-
-                            }
-
-                        </div>
-
-                    )
-
+                )
             }
 
         </section>

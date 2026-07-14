@@ -2,56 +2,70 @@ import {
     FaBrain,
     FaTrafficLight,
     FaAmbulance,
-    FaChartLine,
-    FaServer,
-    FaExclamationTriangle
+    FaServer
 } from "react-icons/fa";
 
 import styles from "./EventCard.module.css";
 
 function EventCard({ event }) {
 
-    // Support both old and new event formats
-    const type = event.category || event.type;
+    const emergency =
+        event.emergencyTriggered;
 
-    const icons = {
+    const icon =
+        emergency
+            ? <FaAmbulance />
+            : <FaTrafficLight />;
 
-        AI: <FaBrain />,
-
-        SIGNAL: <FaTrafficLight />,
-
-        EMERGENCY: <FaAmbulance />,
-
-        ANALYTICS: <FaChartLine />,
-
-        SYSTEM: <FaServer />
-
-    };
     const iconClass =
-        styles[type?.toLowerCase()] || styles.system;
-    const icon = icons[type] || <FaServer />;
+        emergency
+            ? styles.emergency
+            : styles.signal;
+
+    const title =
+        emergency
+            ? `Emergency Priority • ${event.selectedLane}`
+            : `${event.selectedLane} Signal Activated`;
+
+    const description =
+
+        `${event.vehiclesPassed} vehicle(s) passed • Green ${event.greenTime}s • ${event.reason}`;
+
+    const time = new Date(
+        event.simulationTime
+    ).toLocaleTimeString([], {
+
+        hour: "2-digit",
+
+        minute: "2-digit",
+
+        second: "2-digit"
+
+    });
 
     return (
 
         <article className={styles.card}>
-            <div className={`${styles.icon} ${iconClass}`}>
+
+            <div
+                className={`${styles.icon} ${iconClass}`}
+            >
 
                 {icon}
 
             </div>
 
-
             <div className={styles.content}>
 
                 <h3>
 
-                    {event.title}
+                    {title}
 
                 </h3>
 
                 <p>
 
-                    {event.description}
+                    {description}
 
                 </p>
 
@@ -59,7 +73,7 @@ function EventCard({ event }) {
 
             <div className={styles.time}>
 
-                {event.time}
+                {time}
 
             </div>
 

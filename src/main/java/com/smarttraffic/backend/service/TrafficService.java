@@ -32,6 +32,12 @@ public class TrafficService {
 
     private final AdaptiveTrafficOptimizer optimizer;
 
+    private TrafficDecision latestDecision;
+
+    private boolean emergencyActive = false;
+
+    private Direction emergencyLane = null;
+
     public TrafficService(TrafficEngine trafficEngine,
                           AdaptiveTrafficOptimizer optimizer,
                           SimulationHistoryService historyService,TrafficUpdatePublisher publisher) {
@@ -72,7 +78,7 @@ public class TrafficService {
             );
         }
 
-        TrafficDecision decision = optimizer.optimize(intersection);
+        TrafficDecision decision = getCurrentDecision();
 
         return new TrafficStatusResponse(
                 decision.getGreenLane().name(),
@@ -85,29 +91,40 @@ public class TrafficService {
      */
     public TrafficDecision simulateTraffic() {
 
+        TrafficDecision decision = getCurrentDecision();
+
         SimulationResult result =
-                trafficEngine.simulateCycle(intersection);
+                trafficEngine.simulateCycle(
+                        intersection,
+                        decision
+                );
 
-        TrafficDecision decision = result.getDecision();
+        this.latestDecision = decision;
 
-        // Save only meaningful simulations
         if (result.getVehiclesPassed() > 0) {
 
             TrafficSimulationRecord record =
                     buildSimulationRecord(result);
 
-            // Save into MongoDB
             historyService.saveSimulation(record);
 
-            // Update statistics
             intersection.incrementProcessedVehicles(
                     result.getVehiclesPassed()
             );
 
-            // Publish live update
             publisher.publishTrafficUpdate(
                     buildLiveUpdate(record)
             );
+
+            // ==========================================
+            // Clear manual emergency after simulation
+            // ==========================================
+
+            if (emergencyActive) {
+
+                clearEmergency();
+
+            }
         }
 
         return decision;
@@ -122,6 +139,7 @@ public class TrafficService {
         TrafficDecision decision = result.getDecision();
 
         return new TrafficSimulationRecord(
+
                 intersection.getIntersectionId(),
 
                 decision.getGreenLane(),
@@ -142,7 +160,9 @@ public class TrafficService {
 
                 decision.getReason()
                         .toLowerCase()
-                        .contains("emergency")
+                        .contains("emergency"),
+                result.getSimulationTime(),
+                result.getExecutionTimeMs()
         );
     }
     /**
@@ -172,6 +192,78 @@ public class TrafficService {
 
     }
 
+    public TrafficDecision getLatestDecision() {
+
+        return latestDecision;
+
+    }
+    public TrafficDecision getCurrentDecision() {
+
+        if (emergencyActive && emergencyLane != null) {
+
+            return new TrafficDecision(
+
+                    emergencyLane,
+
+                    40,
+
+                    Math.max(
+
+                            1,
+
+                            intersection
+                                    .getLane(emergencyLane)
+                                    .getVehicleCount()
+
+                    ),
+
+                    9999,
+
+                    "Manual emergency override"
+
+            );
+        }
+
+        return optimizer.optimize(intersection);
+
+    }
+    /**
+     * Activate emergency priority.
+     */
+    public void activateEmergency(Direction direction) {
+
+        emergencyActive = true;
+
+        emergencyLane = direction;
+
+        intersection.setCurrentGreenLane(direction);
+
+    }
+
+    /**
+     * Clear emergency priority.
+     */
+    public void clearEmergency() {
+
+        emergencyActive = false;
+
+        emergencyLane = null;
+
+        intersection.setCurrentGreenLane(Direction.NORTH);
+
+    }
+
+    public boolean isEmergencyActive() {
+
+        return emergencyActive;
+
+    }
+
+    public Direction getEmergencyLane() {
+
+        return emergencyLane;
+
+    }
     private TrafficLiveUpdate buildLiveUpdate(
             TrafficSimulationRecord record) {
 

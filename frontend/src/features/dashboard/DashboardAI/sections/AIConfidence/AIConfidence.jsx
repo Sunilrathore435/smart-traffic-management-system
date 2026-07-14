@@ -6,9 +6,9 @@ function AIConfidence({
 
                           value = 98,
 
-                          prediction = 99.3,
+                          prediction = 98,
 
-                          lastPrediction = "0.8 sec ago"
+                          lastPrediction = "Live"
 
                       }) {
 

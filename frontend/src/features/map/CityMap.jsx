@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import Road from "./Road";
 import Junction from "./Junction";
 import TrafficSignal from "./TrafficSignal";
@@ -7,44 +5,46 @@ import Vehicle from "./Vehicle";
 import ZebraCrossing from "./ZebraCrossing";
 import LaneArrow from "./LaneArrow";
 
-import { SimulationEngine } from "../traffic";
-
 import styles from "./CityMap.module.css";
 
-function CityMap() {
+function CityMap({
 
-    const [simulation, setSimulation] = useState({
+                     signal,
 
-        signals: {
-            north: "green",
-            east: "red",
-            south: "red",
-            west: "red"
-        },
+                     emergency,
 
-        vehicles: []
+                     ai
 
-    });
+                 }) {
 
-    useEffect(() => {
+    // ==========================================
+    // Backend Signal State
+    // ==========================================
 
-        const listener = (state) => {
+    const currentGreen =
 
-            setSimulation(state);
+        signal?.currentGreenLane?.toLowerCase() ||
 
-        };
+        "north";
 
-        SimulationEngine.subscribe(listener);
+    const signals = {
 
-        SimulationEngine.start();
+        north: currentGreen === "north" ? "green" : "red",
 
-        return () => {
+        south: currentGreen === "south" ? "green" : "red",
 
-            SimulationEngine.unsubscribe(listener);
+        east: currentGreen === "east" ? "green" : "red",
 
-        };
+        west: currentGreen === "west" ? "green" : "red"
 
-    }, []);
+    };
+
+    // ==========================================
+    // Vehicles
+    // (Later these will come from WebSocket)
+    // ==========================================
+
+    const vehicles = [];
 
     return (
 
@@ -56,7 +56,7 @@ function CityMap() {
 
             <Road direction="vertical" />
 
-            {/* Lane Direction */}
+            {/* Lane Arrows */}
 
             <LaneArrow direction="north" />
             <LaneArrow direction="south" />
@@ -72,33 +72,56 @@ function CityMap() {
 
             {/* Traffic Signals */}
 
-            {Object.entries(simulation.signals).map(([lane, color]) => (
+            {Object.entries(signals).map(([lane, color]) => (
 
                 <TrafficSignal
+
                     key={lane}
+
                     position={lane}
+
                     color={color}
+
+                    emergency={
+                        emergency?.active &&
+                        emergency.lane.toLowerCase() === lane
+                    }
+
                 />
 
             ))}
 
             {/* Vehicles */}
 
-            {simulation.vehicles.map((vehicle) => (
+            {vehicles.map(vehicle => (
 
                 <Vehicle
+
                     key={vehicle.id}
+
                     lane={vehicle.lane}
+
                     color={vehicle.color}
+
                     position={vehicle.position}
+
                     stopped={vehicle.stopped}
+
                 />
 
             ))}
 
-            {/* Junction */}
+            {/* AI Junction */}
 
-            <Junction />
+            <Junction
+
+                currentLane={currentGreen}
+
+                emergency={emergency}
+
+                ai={ai}
+
+            />
 
         </section>
 

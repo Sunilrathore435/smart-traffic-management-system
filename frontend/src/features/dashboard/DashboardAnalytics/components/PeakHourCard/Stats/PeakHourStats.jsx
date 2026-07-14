@@ -9,34 +9,42 @@ import styles from "./PeakHourStats.module.css";
 function PeakHourStats({ analytics }) {
 
     const throughput =
-        analytics?.throughput || 0;
+        analytics?.performance?.throughput ??
+        analytics?.throughput ??
+        0;
 
-    const vehiclesPassed =
-        analytics?.vehiclesPassed || 0;
+    const totalVehicles =
+        analytics?.totalVehiclesProcessed ??
+        0;
+
+    const averageVehicles =
+        Math.round(
+            analytics?.averageVehiclesPassed ?? 0
+        );
 
     const congestion =
-        analytics?.congestion || 0;
+        analytics?.congestion ?? 0;
 
-    const averagePeak = Math.round(
-        vehiclesPassed * 0.75
-    );
+    // =====================================
+    // Dashboard Statistics
+    // =====================================
 
-    const todayTotal =
-        vehiclesPassed;
+    const vsAverage =
+        Math.round(
+            analytics?.performance?.efficiency ??
+            throughput / 2
+        );
 
-    const vsAverage = Math.round(
-        throughput / 2
-    );
-
-    const vsOffPeak = (
-        throughput / 20
-    ).toFixed(1);
+    const vsOffPeak =
+        throughput
+            ? (throughput / 20).toFixed(1)
+            : "0.0";
 
     return (
 
         <div className={styles.wrapper}>
 
-            {/* Top Stats */}
+            {/* Top */}
 
             <div className={styles.top}>
 
@@ -52,7 +60,7 @@ function PeakHourStats({ analytics }) {
 
                     <span>
 
-                        vs Average
+                        Efficiency
 
                     </span>
 
@@ -68,7 +76,7 @@ function PeakHourStats({ analytics }) {
 
                     <span>
 
-                        vs Off-Peak
+                        Throughput
 
                     </span>
 
@@ -76,7 +84,7 @@ function PeakHourStats({ analytics }) {
 
             </div>
 
-            {/* Bottom Stats */}
+            {/* Bottom */}
 
             <div className={styles.bottom}>
 
@@ -88,13 +96,13 @@ function PeakHourStats({ analytics }) {
 
                         <p>
 
-                            Average Peak
+                            Avg Vehicles / Cycle
 
                         </p>
 
                         <h4>
 
-                            {averagePeak} Vehicles
+                            {averageVehicles}
 
                         </h4>
 
@@ -112,13 +120,13 @@ function PeakHourStats({ analytics }) {
 
                         <p>
 
-                            Today's Total
+                            Total Processed
 
                         </p>
 
                         <h4>
 
-                            {todayTotal} Vehicles
+                            {totalVehicles}
 
                         </h4>
 

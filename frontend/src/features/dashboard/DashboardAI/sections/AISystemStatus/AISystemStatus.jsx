@@ -1,6 +1,6 @@
 import {
     FaDatabase,
-    FaChartLine,
+    FaBrain,
     FaTrafficLight,
     FaAmbulance
 } from "react-icons/fa";
@@ -17,7 +17,9 @@ function AISystemStatus({
 
                             emergency = false,
 
-                            aiStatus = "ACTIVE"
+                            aiStatus = "ACTIVE",
+
+                            recommendation = "Traffic Flow Normal"
 
                         }) {
 
@@ -32,18 +34,18 @@ function AISystemStatus({
         },
 
         {
-            icon: <FaChartLine />,
-            title: "Density Prediction",
-            value: "Running",
+            icon: <FaBrain />,
+            title: "AI Recommendation",
+            value: recommendation,
             status: "online",
-            label: "ACTIVE"
+            label: "AI"
         },
 
         {
             icon: <FaTrafficLight />,
             title: "Green Signal",
             value: currentLane.toUpperCase(),
-            status: "online",
+            status: emergency ? "warning" : "online",
             label: aiStatus
         },
 
@@ -57,7 +59,7 @@ function AISystemStatus({
                 ? "warning"
                 : "online",
             label: emergency
-                ? "ALERT"
+                ? "ACTIVE"
                 : "READY"
         }
 
@@ -75,51 +77,47 @@ function AISystemStatus({
 
             <div className={styles.list}>
 
-                {
+                {systems.map(item => (
 
-                    systems.map((item) => (
+                    <div
+                        key={item.title}
+                        className={styles.row}
+                    >
 
-                        <div
-                            key={item.title}
-                            className={styles.row}
-                        >
+                        <div className={styles.left}>
 
-                            <div className={styles.left}>
+                            <span className={styles.icon}>
 
-                                <span className={styles.icon}>
+                                {item.icon}
 
-                                    {item.icon}
+                            </span>
 
-                                </span>
+                            <div>
 
-                                <div>
+                                <strong>
 
-                                    <strong>
+                                    {item.title}
 
-                                        {item.title}
+                                </strong>
 
-                                    </strong>
+                                <p className={styles.value}>
 
-                                    <p className={styles.value}>
+                                    {item.value}
 
-                                        {item.value}
-
-                                    </p>
-
-                                </div>
+                                </p>
 
                             </div>
 
-                            <StatusPill
-                                label={item.label}
-                                status={item.status}
-                            />
-
                         </div>
 
-                    ))
+                        <StatusPill
+                            label={item.label}
+                            status={item.status}
+                        />
 
-                }
+                    </div>
+
+                ))}
 
             </div>
 

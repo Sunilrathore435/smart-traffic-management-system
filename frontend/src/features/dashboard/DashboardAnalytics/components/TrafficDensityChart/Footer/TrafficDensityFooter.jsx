@@ -2,17 +2,13 @@ import styles from "./TrafficDensityFooter.module.css";
 
 function TrafficDensityFooter({
 
-                                  analytics,
-
-                                  vehicles = []
+                                  analytics
 
                               }) {
 
     const congestion =
 
-        analytics?.laneCongestion ||
-
-        {
+        analytics?.laneCongestion ?? {
 
             north: 0,
 
@@ -24,21 +20,27 @@ function TrafficDensityFooter({
 
         };
 
-    const averageDensity = Math.round(
+    const totalVehicles =
 
-        Object.values(congestion)
+        analytics?.totalVehiclesProcessed ?? 0;
 
-            .reduce(
+    const averageDensity =
 
-                (sum, value) => sum + value,
+        Math.round(
 
-                0
+            Object.values(congestion)
 
-            ) /
+                .reduce(
 
-        Object.keys(congestion).length
+                    (sum, value) => sum + value,
 
-    );
+                    0
+
+                ) /
+
+            Object.keys(congestion).length
+
+        );
 
     return (
 
@@ -54,7 +56,7 @@ function TrafficDensityFooter({
 
                 <h3 className={styles.value}>
 
-                    {vehicles.length}
+                    {totalVehicles}
 
                 </h3>
 

@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import {
     FaArrowUp,
     FaArrowRight,
@@ -8,8 +6,6 @@ import {
 } from "react-icons/fa";
 
 import ProgressBar from "../../../../../components/ui/ProgressBar";
-
-import { SimulationEngine } from "../../../../traffic";
 
 import styles from "./LaneSummary.module.css";
 
@@ -25,35 +21,17 @@ const icons = {
 
 };
 
-function LaneSummary() {
+function LaneSummary({
 
-    const [simulation, setSimulation] = useState(
+                         signal,
 
-        SimulationEngine.getState()
+                         analytics
 
-    );
-
-    useEffect(() => {
-
-        const listener = (state) => {
-
-            setSimulation(state);
-
-        };
-
-        SimulationEngine.subscribe(listener);
-
-        return () => {
-
-            SimulationEngine.unsubscribe(listener);
-
-        };
-
-    }, []);
+                     }) {
 
     const congestion =
 
-        simulation.analytics?.laneCongestion ||
+        analytics?.laneCongestion ||
 
         {
 
@@ -67,9 +45,21 @@ function LaneSummary() {
 
         };
 
-    const totalVehicles =
+    const queues =
 
-        simulation.vehicles.length || 1;
+        signal?.laneQueues ||
+
+        {
+
+            north: 0,
+
+            east: 0,
+
+            south: 0,
+
+            west: 0
+
+        };
 
     const lanes = [
 
@@ -81,37 +71,19 @@ function LaneSummary() {
 
         "west"
 
-    ].map(lane => {
+    ].map(lane => ({
 
-        const vehicles =
+        direction:
 
-            simulation.vehicles.filter(
+            `${lane.charAt(0).toUpperCase()}${lane.slice(1)} Lane`,
 
-                vehicle => vehicle.lane === lane
+        vehicles: queues[lane] || 0,
 
-            ).length;
+        density: congestion[lane] || 0,
 
-        const density = Math.round(
+        icon: icons[lane]
 
-            (congestion[lane] / totalVehicles) * 100
-
-        );
-
-        return {
-
-            direction:
-
-                `${lane.charAt(0).toUpperCase()}${lane.slice(1)} Lane`,
-
-            vehicles,
-
-            density,
-
-            icon: icons[lane]
-
-        };
-
-    });
+    }));
 
     return (
 
@@ -120,7 +92,9 @@ function LaneSummary() {
             <div className={styles.header}>
 
                 <h3 className={styles.heading}>
+
                     Traffic Density
+
                 </h3>
 
                 <div className={styles.liveBadge}>
@@ -129,12 +103,16 @@ function LaneSummary() {
 
                     <div>
 
-            <span className={styles.liveTitle}>
-                LIVE TRAFFIC
-            </span>
+                        <span className={styles.liveTitle}>
+
+                            LIVE TRAFFIC
+
+                        </span>
 
                         <small className={styles.liveTime}>
-                            Updated 1 sec ago
+
+                            Backend Connected
+
                         </small>
 
                     </div>
@@ -144,6 +122,7 @@ function LaneSummary() {
             </div>
 
             {
+
                 lanes.map(lane => {
 
                     let status = "LOW";
@@ -166,11 +145,8 @@ function LaneSummary() {
                     return (
 
                         <div
-
                             key={lane.direction}
-
                             className={styles.row}
-
                         >
 
                             <div className={styles.top}>
@@ -193,9 +169,9 @@ function LaneSummary() {
 
                                         <span>
 
-                                {lane.vehicles} Vehicles
+                                            {lane.vehicles} Vehicles
 
-                            </span>
+                                        </span>
 
                                     </div>
 
@@ -203,15 +179,13 @@ function LaneSummary() {
 
                                 <div className={styles.right}>
 
-                        <span
+                                    <span
+                                        className={`${styles.badge} ${statusClass}`}
+                                    >
 
-                            className={`${styles.badge} ${statusClass}`}
+                                        {status}
 
-                        >
-
-                            {status}
-
-                        </span>
+                                    </span>
 
                                     <strong className={styles.percent}>
 
@@ -240,6 +214,7 @@ function LaneSummary() {
                     );
 
                 })
+
             }
 
         </section>

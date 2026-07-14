@@ -1,11 +1,13 @@
 package com.smarttraffic.backend.engine;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.smarttraffic.backend.enums.Direction;
 import com.smarttraffic.backend.enums.SignalStatus;
 import com.smarttraffic.backend.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 public class TrafficEngine {
@@ -22,81 +24,77 @@ public class TrafficEngine {
     /**
      * Executes one complete traffic simulation cycle.
      */
-    public SimulationResult simulateCycle(Intersection intersection) {
+    public SimulationResult simulateCycle(
+            Intersection intersection,
+            TrafficDecision decision) {
+
+        // Simulation Start Time
+        LocalDateTime simulationStartTime = LocalDateTime.now();
+
+        long startMillis = System.currentTimeMillis();
+
         log.info("========== Starting Traffic Simulation ==========");
-        // STEP 1 : Capture queue BEFORE simulation
+
         QueueSnapshot beforeSnapshot = captureSnapshot(intersection);
 
-        // STEP 2 : Ask optimizer for best decision
-        TrafficDecision decision = trafficOptimizer.optimize(intersection);
-
-        // STEP 3 : Reset all signals
         resetSignals(intersection);
 
-        // STEP 4 : Turn selected lane GREEN
         TrafficLane lane = intersection.getLane(decision.getGreenLane());
 
         lane.setSignalStatus(SignalStatus.GREEN);
 
         intersection.setCurrentGreenLane(decision.getGreenLane());
 
-        log.debug("Queue Before : {}", beforeSnapshot);
-
         log.info(
-                "Decision -> Lane: {}, Green Time: {} sec, Vehicles Allowed: {}, Traffic Score: {}, Reason: {}",
+                "Decision -> Lane: {}, Green Time: {}, Vehicles Allowed: {}, Score: {}",
                 decision.getGreenLane(),
                 decision.getGreenTime(),
                 decision.getVehiclesAllowed(),
-                decision.getTrafficScore(),
-                decision.getReason()
+                decision.getTrafficScore()
         );
-
-        log.info("🟢 GREEN SIGNAL -> {}", decision.getGreenLane());
 
         int vehiclesPassed = 0;
 
-        // STEP 5 : Vehicles Cross
         while (!lane.isEmpty()
                 && vehiclesPassed < decision.getVehiclesAllowed()) {
 
             Vehicle vehicle = lane.removeVehicle();
 
-            log.info(
-                    "Vehicle Passed : {} ({})",
-                    vehicle.getVehicleNumber(),
-                    vehicle.getVehicleType()
-            );
+            log.info("Vehicle Passed : {}", vehicle.getVehicleNumber());
 
             vehiclesPassed++;
         }
 
-        // STEP 6 : GREEN -> YELLOW
         lane.setSignalStatus(SignalStatus.YELLOW);
 
-        log.info("🟡 YELLOW SIGNAL -> {}", decision.getGreenLane());
-
-        // STEP 7 : YELLOW -> RED
         lane.setSignalStatus(SignalStatus.RED);
 
-        log.info("🔴 RED SIGNAL -> {}", decision.getGreenLane());
+        QueueSnapshot afterSnapshot =
+                captureSnapshot(intersection);
 
-        // STEP 8 : Capture queue AFTER simulation
-        QueueSnapshot afterSnapshot = captureSnapshot(intersection);
+        long executionTime =
+                System.currentTimeMillis() - startMillis;
 
-        log.debug("Queue After : {}", afterSnapshot);
-
-        // STEP 9 : Build simulation result
         log.info(
-                "Simulation completed. Vehicles Passed: {}, Remaining: {}",
-                vehiclesPassed,
-                lane.getVehicleCount()
+                "Simulation completed in {} ms",
+                executionTime
         );
+
         return new SimulationResult(
+
                 decision,
+
                 beforeSnapshot,
+
                 afterSnapshot,
+
                 vehiclesPassed,
-                lane.getVehicleCount()
+
+                lane.getVehicleCount(),
+
+                simulationStartTime,
+
+                executionTime
         );
     }
 
@@ -106,12 +104,13 @@ public class TrafficEngine {
     private void resetSignals(Intersection intersection) {
 
         for (TrafficLane lane : intersection.getAllLanes().values()) {
-
             lane.setSignalStatus(SignalStatus.RED);
-
         }
     }
 
+    /**
+     * Capture queue snapshot.
+     */
     private QueueSnapshot captureSnapshot(Intersection intersection) {
 
         QueueSnapshot snapshot = new QueueSnapshot();

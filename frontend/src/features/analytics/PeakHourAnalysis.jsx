@@ -1,51 +1,38 @@
-import { useEffect, useState } from "react";
-
 import {
     FaClock,
     FaArrowTrendUp,
     FaBrain
 } from "react-icons/fa6";
 
-import AnalyticsEngine from "../traffic/AnalyticsEngine";
-
 import styles from "./PeakHourAnalysis.module.css";
 
-function PeakHourAnalysis() {
+function PeakHourAnalysis({
 
-    const [stats, setStats] = useState(
-        AnalyticsEngine.getStats()
-    );
+                              analytics = {},
 
-    useEffect(() => {
+                              ai = {}
 
-        const update = () => {
+                          }) {
 
-            setStats(
-                AnalyticsEngine.getStats()
-            );
-
-        };
-
-        AnalyticsEngine.subscribe(update);
-
-        update();
-
-        return () => {
-
-            AnalyticsEngine.unsubscribe(update);
-
-        };
-
-    }, []);
-
-    const congestion = stats.congestion;
+    const congestion = analytics.congestion ?? 0;
 
     const recommendation =
-        congestion > 70
-            ? "Increase green time immediately."
-            : congestion > 40
-                ? "Traffic is stable. Monitor closely."
-                : "Traffic flow is healthy.";
+
+        ai.reason ||
+
+        (
+
+            congestion > 70
+
+                ? "Increase green time immediately."
+
+                : congestion > 40
+
+                    ? "Traffic is stable. Monitor closely."
+
+                    : "Traffic flow is healthy."
+
+        );
 
     return (
 
@@ -89,7 +76,7 @@ function PeakHourAnalysis() {
 
                     <h3>
 
-                        {stats.currentQueue}
+                        {analytics.liveFlow ?? 0}
 
                     </h3>
 
@@ -105,7 +92,7 @@ function PeakHourAnalysis() {
 
                     <h3>
 
-                        {stats.averageGreenTime}s
+                        {Math.round(analytics.averageGreenTime ?? 0)}s
 
                     </h3>
 
@@ -121,7 +108,7 @@ function PeakHourAnalysis() {
 
                     <h3>
 
-                        {stats.throughput}/min
+                        {analytics.throughput ?? 0}/min
 
                     </h3>
 
@@ -137,7 +124,7 @@ function PeakHourAnalysis() {
 
                     <h3>
 
-                        {stats.congestion}%
+                        {congestion}%
 
                     </h3>
 
@@ -175,7 +162,7 @@ function PeakHourAnalysis() {
 
                 <strong>
 
-                    98%
+                    {analytics.prediction?.confidence ?? 99}%
 
                 </strong>
 

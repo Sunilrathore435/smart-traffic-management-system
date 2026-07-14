@@ -13,9 +13,9 @@ function AIFooter({
 
                       status = "online",
 
-                      responseTime = "12 ms",
+                      responseTime = "--",
 
-                      lastSync = "Just Now",
+                      lastSync = "--",
 
                       backend = "CONNECTED",
 

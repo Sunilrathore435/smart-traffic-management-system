@@ -8,16 +8,21 @@ import styles from "./AIFooter.module.css";
 
 function AIFooter({
 
-                      analytics,
+                      simulation,
 
-                      ai,
+                      emergency,
 
-                      emergency
+                      timestamp
 
                   }) {
 
-    const currentTime =
-        new Date().toLocaleTimeString([], {
+    // =====================================
+    // Last Updated
+    // =====================================
+
+    const lastUpdated = timestamp
+
+        ? new Date(timestamp).toLocaleTimeString([], {
 
             hour: "2-digit",
 
@@ -25,7 +30,13 @@ function AIFooter({
 
             second: "2-digit"
 
-        });
+        })
+
+        : "--:--:--";
+
+    // =====================================
+    // AI Model
+    // =====================================
 
     const model =
 
@@ -35,13 +46,29 @@ function AIFooter({
 
             : "Adaptive Traffic AI v2.4";
 
-    const status =
+    // =====================================
+    // Status
+    // =====================================
 
-        emergency?.active
+    let status = "OFFLINE";
 
-            ? "EMERGENCY"
+    if (emergency?.active) {
 
-            : "LIVE";
+        status = "EMERGENCY";
+
+    }
+
+    else if (simulation?.schedulerStatus === "RUNNING") {
+
+        status = "LIVE";
+
+    }
+
+    else if (simulation?.schedulerStatus === "STOPPED") {
+
+        status = "IDLE";
+
+    }
 
     const statusClass =
 
@@ -101,7 +128,7 @@ function AIFooter({
 
                     <h4 className={styles.value}>
 
-                        {currentTime}
+                        {lastUpdated}
 
                     </h4>
 

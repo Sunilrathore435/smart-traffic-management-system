@@ -97,3 +97,58 @@
     background:rgba(34,197,94,.15);
     color:#22C55E;
 }
+.meta{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-end;
+
+    gap:8px;
+
+    min-width:110px;
+
+}
+
+.time{
+
+    color:#CBD5E1;
+
+    font-size:13px;
+
+    font-weight:600;
+
+}
+
+.execution,
+
+.score{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    color:#94A3B8;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.reason{
+
+    display:block;
+
+    margin-top:6px;
+
+    color:#7DD3FC;
+
+    font-size:12px;
+
+    line-height:1.4;
+
+}

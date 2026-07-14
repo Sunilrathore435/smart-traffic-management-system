@@ -8,7 +8,27 @@ import StatusPill from "../../../../../components/ui/StatusPill";
 
 import styles from "./MapFooter.module.css";
 
-function MapFooter() {
+function MapFooter({
+
+                       simulation
+
+                   }) {
+
+    const connected =
+        simulation != null;
+
+    const schedulerRunning =
+        simulation?.simulationRunning ?? false;
+
+    const refresh =
+        Math.round(
+            (simulation?.schedulerIntervalMs ?? 3000) / 1000
+        );
+
+    const lastSync =
+        schedulerRunning
+            ? "Live"
+            : "Stopped";
 
     return (
 
@@ -17,8 +37,19 @@ function MapFooter() {
             <div className={styles.left}>
 
                 <StatusPill
-                    label="CONNECTED"
-                    status="online"
+
+                    label={
+                        connected
+                            ? "CONNECTED"
+                            : "DISCONNECTED"
+                    }
+
+                    status={
+                        connected
+                            ? "online"
+                            : "offline"
+                    }
+
                 />
 
             </div>
@@ -28,14 +59,22 @@ function MapFooter() {
                 <div className={styles.item}>
 
                     <div className={styles.icon}>
+
                         <FaWifi />
+
                     </div>
 
                     <div>
 
                         <p>Connection</p>
 
-                        <span>WebSocket</span>
+                        <span>
+
+                            {connected
+                                ? "Backend API"
+                                : "Offline"}
+
+                        </span>
 
                     </div>
 
@@ -44,14 +83,20 @@ function MapFooter() {
                 <div className={styles.item}>
 
                     <div className={styles.icon}>
+
                         <FaClock />
+
                     </div>
 
                     <div>
 
-                        <p>Last Sync</p>
+                        <p>Scheduler</p>
 
-                        <span>Just Now</span>
+                        <span>
+
+                            {lastSync}
+
+                        </span>
 
                     </div>
 
@@ -60,14 +105,26 @@ function MapFooter() {
                 <div className={styles.item}>
 
                     <div className={styles.icon}>
-                        <FaSyncAlt className={styles.rotate}/>
+
+                        <FaSyncAlt
+                            className={
+                                schedulerRunning
+                                    ? styles.rotate
+                                    : ""
+                            }
+                        />
+
                     </div>
 
                     <div>
 
                         <p>Refresh</p>
 
-                        <span>1 sec</span>
+                        <span>
+
+                            {refresh} sec
+
+                        </span>
 
                     </div>
 

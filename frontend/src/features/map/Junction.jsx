@@ -5,7 +5,28 @@ import {
 
 import styles from "./Junction.module.css";
 
-function Junction() {
+function Junction({
+
+                      currentLane,
+
+                      emergency,
+
+                      ai
+
+                  }) {
+
+    const lane =
+        currentLane?.toUpperCase() || "NORTH";
+
+    const active =
+        emergency?.active
+            ? "EMERGENCY"
+            : "AI ACTIVE";
+
+    const status =
+        emergency?.active
+            ? "PRIORITY"
+            : "LIVE";
 
     return (
 
@@ -19,15 +40,27 @@ function Junction() {
 
                 <FaBrain className={styles.icon} />
 
-                <h3>North</h3>
+                <h3>
 
-                <span>AI Active</span>
+                    {lane}
+
+                </h3>
+
+                <span>
+
+                    {active}
+
+                </span>
 
                 <div className={styles.status}>
 
                     <FaCircle />
 
-                    <small>LIVE</small>
+                    <small>
+
+                        {status}
+
+                    </small>
 
                 </div>
 

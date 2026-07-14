@@ -15,9 +15,7 @@ function TrafficDensityHeader({
 
     const congestion =
 
-        analytics?.laneCongestion ||
-
-        {
+        analytics?.laneCongestion ?? {
 
             north: 0,
 
@@ -92,11 +90,8 @@ function TrafficDensityHeader({
                 />
 
                 <button
-
                     className={styles.menu}
-
                     aria-label="More"
-
                 >
 
                     <FaEllipsisVertical />

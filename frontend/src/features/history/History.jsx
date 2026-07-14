@@ -4,85 +4,85 @@ import LogsHeader from "./LogsHeader";
 import StatisticsBar from "./StatisticsBar";
 import LogsToolbar from "./LogsToolbar";
 import EventTimeline from "./EventTimeline";
-import HistoryEngine from "./HistoryEngine";
+
+import { historyApi } from "../../services/api";
 
 import styles from "./History.module.css";
 
 function History() {
 
-    const [events, setEvents] = useState(
-        HistoryEngine.getEvents()
-    );
+    const [events, setEvents] = useState([]);
 
     const [search, setSearch] = useState("");
 
     const [filter, setFilter] = useState("ALL");
 
-    // =====================================
-    // Listen History Updates
-    // =====================================
-
     useEffect(() => {
 
-        const listener = (history) => {
+        loadHistory();
 
-            setEvents(history);
+        const timer = setInterval(
 
-        };
+            loadHistory,
 
-        HistoryEngine.subscribe(listener);
+            3000
 
-        return () => {
+        );
 
-            HistoryEngine.unsubscribe(listener);
-
-        };
+        return () => clearInterval(timer);
 
     }, []);
 
-    // =====================================
-    // Search + Filter
-    // =====================================
+    async function loadHistory() {
+
+        try {
+
+            const history = await historyApi.getAll();
+
+            setEvents(history);
+
+        }
+
+        catch (error) {
+
+            console.error("Failed to load history", error);
+
+        }
+
+    }
 
     const filteredEvents = useMemo(() => {
 
         return events.filter(event => {
 
             const category =
-                event.category || event.type;
+                event.emergencyTriggered
+                    ? "EMERGENCY"
+                    : "SIMULATION";
 
             const matchesFilter =
                 filter === "ALL" ||
-                category === filter;
+                filter === category;
 
             const text = (
 
-                event.title +
+                event.selectedLane +
                 " " +
-                event.description
+                event.reason
 
             ).toLowerCase();
 
-            const matchesSearch =
+            return matchesFilter &&
                 text.includes(
                     search.toLowerCase()
                 );
 
-            return (
-                matchesFilter &&
-                matchesSearch
-            );
-
         });
 
     }, [
-
         events,
-
         search,
-
         filter
-
     ]);
 
     return (

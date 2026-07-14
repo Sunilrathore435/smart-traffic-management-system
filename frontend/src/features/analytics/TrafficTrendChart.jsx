@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import {
     ResponsiveContainer,
     AreaChart,
@@ -10,37 +8,15 @@ import {
     Tooltip
 } from "recharts";
 
-import AnalyticsEngine from "../traffic/AnalyticsEngine";
-
 import styles from "./TrafficTrendChart.module.css";
 
-function TrafficTrendChart() {
+function TrafficTrendChart({
 
-    const [data, setData] = useState(
-        AnalyticsEngine.getTrafficHistory()
-    );
+                               analytics = {}
 
-    useEffect(() => {
+                           }) {
 
-        const update = () => {
-
-            setData(
-                AnalyticsEngine.getTrafficHistory()
-            );
-
-        };
-
-        AnalyticsEngine.subscribe(update);
-
-        update();
-
-        return () => {
-
-            AnalyticsEngine.unsubscribe(update);
-
-        };
-
-    }, []);
+    const data = analytics.trafficHistory || [];
 
     return (
 
@@ -96,75 +72,44 @@ function TrafficTrendChart() {
                     </defs>
 
                     <CartesianGrid
-
                         strokeDasharray="4 4"
-
                         stroke="rgba(255,255,255,.05)"
-
                     />
 
                     <XAxis
-
                         dataKey="time"
-
                         tick={{
-
-                            fill:"#94A3B8",
-
-                            fontSize:12
-
+                            fill: "#94A3B8",
+                            fontSize: 12
                         }}
-
                         tickLine={false}
-
                         axisLine={false}
-
                     />
 
                     <YAxis
-
                         tick={{
-
-                            fill:"#94A3B8"
-
+                            fill: "#94A3B8"
                         }}
-
                         tickLine={false}
-
                         axisLine={false}
-
                     />
 
                     <Tooltip
-
                         contentStyle={{
-
-                            background:"#181C2B",
-
-                            border:"1px solid #00E5FF",
-
-                            borderRadius:16,
-
-                            color:"#fff"
-
+                            background: "#181C2B",
+                            border: "1px solid #00E5FF",
+                            borderRadius: 16,
+                            color: "#fff"
                         }}
-
                     />
 
                     <Area
-
                         type="monotone"
-
                         dataKey="vehicles"
-
                         stroke="#00E5FF"
-
                         strokeWidth={3}
-
                         fill="url(#traffic)"
-
                         animationDuration={600}
-
                     />
 
                 </AreaChart>

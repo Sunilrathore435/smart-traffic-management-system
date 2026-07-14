@@ -1,34 +1,12 @@
-import { useEffect, useState } from "react";
-
-import AnalyticsEngine from "../traffic/AnalyticsEngine";
-
 import styles from "./JunctionRanking.module.css";
 
-function JunctionRanking() {
+function JunctionRanking({
 
-    const [junctions, setJunctions] = useState([]);
+                             analytics = {}
 
-    useEffect(() => {
+                         }) {
 
-        const update = () => {
-
-            setJunctions(
-                AnalyticsEngine.getRanking()
-            );
-
-        };
-
-        AnalyticsEngine.subscribe(update);
-
-        update();
-
-        return () => {
-
-            AnalyticsEngine.unsubscribe(update);
-
-        };
-
-    }, []);
+    const junctions = analytics.ranking || [];
 
     return (
 
@@ -81,7 +59,7 @@ function JunctionRanking() {
 
                                     style={{
 
-                                        width: `${item.score}%`
+                                        width: `${item.congestion}%`
 
                                     }}
 
@@ -93,7 +71,7 @@ function JunctionRanking() {
 
                         <strong>
 
-                            {item.score}%
+                            {item.congestion}%
 
                         </strong>
 

@@ -1,38 +1,31 @@
 import {
     FaList,
     FaAmbulance,
-    FaServer,
-    FaChartLine
+    FaTrafficLight,
+    FaCar
 } from "react-icons/fa";
 
 import styles from "./StatisticsBar.module.css";
 
-function StatisticsBar({ events }) {
+function StatisticsBar({ events = [] }) {
 
     const stats = {
 
         total: events.length,
 
-        emergency: events.filter(
-
-            event =>
-                (event.category || event.type) === "EMERGENCY"
-
+        emergencies: events.filter(
+            event => event.emergencyTriggered
         ).length,
 
-        system: events.filter(
-
-            event =>
-                (event.category || event.type) === "SYSTEM"
-
+        simulations: events.filter(
+            event => !event.emergencyTriggered
         ).length,
 
-        analytics: events.filter(
-
-            event =>
-                (event.category || event.type) === "ANALYTICS"
-
-        ).length
+        vehiclesPassed: events.reduce(
+            (total, event) =>
+                total + (event.vehiclesPassed || 0),
+            0
+        )
 
     };
 
@@ -40,7 +33,7 @@ function StatisticsBar({ events }) {
 
         {
 
-            title: "Total Events",
+            title: "Total Simulations",
 
             value: stats.total,
 
@@ -50,9 +43,9 @@ function StatisticsBar({ events }) {
 
         {
 
-            title: "Emergencies",
+            title: "Emergency Events",
 
-            value: stats.emergency,
+            value: stats.emergencies,
 
             icon: <FaAmbulance />
 
@@ -60,21 +53,21 @@ function StatisticsBar({ events }) {
 
         {
 
-            title: "System Events",
+            title: "Normal Simulations",
 
-            value: stats.system,
+            value: stats.simulations,
 
-            icon: <FaServer />
+            icon: <FaTrafficLight />
 
         },
 
         {
 
-            title: "Analytics",
+            title: "Vehicles Passed",
 
-            value: stats.analytics,
+            value: stats.vehiclesPassed,
 
-            icon: <FaChartLine />
+            icon: <FaCar />
 
         }
 

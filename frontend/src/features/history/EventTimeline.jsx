@@ -1,34 +1,10 @@
-import { useEffect, useState } from "react";
-
 import EventCard from "./EventCard";
-import HistoryEngine from "./HistoryEngine";
 
 import styles from "./EventTimeline.module.css";
-import {FaFileCircleXmark} from "react-icons/fa6";
 
-function EventTimeline() {
+import { FaFileCircleXmark } from "react-icons/fa6";
 
-    const [events, setEvents] = useState(
-        HistoryEngine.getEvents()
-    );
-
-    useEffect(() => {
-
-        const listener = (history) => {
-
-            setEvents(history);
-
-        };
-
-        HistoryEngine.subscribe(listener);
-
-        return () => {
-
-            HistoryEngine.unsubscribe(listener);
-
-        };
-
-    }, []);
+function EventTimeline({ events = [] }) {
 
     if (events.length === 0) {
 
@@ -41,7 +17,9 @@ function EventTimeline() {
                 <h2>No Events Yet</h2>
 
                 <p>
-                    Waiting for simulation...
+
+                    Waiting for traffic simulation...
+
                 </p>
 
             </section>

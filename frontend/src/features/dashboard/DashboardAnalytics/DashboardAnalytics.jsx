@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import { useDashboard } from "../../../hooks";
+
 import AnalyticsCard from "./components/AnalyticsCard";
 import TrafficDensity from "./components/TrafficDensityChart";
 import PeakHourCard from "./components/PeakHourCard";
@@ -15,6 +17,16 @@ function DashboardAnalytics() {
     const [simulation, setSimulation] = useState(
         SimulationEngine.getState()
     );
+
+    const {
+
+        dashboard,
+
+        loading,
+
+        error
+
+    } = useDashboard();
 
     useEffect(() => {
 
@@ -34,6 +46,22 @@ function DashboardAnalytics() {
 
     }, []);
 
+    if (loading) {
+
+        return <div className={styles.loading}>Loading Dashboard...</div>;
+
+    }
+
+    if (error) {
+
+        return (
+            <div className={styles.error}>
+                Failed to load dashboard.
+            </div>
+        );
+
+    }
+
     return (
 
         <section className={styles.container}>
@@ -44,7 +72,7 @@ function DashboardAnalytics() {
 
                 <span>
 
-                     Real-Time City Intelligence
+                    Real-Time City Intelligence
 
                 </span>
 
@@ -52,13 +80,15 @@ function DashboardAnalytics() {
 
             <div className={styles.grid}>
 
+                {/* Vehicle Animation (still frontend) */}
+
                 <div className={styles.flow}>
 
                     <AnalyticsCard>
 
                         <VehicleFlow
 
-                            analytics={simulation.analytics}
+                            analytics={dashboard?.analytics}
 
                             vehicles={simulation.vehicles}
 
@@ -69,6 +99,8 @@ function DashboardAnalytics() {
                     </AnalyticsCard>
 
                 </div>
+
+                {/* Backend */}
 
                 <div className={styles.density}>
 
@@ -76,15 +108,15 @@ function DashboardAnalytics() {
 
                         <TrafficDensity
 
-                            analytics={simulation.analytics}
-
-                            vehicles={simulation.vehicles}
+                            analytics={dashboard?.analytics}
 
                         />
 
                     </AnalyticsCard>
 
                 </div>
+
+                {/* Backend */}
 
                 <div className={styles.peak}>
 
@@ -92,19 +124,20 @@ function DashboardAnalytics() {
 
                         <PeakHourCard
 
-                            analytics={simulation.analytics}
+                            analytics={dashboard?.analytics}
 
-                            ai={simulation.ai}
+                            ai={dashboard?.ai}
 
-                            vehicles={simulation.vehicles}
+                            emergency={dashboard?.emergency}
 
-                            emergency={simulation.emergency}
+                            timestamp={dashboard?.timestamp}
 
                         />
-
                     </AnalyticsCard>
 
                 </div>
+
+                {/* Backend */}
 
                 <div className={styles.ai}>
 
@@ -112,13 +145,17 @@ function DashboardAnalytics() {
 
                         <AIInsightCard
 
-                            analytics={simulation.analytics}
+                            analytics={dashboard?.analytics}
 
-                            ai={simulation.ai}
+                            ai={dashboard?.ai}
 
-                            emergency={simulation.emergency}
+                            emergency={dashboard?.emergency}
 
-                            signals={simulation.signals}
+                            signal={dashboard?.signal}
+
+                            simulation={dashboard?.simulation}
+
+                            timestamp={dashboard?.timestamp}
 
                         />
 

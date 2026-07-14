@@ -16,21 +16,21 @@ function AIMetrics({
 
                    }) {
 
-    const congestion =
-        analytics?.congestion || 0;
+    const performance =
+        analytics?.performance || {};
 
-    const fuelSaving =
-        analytics?.fuelSaving || 0;
+    const congestion =
+        analytics?.congestion ?? 0;
 
     const greenTime =
-        ai?.greenTime ||
+        ai?.greenTime ??
 
-        analytics?.averageGreenTime ||
-
-        8;
+        Math.round(
+            analytics?.averageGreenTime ?? 10
+        );
 
     // =====================================
-    // Dynamic Metrics
+    // Backend Metrics
     // =====================================
 
     const queueReduction =
@@ -39,18 +39,14 @@ function AIMetrics({
 
             ? 100
 
-            : Math.max(
+            : performance.efficiency ??
 
+            Math.max(
                 10,
-
                 Math.min(
-
                     90,
-
                     Math.round(100 - congestion)
-
                 )
-
             );
 
     const waitReduction =
@@ -60,49 +56,43 @@ function AIMetrics({
             ? 100
 
             : Math.max(
-
                 5,
-
                 Math.round(greenTime * 2.2)
-
             );
+
+    const fuelSaving =
+
+        emergency?.active
+
+            ? 100
+
+            : performance.fuelSaving ??
+
+            analytics?.fuelSaving ??
+
+            0;
 
     const metrics = [
 
         {
-
             icon: <FaArrowTrendUp />,
-
             label: "Expected Queue Reduction",
-
             value: `${queueReduction}%`,
-
             color: "#22C55E"
-
         },
 
         {
-
             icon: <FaClock />,
-
             label: "Estimated Wait Time Reduction",
-
             value: `${waitReduction}%`,
-
             color: "#25D7FF"
-
         },
 
         {
-
             icon: <FaLeaf />,
-
             label: "Fuel Savings (Est.)",
-
             value: `${fuelSaving}%`,
-
             color: "#9B5CF6"
-
         }
 
     ];
@@ -122,36 +112,24 @@ function AIMetrics({
                 metrics.map(item => (
 
                     <div
-
                         key={item.label}
-
                         className={styles.row}
-
                     >
 
                         <div className={styles.left}>
 
                             <div
-
                                 className={styles.icon}
-
                                 style={{
-
                                     color: item.color
-
                                 }}
-
                             >
 
                                 {item.icon}
 
                             </div>
 
-                            <span
-
-                                className={styles.label}
-
-                            >
+                            <span className={styles.label}>
 
                                 {item.label}
 
@@ -160,15 +138,10 @@ function AIMetrics({
                         </div>
 
                         <span
-
                             className={styles.value}
-
                             style={{
-
                                 color: item.color
-
                             }}
-
                         >
 
                             {item.value}

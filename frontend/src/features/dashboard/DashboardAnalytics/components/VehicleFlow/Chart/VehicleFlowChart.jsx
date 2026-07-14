@@ -75,16 +75,23 @@ function CustomTooltip({ active, payload, label }) {
 
 function VehicleFlowChart({ analytics }) {
 
-    const data = analytics?.trafficHistory?.length
+    const data =
 
-        ? analytics.trafficHistory
+        analytics?.trafficHistory?.length > 0
 
-        : [
+            ? analytics.trafficHistory
 
-            { time: "--:--", vehicles: 0 }
+            : [
 
-        ];
+                {
 
+                    time: "--:--",
+
+                    vehicles: 0
+
+                }
+
+            ];
     return (
 
         <ResponsiveContainer
@@ -149,12 +156,23 @@ function VehicleFlowChart({ analytics }) {
                 />
 
                 <YAxis
+
+                    domain={[0, "dataMax + 5"]}
+
+                    allowDecimals={false}
+
                     tick={{
+
                         fill: "#94A3B8",
+
                         fontSize: 14
+
                     }}
+
                     tickLine={false}
+
                     axisLine={false}
+
                 />
 
                 <Tooltip

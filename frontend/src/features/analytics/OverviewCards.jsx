@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import {
     FaCar,
     FaTrafficLight,
@@ -7,78 +5,42 @@ import {
     FaAmbulance
 } from "react-icons/fa";
 
-import AnalyticsEngine from "../traffic/AnalyticsEngine";
-
 import styles from "./OverviewCards.module.css";
 
-function OverviewCards() {
+function OverviewCards({
 
-    const [stats, setStats] = useState(
-        AnalyticsEngine.getStats()
-    );
+                           analytics = {}
 
-    useEffect(() => {
-
-        const timer = setInterval(() => {
-
-            setStats(
-                AnalyticsEngine.getStats()
-            );
-
-        }, 500);
-
-        return () => clearInterval(timer);
-
-    }, []);
+                       }) {
 
     const cards = [
 
         {
-
             title: "Vehicles Passed",
-
-            value: stats.vehiclesPassed,
-
+            value: analytics.totalVehiclesProcessed ?? 0,
             subtitle: "Today",
-
             icon: <FaCar />
-
         },
 
         {
-
             title: "Congestion",
-
-            value: `${stats.congestion}%`,
-
+            value: `${analytics.congestion ?? 0}%`,
             subtitle: "Live Queue",
-
             icon: <FaTrafficLight />
-
         },
 
         {
-
             title: "AI Efficiency",
-
-            value: `${stats.fuelSaving}%`,
-
+            value: `${analytics.fuelSaving ?? 0}%`,
             subtitle: "Optimization",
-
             icon: <FaBrain />
-
         },
 
         {
-
             title: "Emergencies",
-
-            value: stats.emergencyCount,
-
+            value: analytics.emergencyVehiclesHandled ?? 0,
             subtitle: "Handled",
-
             icon: <FaAmbulance />
-
         }
 
     ];

@@ -38,9 +38,9 @@ function LogsHeader() {
 
                     <div>
 
-                        <strong>Local Cache</strong>
+                        <strong>MongoDB</strong>
 
-                        <small>Frontend Storage</small>
+                        <small>Simulation History</small>
 
                     </div>
 
@@ -52,9 +52,9 @@ function LogsHeader() {
 
                     <div>
 
-                        <strong>Offline Mode</strong>
+                        <strong>Spring Boot API</strong>
 
-                        <small>Backend Pending</small>
+                        <small>Connected</small>
 
                     </div>
 
