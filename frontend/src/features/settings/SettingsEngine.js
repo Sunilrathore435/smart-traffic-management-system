@@ -1,64 +1,38 @@
+import { settingsApi } from "../../services/api";
+
 class SettingsEngine {
 
     constructor() {
 
         this.listeners = [];
 
-        this.storageKey = "sctcc-settings";
-
-        this.defaultSettings = {
-
-            // Simulation
+        this.settings = {
 
             autoSimulation: true,
-
-            vehicleSpawnRate: 6,
-
-            vehicleSpeed: 5,
-
-            // AI
+            vehicleSpawnRate: 5,
+            schedulerInterval: 5000,
 
             adaptiveAI: true,
-
-            minGreenTime: 8,
-
-            maxGreenTime: 20,
-
-            aiDecisionInterval: 5,
-
-            // Emergency
+            minGreenTime: 10,
+            maxGreenTime: 40,
+            vehiclesPerGreen: 3,
 
             emergencyPriority: true,
-
-            emergencyDuration: 20,
-
-            // Analytics
+            emergencyGreenTime: 40,
 
             refreshRate: 500,
-
-            historyLimit: 100,
-
-            // UI
-
-            theme: "dark"
+            historyLimit: 100
 
         };
+
+        this.hasChanges = false;
 
         this.systemInfo = {
 
             backendConnected: false,
-
             websocketConnected: false,
-
             database: "MongoDB Atlas",
-
-            version: "2.4.0"
-
-        };
-
-        this.settings = {
-
-            ...this.defaultSettings
+            version: "2.5.0"
 
         };
 
@@ -67,7 +41,100 @@ class SettingsEngine {
     }
 
     // =====================================
-    // Getter
+    // Load Settings
+    // =====================================
+
+    async load() {
+
+        try {
+
+            const data =
+                await settingsApi.getSettings();
+
+            console.log("Settings Loaded:", data);
+
+            this.settings = data;
+
+            this.hasChanges = false;
+
+            this.systemInfo.backendConnected = true;
+
+            this.notify();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            this.systemInfo.backendConnected = false;
+
+        }
+
+    }
+
+    // =====================================
+    // Save Settings
+    // =====================================
+
+    async save() {
+
+        try {
+
+            const data =
+                await settingsApi.updateSettings(
+                    this.settings
+                );
+
+            this.settings = data;
+
+            this.hasChanges = false;
+
+            this.notify();
+
+            return true;
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            return false;
+
+        }
+
+    }
+
+    // =====================================
+    // Reset
+    // =====================================
+
+    async reset() {
+
+        try {
+
+            const data =
+                await settingsApi.resetSettings();
+
+            this.settings = data;
+
+            this.hasChanges = false;
+
+            this.notify();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+        }
+
+    }
+
+    // =====================================
+    // Getters
     // =====================================
 
     getSettings() {
@@ -87,6 +154,12 @@ class SettingsEngine {
             ...this.systemInfo
 
         };
+
+    }
+
+    hasUnsavedChanges() {
+
+        return this.hasChanges;
 
     }
 
@@ -110,171 +183,28 @@ class SettingsEngine {
 
         this.settings[key] = value;
 
-        this.save();
+        this.hasChanges = true;
 
         this.notify();
 
     }
 
     // =====================================
-    // Toggle Boolean
-    // =====================================
-
-    toggle(key) {
-
-        if (
-
-            typeof this.settings[key] !== "boolean"
-
-        ) {
-
-            return;
-
-        }
-
-        this.update(
-
-            key,
-
-            !this.settings[key]
-
-        );
-
-    }
-
-    // =====================================
-    // Multiple Update
+    // Update Multiple
     // =====================================
 
     updateAll(values) {
 
-        Object.keys(values).forEach(key => {
-
-            if (key in this.settings) {
-
-                this.settings[key] = values[key];
-
-            }
-
-        });
-
-        this.save();
-
-        this.notify();
-
-    }
-
-    // =====================================
-    // Reset
-    // =====================================
-
-    reset() {
-
         this.settings = {
 
-            ...this.defaultSettings
+            ...this.settings,
+            ...values
 
         };
 
-        this.save();
+        this.hasChanges = true;
 
         this.notify();
-
-    }
-
-    // =====================================
-    // Export
-    // =====================================
-
-    export() {
-
-        return JSON.stringify(
-
-            this.settings,
-
-            null,
-
-            2
-
-        );
-
-    }
-
-    // =====================================
-    // Import
-    // =====================================
-
-    import(config) {
-
-        Object.keys(config).forEach(key => {
-
-            if (key in this.settings) {
-
-                this.settings[key] = config[key];
-
-            }
-
-        });
-
-        this.save();
-
-        this.notify();
-
-    }
-
-    // =====================================
-    // Local Storage
-    // =====================================
-
-    save() {
-
-        localStorage.setItem(
-
-            this.storageKey,
-
-            JSON.stringify(this.settings)
-
-        );
-
-    }
-
-    load() {
-
-        const data =
-
-            localStorage.getItem(
-
-                this.storageKey
-
-            );
-
-        if (!data) {
-
-            return;
-
-        }
-
-        try {
-
-            this.settings = {
-
-                ...this.defaultSettings,
-
-                ...JSON.parse(data)
-
-            };
-
-        }
-
-        catch {
-
-            this.settings = {
-
-                ...this.defaultSettings
-
-            };
-
-        }
 
     }
 
@@ -291,24 +221,25 @@ class SettingsEngine {
     unsubscribe(listener) {
 
         this.listeners =
-
             this.listeners.filter(
-
                 item => item !== listener
-
             );
 
     }
 
     notify() {
 
-        const settings =
+        const state = {
 
-            this.getSettings();
+            ...this.settings,
+
+            hasChanges: this.hasChanges
+
+        };
 
         this.listeners.forEach(
 
-            listener => listener(settings)
+            listener => listener(state)
 
         );
 

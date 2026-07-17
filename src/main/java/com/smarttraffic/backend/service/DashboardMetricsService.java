@@ -8,8 +8,6 @@ import com.smarttraffic.backend.model.TrafficLane;
 import org.springframework.stereotype.Service;
 
 import java.lang.management.ManagementFactory;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -150,16 +148,7 @@ public class DashboardMetricsService {
         // Traffic History
         // =====================================
 
-        List<TrafficHistoryPoint> history =
-                List.of(
-                        new TrafficHistoryPoint(
-                                LocalTime.now()
-                                        .format(
-                                                DateTimeFormatter.ofPattern("HH:mm")
-                                        ),
-                                throughput
-                        )
-                );
+
 
         // =====================================
         // Populate Response
@@ -175,6 +164,5 @@ public class DashboardMetricsService {
         analytics.setPrediction(prediction);
         analytics.setPerformance(performance);
         analytics.setSystemHealth(systemHealth);
-        analytics.setTrafficHistory(history);
     }
 }

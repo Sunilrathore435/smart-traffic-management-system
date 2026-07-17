@@ -1,7 +1,6 @@
 import EventCard from "./EventCard";
 
 import styles from "./EventTimeline.module.css";
-
 import { FaFileCircleXmark } from "react-icons/fa6";
 
 function EventTimeline({ events = [] }) {
@@ -17,9 +16,7 @@ function EventTimeline({ events = [] }) {
                 <h2>No Events Yet</h2>
 
                 <p>
-
                     Waiting for traffic simulation...
-
                 </p>
 
             </section>
@@ -38,7 +35,7 @@ function EventTimeline({ events = [] }) {
 
                     <EventCard
 
-                        key={event.id}
+                        key={event.simulationId}
 
                         event={event}
 

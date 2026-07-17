@@ -34,7 +34,9 @@ function LogsToolbar({
 
             await historyApi.clear();
 
-            reloadHistory();
+            await reloadHistory();
+
+            alert("History cleared successfully.");
 
         }
 
@@ -45,10 +47,11 @@ function LogsToolbar({
                 error
             );
 
+            alert("Failed to clear history.");
+
         }
 
     };
-
     return (
 
         <section className={styles.toolbar}>

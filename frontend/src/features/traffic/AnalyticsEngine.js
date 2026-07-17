@@ -17,6 +17,8 @@ class AnalyticsEngine {
 
         this.lastVehicleCount = 0;
 
+        this.lastHistoryUpdate = 0;
+
         this.flowPercentage=0;
 
         SettingsEngine.subscribe(settings => {
@@ -60,7 +62,7 @@ class AnalyticsEngine {
         };
 
         this.trafficHistory = [];
-
+        this.lastHistoryUpdate = 0;
         this.lastRefresh = 0;
 
         this.laneCongestion = {
@@ -117,9 +119,7 @@ class AnalyticsEngine {
         // -----------------------------
 
         const queue = vehicles.filter(
-
             vehicle => vehicle.stopped
-
         ).length;
 
         // -----------------------------
@@ -153,9 +153,7 @@ class AnalyticsEngine {
         // -----------------------------
 
         const congestion = Math.round(
-
             (queue / Math.max(vehicles.length, 1)) * 100
-
         );
 
         // -----------------------------
@@ -163,11 +161,9 @@ class AnalyticsEngine {
         // -----------------------------
 
         const fuelSaving = Math.max(
-
             0,
 
             100 - congestion
-
         );
 
         // -----------------------------
@@ -175,19 +171,15 @@ class AnalyticsEngine {
         // -----------------------------
 
         const elapsedMinutes = Math.max(
-
             1 / 60,
 
             (Date.now() - this.startTime) / 60000
-
         );
 
         const throughput = Math.round(
-
             this.stats.vehiclesPassed /
 
             elapsedMinutes
-
         );
         // =====================================
 // Flow Percentage
@@ -232,30 +224,32 @@ class AnalyticsEngine {
             ai?.greenTime || 8;
 
         // -----------------------------
-        // Traffic History
-        // -----------------------------
+// Traffic History
+// -----------------------------
 
-        const currentTime =
-            new Date().toLocaleTimeString([], {
+        const now = Date.now();
 
-                hour: "2-digit",
+// Save history every refresh interval
+        if (
+            now - this.lastHistoryUpdate >=
+            this.settings.refreshRate
+        ) {
 
-                minute: "2-digit"
-
-            });
-
-        const last =
-            this.trafficHistory[
-            this.trafficHistory.length - 1
-                ];
-
-        if (!last || last.time !== currentTime) {
+            this.lastHistoryUpdate = now;
 
             this.trafficHistory.push({
 
-                time: currentTime,
+                time: new Date().toLocaleTimeString([], {
+                    minute: "2-digit",
+                    second: "2-digit"
+                }),
 
-                vehicles: this.stats.vehiclesPassed
+                // Flow during this interval
+                vehicles: currentFlow
+
+                // If you prefer cumulative values instead,
+                // replace currentFlow with:
+                // vehicles: this.stats.vehiclesPassed
 
             });
 
@@ -267,14 +261,10 @@ class AnalyticsEngine {
 
         }
 
-        const now = Date.now();
-
+// Notify UI
         if (
-
             now - this.lastRefresh >=
-
             this.settings.refreshRate
-
         ) {
 
             this.lastRefresh = now;
@@ -282,7 +272,6 @@ class AnalyticsEngine {
             this.notify();
 
         }
-
     }
 
     // =====================================

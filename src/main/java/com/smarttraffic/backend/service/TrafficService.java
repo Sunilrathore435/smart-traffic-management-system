@@ -1,9 +1,11 @@
 package com.smarttraffic.backend.service;
 
+import com.smarttraffic.backend.config.RuntimeSimulationState;
 import com.smarttraffic.backend.dto.AddVehicleRequest;
 import com.smarttraffic.backend.dto.TrafficLiveUpdate;
 import com.smarttraffic.backend.dto.TrafficStatusResponse;
 import com.smarttraffic.backend.engine.AdaptiveTrafficOptimizer;
+import com.smarttraffic.backend.engine.FixedTrafficOptimizer;
 import com.smarttraffic.backend.engine.SimulationResult;
 import com.smarttraffic.backend.engine.TrafficEngine;
 import com.smarttraffic.backend.enums.Direction;
@@ -17,7 +19,9 @@ import java.util.Map;
 
 @Service
 public class TrafficService {
-
+    private final AdaptiveTrafficOptimizer adaptiveTrafficOptimizer;
+    private final FixedTrafficOptimizer fixedTrafficOptimizer;
+    private final RuntimeSimulationState runtimeState;
     private final SimulationHistoryService historyService;
     private final TrafficUpdatePublisher publisher;
     private final Intersection intersection =
@@ -30,7 +34,7 @@ public class TrafficService {
 
     private final TrafficEngine trafficEngine;
 
-    private final AdaptiveTrafficOptimizer optimizer;
+   // private final AdaptiveTrafficOptimizer optimizer;
 
     private TrafficDecision latestDecision;
 
@@ -39,11 +43,14 @@ public class TrafficService {
     private Direction emergencyLane = null;
 
     public TrafficService(TrafficEngine trafficEngine,
-                          AdaptiveTrafficOptimizer optimizer,
-                          SimulationHistoryService historyService,TrafficUpdatePublisher publisher) {
+                          SimulationHistoryService historyService,TrafficUpdatePublisher publisher, AdaptiveTrafficOptimizer adaptiveTrafficOptimizer,
+                          FixedTrafficOptimizer fixedTrafficOptimizer,
+                          RuntimeSimulationState runtimeState) {
 
         this.trafficEngine = trafficEngine;
-        this.optimizer = optimizer;
+        this.adaptiveTrafficOptimizer = adaptiveTrafficOptimizer;
+        this.fixedTrafficOptimizer = fixedTrafficOptimizer;
+        this.runtimeState = runtimeState;
         this.historyService = historyService;
         this.publisher = publisher;
     }
@@ -128,8 +135,8 @@ public class TrafficService {
         }
 
         return decision;
-    }
 
+    }
     /**
      * Build simulation history record.
      */
@@ -202,30 +209,24 @@ public class TrafficService {
         if (emergencyActive && emergencyLane != null) {
 
             return new TrafficDecision(
-
                     emergencyLane,
-
-                    40,
-
+                    runtimeState.getEmergencyGreenTime(),
                     Math.max(
-
                             1,
-
                             intersection
                                     .getLane(emergencyLane)
                                     .getVehicleCount()
-
                     ),
-
                     9999,
-
                     "Manual emergency override"
-
             );
         }
 
-        return optimizer.optimize(intersection);
+        if (runtimeState.isAdaptiveAI()) {
+            return adaptiveTrafficOptimizer.optimize(intersection);
+        }
 
+        return fixedTrafficOptimizer.optimize(intersection);
     }
     /**
      * Activate emergency priority.

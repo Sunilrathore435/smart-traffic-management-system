@@ -1,6 +1,6 @@
 package com.smarttraffic.backend.controller;
 
-import com.smarttraffic.backend.config.SimulationSettings;
+import com.smarttraffic.backend.config.RuntimeSimulationState;
 import com.smarttraffic.backend.dto.ApiResponse;
 import com.smarttraffic.backend.dto.SimulationStatusResponse;
 import com.smarttraffic.backend.enums.SchedulerStatus;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/simulation")
 public class SimulationController {
 
-    private final SimulationSettings settings;
+    private final RuntimeSimulationState settings;
     private final TrafficService trafficService;
     private final SimulationHistoryService historyService;
 
     public SimulationController(
-            SimulationSettings settings,
+            RuntimeSimulationState settings,
             TrafficService trafficService,
             SimulationHistoryService historyService) {
 

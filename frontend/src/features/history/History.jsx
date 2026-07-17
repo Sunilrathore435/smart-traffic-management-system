@@ -105,7 +105,10 @@ function History() {
 
                 setFilter={setFilter}
 
+                reloadHistory={loadHistory}
+
             />
+
 
             <EventTimeline
                 events={filteredEvents}

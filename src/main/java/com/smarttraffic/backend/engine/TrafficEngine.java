@@ -15,11 +15,8 @@ public class TrafficEngine {
     private static final Logger log =
             LoggerFactory.getLogger(TrafficEngine.class);
 
-    private final TrafficOptimizer trafficOptimizer;
 
-    public TrafficEngine(TrafficOptimizer trafficOptimizer) {
-        this.trafficOptimizer = trafficOptimizer;
-    }
+
 
     /**
      * Executes one complete traffic simulation cycle.
@@ -79,7 +76,10 @@ public class TrafficEngine {
                 "Simulation completed in {} ms",
                 executionTime
         );
-
+        System.out.println(
+                "Decision = "
+                        + decision
+        );
         return new SimulationResult(
 
                 decision,

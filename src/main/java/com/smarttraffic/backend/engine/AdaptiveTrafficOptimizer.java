@@ -2,34 +2,60 @@ package com.smarttraffic.backend.engine;
 
 import com.smarttraffic.backend.enums.Direction;
 import com.smarttraffic.backend.model.*;
-
+import com.smarttraffic.backend.config.RuntimeSimulationState;
 import com.smarttraffic.backend.util.TrafficConstants;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
 
+    private final RuntimeSimulationState runtimeState;
 
+    public AdaptiveTrafficOptimizer(RuntimeSimulationState runtimeState) {
+        this.runtimeState = runtimeState;
+    }
 
     @Override
     public TrafficDecision optimize(Intersection intersection) {
 
-
         // =====================================================
-        // STEP 2 : Automatic Emergency Vehicle Detection
+        // STEP 0 : Adaptive AI Disabled
         // =====================================================
 
-        TrafficDecision emergencyDecision =
-                checkEmergency(intersection);
+        if (!runtimeState.isAdaptiveAI()) {
 
-        if (emergencyDecision != null) {
+            return new TrafficDecision(
 
-            return emergencyDecision;
+                    Direction.NORTH,
+
+                    runtimeState.getMinGreenTime(),
+
+                    runtimeState.getVehiclesPerGreen(),
+
+                    0,
+
+                    "Adaptive AI Disabled"
+
+            );
 
         }
 
         // =====================================================
-        // STEP 3 : Normal AI Optimization
+        // STEP 1 : Automatic Emergency Vehicle Detection
+        // =====================================================
+
+        if (runtimeState.isEmergencyPriority()) {
+
+            TrafficDecision emergencyDecision =
+                    checkEmergency(intersection);
+
+            if (emergencyDecision != null) {
+                return emergencyDecision;
+            }
+        }
+
+        // =====================================================
+        // STEP 2 : Normal AI Optimization
         // =====================================================
 
         int totalVehicles =
@@ -41,7 +67,7 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
 
                     Direction.NORTH,
 
-                    TrafficConstants.MIN_GREEN_TIME,
+                    runtimeState.getMinGreenTime(),
 
                     0,
 
@@ -68,9 +94,24 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
                     > bestLane.getTrafficScore()) {
 
                 bestLane = analysis;
-
             }
+        }
 
+        if (bestLane == null) {
+
+            return new TrafficDecision(
+
+                    Direction.NORTH,
+
+                    runtimeState.getMinGreenTime(),
+
+                    0,
+
+                    0,
+
+                    "No valid lane found"
+
+            );
         }
 
         return new TrafficDecision(
@@ -137,7 +178,10 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
                 calculateGreenTime(density);
 
         int vehiclesAllowed =
-                calculateVehiclesAllowed(greenTime);
+                calculateVehiclesAllowed(
+                        queueLength,
+                        greenTime
+                );
 
         return new LaneAnalysis(
 
@@ -178,7 +222,6 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
 
             TrafficLane lane =
                     intersection.getLane(direction);
-
             if (!lane.hasEmergencyVehicle()) {
 
                 continue;
@@ -210,9 +253,13 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
 
                         position,
 
-                        TrafficConstants.MAX_GREEN_TIME,
+                        runtimeState.getEmergencyGreenTime(),
 
-                        position,
+                        Math.min(
+                                lane.getVehicleCount(),
+                                runtimeState.getEmergencyGreenTime()
+                                        / TrafficConstants.PASSING_RATE
+                        ),
 
                         "Emergency vehicle detected"
 
@@ -272,7 +319,7 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
 
         int greenTime =
 
-                TrafficConstants.MIN_GREEN_TIME
+                runtimeState.getMinGreenTime()
 
                         + (int) (
 
@@ -280,9 +327,9 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
 
                                 * (
 
-                                TrafficConstants.MAX_GREEN_TIME
+                                runtimeState.getMaxGreenTime()
 
-                                        - TrafficConstants.MIN_GREEN_TIME
+                                        - runtimeState.getMinGreenTime()
 
                         )
 
@@ -290,7 +337,7 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
 
         return Math.min(
 
-                TrafficConstants.MAX_GREEN_TIME,
+                runtimeState.getMaxGreenTime(),
 
                 greenTime
 
@@ -298,19 +345,27 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
     }
 
     /**
-     * Vehicles allowed in one cycle.
+     * Calculate vehicles that can pass during this green cycle.
      */
     private int calculateVehiclesAllowed(
+            int queueLength,
             int greenTime) {
 
-        return Math.max(
+        // 1 vehicle crosses every PASSING_RATE seconds
+        int vehiclesAllowed = greenTime / TrafficConstants.PASSING_RATE;
 
-                TrafficConstants.MIN_VEHICLES_ALLOWED,
+        // Never allow more vehicles than actually exist
+        vehiclesAllowed = Math.min(queueLength, vehiclesAllowed);
 
-                greenTime
-                        / TrafficConstants.PASSING_RATE
+        // At least one vehicle should pass if the queue isn't empty
+        if (queueLength > 0) {
+            vehiclesAllowed = Math.max(1, vehiclesAllowed);
+        }
 
-        );
+        // Store for dashboard/settings display
+        runtimeState.setVehiclesPerGreen(vehiclesAllowed);
+
+        return vehiclesAllowed;
     }
 
 }

@@ -8,7 +8,9 @@ function ToggleSwitch({
 
                           checked,
 
-                          onChange
+                          onChange,
+
+                          disabled = false
 
                       }) {
 
@@ -18,21 +20,13 @@ function ToggleSwitch({
 
             <div className={styles.left}>
 
-                <h4>
-
-                    {label}
-
-                </h4>
+                <h4>{label}</h4>
 
                 {
 
                     description &&
 
-                    <p>
-
-                        {description}
-
-                    </p>
+                    <p>{description}</p>
 
                 }
 
@@ -41,14 +35,16 @@ function ToggleSwitch({
             <div className={styles.right}>
 
                 <span
-
-                    className={`${styles.status}
-
-                    ${checked ? styles.enabled : styles.disabled}`}
-
+                    className={`${styles.status} ${
+                        checked
+                            ? styles.enabled
+                            : styles.disabled
+                    }`}
                 >
 
-                    {checked ? "Enabled" : "Disabled"}
+                    {checked
+                        ? "Enabled"
+                        : "Disabled"}
 
                 </span>
 
@@ -56,11 +52,33 @@ function ToggleSwitch({
 
                     type="button"
 
-                    onClick={() => onChange(!checked)}
+                    role="switch"
 
-                    className={`${styles.switch}
+                    aria-checked={checked}
 
-                    ${checked ? styles.active : ""}`}
+                    aria-label={label}
+
+                    disabled={disabled}
+
+                    onClick={() => {
+
+                        if (!disabled) {
+
+                            onChange(!checked);
+
+                        }
+
+                    }}
+
+                    className={`${styles.switch} ${
+                        checked
+                            ? styles.active
+                            : ""
+                    } ${
+                        disabled
+                            ? styles.inactive
+                            : ""
+                    }`}
 
                 >
 

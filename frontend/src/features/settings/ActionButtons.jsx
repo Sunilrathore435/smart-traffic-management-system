@@ -10,25 +10,27 @@ import SettingsEngine from "./SettingsEngine";
 
 import styles from "./ActionButtons.module.css";
 
-function ActionButtons() {
+function ActionButtons({
 
-    const save = () => {
+                           onSave,
 
-        alert("Configuration Saved Successfully");
+                           onReset
 
-    };
-
-    const reset = () => {
-
-        SettingsEngine.reset();
-
-    };
+                       }) {
 
     const exportSettings = () => {
 
         const blob = new Blob(
 
-            [SettingsEngine.export()],
+            [
+
+                JSON.stringify(
+                    SettingsEngine.getSettings(),
+                    null,
+                    2
+                )
+
+            ],
 
             {
 
@@ -38,13 +40,16 @@ function ActionButtons() {
 
         );
 
-        const url = URL.createObjectURL(blob);
+        const url =
+            URL.createObjectURL(blob);
 
-        const link = document.createElement("a");
+        const link =
+            document.createElement("a");
 
         link.href = url;
 
-        link.download = "traffic-settings.json";
+        link.download =
+            "traffic-settings.json";
 
         link.click();
 
@@ -54,7 +59,9 @@ function ActionButtons() {
 
     const importSettings = () => {
 
-        alert("Import feature will be connected with backend.");
+        alert(
+            "Import feature coming soon."
+        );
 
     };
 
@@ -87,8 +94,11 @@ function ActionButtons() {
             <div className={styles.buttons}>
 
                 <button
+
                     className={styles.secondary}
-                    onClick={reset}
+
+                    onClick={onReset}
+
                 >
 
                     <FaRotateLeft />
@@ -98,8 +108,11 @@ function ActionButtons() {
                 </button>
 
                 <button
+
                     className={styles.secondary}
+
                     onClick={exportSettings}
+
                 >
 
                     <FaDownload />
@@ -109,8 +122,11 @@ function ActionButtons() {
                 </button>
 
                 <button
+
                     className={styles.secondary}
+
                     onClick={importSettings}
+
                 >
 
                     <FaUpload />
@@ -120,8 +136,11 @@ function ActionButtons() {
                 </button>
 
                 <button
+
                     className={styles.primary}
-                    onClick={save}
+
+                    onClick={onSave}
+
                 >
 
                     <FaFloppyDisk />

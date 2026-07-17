@@ -4,6 +4,7 @@ import com.smarttraffic.backend.dto.AnalyticsResponse;
 import com.smarttraffic.backend.model.TrafficSimulationRecord;
 import com.smarttraffic.backend.repository.TrafficSimulationRepository;
 import org.springframework.stereotype.Service;
+import com.smarttraffic.backend.dto.analytics.TrafficHistoryPoint;
 
 import java.util.HashMap;
 import java.util.List;
@@ -69,8 +70,30 @@ public class AnalyticsService {
         response.setAverageTrafficScore(averageTrafficScore);
         response.setBusiestLane(busiestLane);
         response.setEmergencyVehiclesHandled(emergencyVehiclesHandled);
-
+// Add chart history
+        response.setTrafficHistory(buildTrafficHistory(records));
         return response;
+    }
+    private List<TrafficHistoryPoint> buildTrafficHistory(
+            List<TrafficSimulationRecord> records) {
+
+        return records.stream()
+
+                // Keep only the latest 12 records
+                .skip(Math.max(0, records.size() - 12))
+
+                .map(record -> new TrafficHistoryPoint(
+
+                        record.getSimulationTime()
+                                .toLocalTime()
+                                .withNano(0)
+                                .toString(),
+
+                        record.getVehiclesPassed()
+
+                ))
+
+                .toList();
     }
     /**
      * Calculate total processed vehicles.

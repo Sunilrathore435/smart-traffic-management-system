@@ -1,7 +1,7 @@
 package com.smarttraffic.backend.service;
 
 import com.smarttraffic.backend.analytics.AnalyticsService;
-import com.smarttraffic.backend.config.SimulationSettings;
+import com.smarttraffic.backend.config.RuntimeSimulationState;
 import com.smarttraffic.backend.dto.AnalyticsResponse;
 import com.smarttraffic.backend.dto.DashboardResponse;
 import com.smarttraffic.backend.dto.SimulationStatusResponse;
@@ -26,7 +26,11 @@ public class DashboardService {
 
     private final SimulationHistoryService historyService;
 
-    private final SimulationSettings settings;
+    // Runtime statistics
+    private final RuntimeSimulationState runtimeState;
+
+    // MongoDB settings
+    private final SettingsService settingsService;
 
     public DashboardService(
 
@@ -40,14 +44,17 @@ public class DashboardService {
 
             SimulationHistoryService historyService,
 
-            SimulationSettings settings) {
+            RuntimeSimulationState runtimeState,
+
+            SettingsService settingsService) {
 
         this.trafficService = trafficService;
         this.analyticsService = analyticsService;
         this.dashboardMetricsService = dashboardMetricsService;
         this.dashboardStateService = dashboardStateService;
         this.historyService = historyService;
-        this.settings = settings;
+        this.runtimeState = runtimeState;
+        this.settingsService = settingsService;
     }
 
     public DashboardResponse getLiveDashboard() {
@@ -78,14 +85,19 @@ public class DashboardService {
         // Simulation
         // =====================================
 
+        boolean autoSimulation =
+                settingsService
+                        .getSettings()
+                        .isAutoSimulation();
+
         SimulationStatusResponse simulation =
                 new SimulationStatusResponse(
 
-                        settings.isRunning(),
+                        autoSimulation,
 
-                        settings.getInterval(),
+                        runtimeState.getInterval(),
 
-                        settings.getTotalSimulationCycles(),
+                        runtimeState.getTotalSimulationCycles(),
 
                         trafficService.getIntersection()
                                 .getTotalVehiclesProcessed(),
@@ -100,20 +112,15 @@ public class DashboardService {
 
                         trafficService.getIntersection()
                                 .getCurrentGreenLane() == null
-
                                 ? "NONE"
-
                                 : trafficService
                                 .getIntersection()
                                 .getCurrentGreenLane()
                                 .name(),
 
-                        settings.isRunning()
-
+                        autoSimulation
                                 ? SchedulerStatus.RUNNING
-
                                 : SchedulerStatus.STOPPED
-
                 );
 
         // =====================================
@@ -143,7 +150,6 @@ public class DashboardService {
         // =====================================
         // Dashboard Response
         // =====================================
-
         return new DashboardResponse(
 
                 traffic,
@@ -163,7 +169,5 @@ public class DashboardService {
                 System.currentTimeMillis()
 
         );
-
     }
-
 }

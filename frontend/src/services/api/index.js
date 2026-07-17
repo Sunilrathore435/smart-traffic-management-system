@@ -9,3 +9,4 @@ export { default as analyticsApi } from "./analyticsApi";
 export { default as emergencyApi } from "./emergencyApi";
 
 export { default as historyApi } from "./historyApi";
+export { default as settingsApi } from "./settingsApi";

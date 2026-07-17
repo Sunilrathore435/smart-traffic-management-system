@@ -17,30 +17,62 @@ import ActionButtons from "./ActionButtons";
 import styles from "./Settings.module.css";
 
 function Settings(){
+    const saveSettings = async () => {
 
+        const success =
+            await SettingsEngine.save();
+
+        if (success) {
+
+            alert("Configuration saved successfully.");
+
+        } else {
+
+            alert("Failed to save configuration.");
+
+        }
+
+    };
+
+    const resetSettings = async () => {
+
+        if (!window.confirm(
+            "Restore default settings?"
+        )) {
+
+            return;
+
+        }
+
+        await SettingsEngine.reset();
+
+    };
     const [settings,setSettings]=useState(
 
         SettingsEngine.getSettings()
 
     );
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        const listener=(config)=>{
-
+        const listener = (config) => {
+            console.log("React received:", config);
             setSettings(config);
 
         };
 
         SettingsEngine.subscribe(listener);
 
-        return()=>{
+        // Load settings from Spring Boot
+        SettingsEngine.load();
+
+        return () => {
 
             SettingsEngine.unsubscribe(listener);
 
         };
 
-    },[]);
+    }, []);
 
     return (
 
@@ -176,7 +208,7 @@ function Settings(){
 
                         min={15}
 
-                        max={30}
+                        max={40}
 
                         unit=" s"
 
@@ -300,7 +332,10 @@ function Settings(){
 
             </div>
 
-            <ActionButtons />
+            <ActionButtons
+                onSave={saveSettings}
+                onReset={resetSettings}
+            />
 
         </div>
 

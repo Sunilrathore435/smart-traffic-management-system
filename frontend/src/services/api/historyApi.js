@@ -4,7 +4,8 @@ const historyApi = {
 
     async getAll() {
 
-        const response = await apiClient.get("/history");
+        const response =
+            await apiClient.get("/history");
 
         return response.data;
 
@@ -12,7 +13,26 @@ const historyApi = {
 
     async getLatest() {
 
-        const response = await apiClient.get("/history/latest");
+        const response =
+            await apiClient.get("/history/latest");
+
+        return response.data;
+
+    },
+
+    async getCount() {
+
+        const response =
+            await apiClient.get("/history/count");
+
+        return response.data;
+
+    },
+
+    async clear() {
+
+        const response =
+            await apiClient.delete("/history");
 
         return response.data;
 
