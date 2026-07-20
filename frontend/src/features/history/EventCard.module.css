@@ -14,25 +14,30 @@
 
     border:1px solid rgba(255,255,255,.05);
 
-    transition:.25s;
+    transition:
+            transform .25s,
+            border-color .25s,
+            box-shadow .25s;
 
 }
 
 .card:hover{
 
-    transform:translateX(6px);
+    transform:translateY(-2px);
 
     border-color:#00E5FF;
+
+    box-shadow:0 8px 24px rgba(0,0,0,.25);
 
 }
 
 .icon{
 
-    width:54px;
+    width:56px;
 
-    height:54px;
+    height:56px;
 
-    border-radius:14px;
+    border-radius:16px;
 
     display:flex;
 
@@ -40,43 +45,13 @@
 
     align-items:center;
 
-    background:rgba(0,229,255,.08);
+    font-size:24px;
 
-    color:#00E5FF;
-
-    font-size:22px;
+    flex-shrink:0;
 
 }
 
-.content{
-
-    flex:1;
-
-}
-
-.content h3{
-
-    color:white;
-
-    margin-bottom:6px;
-
-}
-
-.content p{
-
-    color:#94A3B8;
-
-}
-
-.time{
-
-    color:#00E5FF;
-
-    font-weight:700;
-
-}
-
-.ai{
+.signal{
 
     background:rgba(0,229,255,.15);
 
@@ -92,26 +67,140 @@
 
 }
 
-.analytics{
+.content{
 
-    background:rgba(168,85,247,.15);
+    flex:1;
 
-    color:#A855F7;
-
-}
-
-.system{
-
-    background:rgba(251,191,36,.15);
-
-    color:#FBBF24;
+    min-width:0;
 
 }
 
-.backend{
+.header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:8px;
+
+    gap:12px;
+
+}
+
+.content h3{
+
+    margin:0;
+
+    color:white;
+
+    font-size:16px;
+
+}
+
+.content p{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin:0;
+
+    color:#CBD5E1;
+
+    font-size:14px;
+
+}
+
+.reason{
+
+    display:block;
+
+    margin-top:8px;
+
+    color:#7DD3FC;
+
+    font-size:12px;
+
+}
+
+.meta{
+
+    display:flex;
+
+    align-items:center;
+
+    min-width:120px;
+
+    justify-content:flex-end;
+
+}
+
+.time{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    color:#00E5FF;
+
+    font-weight:700;
+
+    font-size:13px;
+
+}
+
+.badgeNormal{
+
+    padding:4px 10px;
+
+    border-radius:999px;
 
     background:rgba(34,197,94,.15);
 
     color:#22C55E;
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+.badgeEmergency{
+
+    padding:4px 10px;
+
+    border-radius:999px;
+
+    background:rgba(239,68,68,.15);
+
+    color:#EF4444;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    animation:pulse 1.5s infinite;
+
+}
+
+@keyframes pulse{
+
+    0%,100%{
+
+        opacity:1;
+
+    }
+
+    50%{
+
+        opacity:.55;
+
+    }
 
 }

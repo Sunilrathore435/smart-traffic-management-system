@@ -4,8 +4,12 @@ import {
     FaGaugeHigh
 } from "react-icons/fa6";
 
+import {
+    FaAmbulance,
+    FaCheckCircle
+} from "react-icons/fa";
+
 import styles from "./RecentEventItem.module.css";
-import {FaAmbulance} from "react-icons/fa";
 
 function RecentEventItem({ event }) {
 
@@ -18,21 +22,28 @@ function RecentEventItem({ event }) {
     const iconClass = emergency
         ? styles.emergency
         : styles.signal;
-
+    const phase =
+        event.signalPhase ??
+        event.currentSignalPhase ??
+        "Unknown";
+    const phaseLabel = {
+        NORTH_SOUTH: "North ↕ South",
+        EAST_WEST: "East ↔ West",
+        ALL_RED: "All Red"
+    }[phase] ?? phase;
     const title = emergency
-        ? `Emergency Priority • ${event.selectedLane}`
-        : `${event.selectedLane} Signal Activated`;
+        ? "Emergency Priority Activated"
+        : `${phaseLabel} Phase Activated`;
 
-    const description =
-        `${event.vehiclesPassed} vehicle(s) passed • Green ${event.greenTime}s`;
+    const description = `${event.vehiclesPassed} vehicle(s) passed • Green for ${event.greenTime}s`;
 
-    const time = new Date(
-        event.simulationTime
-    ).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit"
-    });
+    const time = event.simulationTime
+        ? new Date(event.simulationTime).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        })
+        : "--:--:--";
 
     return (
 
@@ -46,16 +57,34 @@ function RecentEventItem({ event }) {
 
             <div className={styles.content}>
 
-                <h4>
-                    {title}
-                </h4>
+                <div className={styles.header}>
 
-                <p>
-                    {description}
-                </p>
+                    <h4>{title}</h4>
+
+                    <span
+                        className={
+                            emergency
+                                ? styles.badgeEmergency
+                                : styles.badgeNormal
+                        }
+                    >
+
+                        {emergency
+                            ? "EMERGENCY"
+                            : "NORMAL"}
+
+                    </span>
+
+                </div>
+
+                <p>{description}</p>
 
                 <small className={styles.reason}>
-                    {event.reason}
+
+                    <FaCheckCircle />
+
+                    {event.reason || "Adaptive traffic optimization"}
+
                 </small>
 
             </div>
@@ -63,17 +92,25 @@ function RecentEventItem({ event }) {
             <div className={styles.meta}>
 
                 <span className={styles.time}>
+
                     {time}
+
                 </span>
 
                 <span className={styles.execution}>
+
                     <FaClock />
-                    {event.executionTimeMs ?? 0} ms
+
+                    {((event.executionTimeMs ?? 0) / 1000).toFixed(2)} s
+
                 </span>
 
                 <span className={styles.score}>
+
                     <FaGaugeHigh />
-                    {event.trafficScore.toFixed(1)}
+
+                    {(event.trafficScore ?? 0).toFixed(1)}
+
                 </span>
 
             </div>

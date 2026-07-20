@@ -1,7 +1,9 @@
 package com.smarttraffic.backend.model;
 
 import com.smarttraffic.backend.enums.Direction;
-
+import com.smarttraffic.backend.enums.SignalPhase;
+import com.smarttraffic.backend.enums.PedestrianSignal;
+import com.smarttraffic.backend.enums.SimulationStage;
 import java.time.LocalDateTime;
 import java.util.EnumMap;
 import java.util.Map;
@@ -27,9 +29,66 @@ public class Intersection {
 
     private final Map<Direction, TrafficLane> lanes;
 
-    // Currently Green Signal
-    private Direction currentGreenLane;
+    // ==================================================
+// Signal Management
+// ==================================================
 
+    /*
+     * Current active signal phase.
+     * Determines which pair of roads has GREEN.
+     */
+    private SignalPhase currentSignalPhase;
+
+    /*
+     * Lane with the highest traffic score.
+     * Used only for analytics and dashboard.
+     * This is NOT the active green lane.
+     */
+    private Direction dominantLane;
+
+    /*
+     * Current traffic controller stage.
+     */
+    private SimulationStage currentStage;
+
+    /*
+     * Current pedestrian signal.
+     */
+    private PedestrianSignal pedestrianSignal;
+
+    /*
+     * Remaining seconds of current stage.
+     */
+    private int remainingTime;
+
+    /*
+     * Time when current stage started.
+     */
+    private LocalDateTime phaseStartTime;
+
+    /*
+     * Emergency vehicle state.
+     */
+    private boolean emergencyActive;
+
+    /*
+     * Lane containing the emergency vehicle.
+     */
+    private Direction emergencyLane;
+    /*
+     * Indicates whether a pedestrian has requested to cross.
+     */
+    private boolean pedestrianWaiting;
+
+    /*
+     * Direction from which the pedestrian requested crossing.
+     */
+    private Direction pedestrianDirection;
+
+    /*
+     * Time when the pedestrian request was received.
+     */
+    private LocalDateTime pedestrianRequestTime;
     // ==================================================
     // Statistics
     // ==================================================
@@ -59,7 +118,24 @@ public class Intersection {
         lanes.put(Direction.EAST, new TrafficLane(Direction.EAST));
         lanes.put(Direction.WEST, new TrafficLane(Direction.WEST));
 
-        this.currentGreenLane = Direction.NORTH;
+        this.currentSignalPhase = SignalPhase.NORTH_SOUTH;
+
+        this.dominantLane = Direction.NORTH;
+
+        this.currentStage = SimulationStage.VEHICLE_GREEN;
+
+        this.pedestrianSignal = PedestrianSignal.DONT_WALK;
+
+        this.remainingTime = 0;
+
+        this.phaseStartTime = LocalDateTime.now();
+
+        this.emergencyActive = false;
+
+        this.emergencyLane = null;
+        this.pedestrianWaiting = false;
+        this.pedestrianDirection = null;
+        this.pedestrianRequestTime = null;
 
         this.totalVehiclesProcessed = 0;
 
@@ -108,17 +184,17 @@ public class Intersection {
     // Signal Management
     // ==================================================
 
-    public Direction getCurrentGreenLane() {
-        return currentGreenLane;
+
+    public SignalPhase getCurrentSignalPhase() {
+        return currentSignalPhase;
     }
 
-    public void setCurrentGreenLane(Direction currentGreenLane) {
+    public void setCurrentSignalPhase(SignalPhase currentSignalPhase) {
 
-        this.currentGreenLane = currentGreenLane;
+        this.currentSignalPhase = currentSignalPhase;
 
         updateTimestamp();
     }
-
     // ==================================================
     // Statistics
     // ==================================================
@@ -185,36 +261,105 @@ public class Intersection {
         updateTimestamp();
     }
 
-    public double getLatitude() {
-        return latitude;
+    public Direction getDominantLane() {
+        return dominantLane;
     }
 
-    public void setLatitude(double latitude) {
+    public void setDominantLane(Direction dominantLane) {
+        this.dominantLane = dominantLane;
+        updateTimestamp();
+    }
 
-        this.latitude = latitude;
+    public SimulationStage getCurrentStage() {
+        return currentStage;
+    }
+
+    public void setCurrentStage(SimulationStage currentStage) {
+
+        this.currentStage = currentStage;
 
         updateTimestamp();
     }
 
-    public double getLongitude() {
-        return longitude;
+    public PedestrianSignal getPedestrianSignal() {
+        return pedestrianSignal;
     }
 
-    public void setLongitude(double longitude) {
+    public void setPedestrianSignal(PedestrianSignal pedestrianSignal) {
+        this.pedestrianSignal = pedestrianSignal;
+        updateTimestamp();
+    }
 
-        this.longitude = longitude;
+    public int getRemainingTime() {
+        return remainingTime;
+    }
+
+    public void setRemainingTime(int remainingTime) {
+        this.remainingTime = remainingTime;
+        updateTimestamp();
+    }
+
+    public LocalDateTime getPhaseStartTime() {
+        return phaseStartTime;
+    }
+
+    public void setPhaseStartTime(LocalDateTime phaseStartTime) {
+
+        this.phaseStartTime = phaseStartTime;
 
         updateTimestamp();
     }
 
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
+    public boolean isEmergencyActive() {
+        return emergencyActive;
     }
 
+    public void setEmergencyActive(boolean emergencyActive) {
+        this.emergencyActive = emergencyActive;
+        updateTimestamp();
+    }
+
+    public Direction getEmergencyLane() {
+        return emergencyLane;
+    }
+
+    public void setEmergencyLane(Direction emergencyLane) {
+        this.emergencyLane = emergencyLane;
+        updateTimestamp();
+    }
+// ==================================================
+// Pedestrian Management
+// ==================================================
+
+    public boolean isPedestrianWaiting() {
+        return pedestrianWaiting;
+    }
+
+    public void setPedestrianWaiting(boolean pedestrianWaiting) {
+        this.pedestrianWaiting = pedestrianWaiting;
+        updateTimestamp();
+    }
+
+    public Direction getPedestrianDirection() {
+        return pedestrianDirection;
+    }
+
+    public void setPedestrianDirection(Direction pedestrianDirection) {
+        this.pedestrianDirection = pedestrianDirection;
+        updateTimestamp();
+    }
+
+    public LocalDateTime getPedestrianRequestTime() {
+        return pedestrianRequestTime;
+    }
+
+    public void setPedestrianRequestTime(LocalDateTime pedestrianRequestTime) {
+        this.pedestrianRequestTime = pedestrianRequestTime;
+        updateTimestamp();
+    }
     // ==================================================
     // Debug
     // ==================================================
-
     @Override
     public String toString() {
 
@@ -223,10 +368,20 @@ public class Intersection {
                 ", intersectionName='" + intersectionName + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
-                ", currentGreenLane=" + currentGreenLane +
+                ", currentSignalPhase=" + currentSignalPhase +
+                ", dominantLane=" + dominantLane +
+                ", currentStage=" + currentStage +
+                ", pedestrianSignal=" + pedestrianSignal +
+                ", remainingTime=" + remainingTime +
+                ", phaseStartTime=" + phaseStartTime +
+                ", emergencyActive=" + emergencyActive +
+                ", emergencyLane=" + emergencyLane +
                 ", waitingVehicles=" + getTotalWaitingVehicles() +
                 ", totalVehiclesProcessed=" + totalVehiclesProcessed +
                 ", lastUpdated=" + lastUpdated +
+                ", pedestrianWaiting=" + pedestrianWaiting +
+                ", pedestrianDirection=" + pedestrianDirection +
+                ", pedestrianRequestTime=" + pedestrianRequestTime +
                 '}';
     }
 }

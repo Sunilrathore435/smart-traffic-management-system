@@ -2,7 +2,9 @@ package com.smarttraffic.backend.dto.dashboard;
 
 public class AIResponse {
 
-    private String selectedLane;
+    private String signalPhase;
+
+    private String dominantLane;
 
     private int greenTime;
 
@@ -16,25 +18,35 @@ public class AIResponse {
     }
 
     public AIResponse(
-            String selectedLane,
+            String signalPhase,
+            String dominantLane,
             int greenTime,
             int vehiclesAllowed,
             double trafficScore,
             String reason) {
 
-        this.selectedLane = selectedLane;
+        this.signalPhase = signalPhase;
+        this.dominantLane = dominantLane;
         this.greenTime = greenTime;
         this.vehiclesAllowed = vehiclesAllowed;
         this.trafficScore = trafficScore;
         this.reason = reason;
     }
 
-    public String getSelectedLane() {
-        return selectedLane;
+    public String getSignalPhase() {
+        return signalPhase;
     }
 
-    public void setSelectedLane(String selectedLane) {
-        this.selectedLane = selectedLane;
+    public void setSignalPhase(String signalPhase) {
+        this.signalPhase = signalPhase;
+    }
+
+    public String getDominantLane() {
+        return dominantLane;
+    }
+
+    public void setDominantLane(String dominantLane) {
+        this.dominantLane = dominantLane;
     }
 
     public int getGreenTime() {
@@ -68,5 +80,4 @@ public class AIResponse {
     public void setReason(String reason) {
         this.reason = reason;
     }
-
 }

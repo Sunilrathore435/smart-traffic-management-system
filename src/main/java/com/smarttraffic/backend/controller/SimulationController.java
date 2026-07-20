@@ -87,11 +87,31 @@ public class SimulationController {
                         .getIntersectionName(),
 
                 trafficService.getIntersection()
-                        .getCurrentGreenLane() == null
+                        .getCurrentSignalPhase() == null
                         ? "NONE"
                         : trafficService.getIntersection()
-                        .getCurrentGreenLane()
+                        .getCurrentSignalPhase()
                         .name(),
+
+                trafficService.getIntersection()
+                        .getCurrentStage() == null
+                        ? "NONE"
+                        : trafficService.getIntersection()
+                        .getCurrentStage()
+                        .name(),
+
+                trafficService.getIntersection()
+                        .getPedestrianSignal() == null
+                        ? "NONE"
+                        : trafficService.getIntersection()
+                        .getPedestrianSignal()
+                        .name(),
+
+                trafficService.getIntersection()
+                        .getRemainingTime(),
+
+                trafficService.getIntersection()
+                        .isPedestrianWaiting(),
 
                 settings.isRunning()
                         ? SchedulerStatus.RUNNING

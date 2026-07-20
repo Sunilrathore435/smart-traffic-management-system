@@ -1,68 +1,272 @@
+/* ==========================================
+   Header
+========================================== */
+
 .header{
 
     display:flex;
 
     justify-content:space-between;
 
-    align-items:flex-start;
+    align-items:center;
 
-    gap:20px;
+    gap:24px;
 
-    padding-bottom:20px;
+    padding-bottom:24px;
 
     border-bottom:1px solid var(--color-border);
 
 }
 
-.title{
+/* ==========================================
+   Left
+========================================== */
 
-    font-size:var(--font-xl);
-
-    color:var(--color-text);
-
-    font-weight:700;
-
-}
-
-.subtitle{
-
-    margin-top:6px;
-
-    color:var(--color-text-secondary);
-
-    font-size:var(--font-sm);
-
-}
-
-.statusGroup{
+.left{
 
     display:flex;
 
     align-items:center;
 
-    gap:12px;
+    gap:18px;
+
+}
+
+/* ==========================================
+   AI Logo
+========================================== */
+
+.logo{
+
+    width:62px;
+
+    height:62px;
+
+    border-radius:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:linear-gradient(
+            135deg,
+            rgba(0,229,255,.18),
+            rgba(0,229,255,.05)
+    );
+
+    border:1px solid rgba(0,229,255,.25);
+
+    color:var(--color-primary);
+
+    font-size:28px;
+
+    flex-shrink:0;
+
+    box-shadow:0 10px 25px rgba(0,229,255,.12);
+
+}
+
+/* ==========================================
+   Title
+========================================== */
+
+.title{
+
+    margin:0;
+
+    font-size:28px;
+
+    font-weight:800;
+
+    letter-spacing:.8px;
+
+    color:var(--color-text-primary);
+
+}
+
+.subtitle{
+
+    margin-top:4px;
+
+    color:var(--color-text-secondary);
+
+    font-size:14px;
+
+    line-height:1.5;
+
+}
+
+/* ==========================================
+   AI Mode
+========================================== */
+
+.modeRow{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-top:10px;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    background:rgba(0,229,255,.08);
+
+    color:var(--color-primary);
+
+    font-size:12px;
+
+    font-weight:700;
+
+    letter-spacing:.4px;
+
+    border:1px solid rgba(0,229,255,.15);
+
+}
+
+.modeRow svg{
+
+    font-size:12px;
+
+}
+
+/* ==========================================
+   Right
+========================================== */
+
+.right{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-end;
+
+    gap:10px;
 
 }
 
 .version{
 
+    padding:4px 10px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
     color:var(--color-text-secondary);
-
-    font-size:var(--font-sm);
-
-}
-.mode{
-
-    display:block;
-
-    margin-top:6px;
-
-    color:#00E5FF;
 
     font-size:12px;
 
     font-weight:600;
 
-    letter-spacing:.5px;
+}
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width:768px){
+
+    .header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+    .right{
+
+        width:100%;
+
+        flex-direction:row;
+
+        justify-content:space-between;
+
+        align-items:center;
+
+    }
+
+}
+
+@media (max-width:480px){
+
+    .left{
+
+        align-items:flex-start;
+
+    }
+
+    .logo{
+
+        width:52px;
+
+        height:52px;
+
+        font-size:22px;
+
+    }
+
+    .title{
+
+        font-size:22px;
+
+    }
+
+}
+.meta{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+    margin-top:12px;
+
+}
+
+.meta div{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:var(--color-text-secondary);
+
+    font-size:13px;
+
+}
+
+.meta svg{
+
+    color:var(--color-primary);
+
+}
+
+.footer{
+
+    display:flex;
+
+    gap:18px;
+
+    margin-top:12px;
+
+    font-size:12px;
+
+    color:var(--color-text-secondary);
+
+    flex-wrap:wrap;
 
 }

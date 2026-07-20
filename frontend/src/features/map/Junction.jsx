@@ -1,72 +1,261 @@
 import {
     FaBrain,
-    FaCircle
+    FaCircle,
+    FaClock,
+    FaWalking,
+    FaAmbulance,
+    FaTrafficLight
 } from "react-icons/fa";
 
 import styles from "./Junction.module.css";
 
 function Junction({
 
-                      currentLane,
-
-                      emergency,
-
-                      ai
+                      simulation,
+                      emergency
 
                   }) {
 
-    const lane =
-        currentLane?.toUpperCase() || "NORTH";
+    // ==========================================
+    // Backend State
+    // ==========================================
 
-    const active =
-        emergency?.active
-            ? "EMERGENCY"
-            : "AI ACTIVE";
+    const phase =
+        simulation?.currentSignalPhase ?? "UNKNOWN";
 
-    const status =
-        emergency?.active
-            ? "PRIORITY"
-            : "LIVE";
+    const stage =
+        simulation?.currentStage ?? "UNKNOWN";
+
+    const countdown =
+        simulation?.remainingTime ?? 0;
+
+    const pedestrian =
+        simulation?.pedestrianSignal ?? "DONT_WALK";
+
+    const scheduler =
+        simulation?.schedulerStatus ?? "UNKNOWN";
+
+    const running =
+        simulation?.simulationRunning ?? false;
+
+    const emergencyActive =
+        emergency?.active ?? false;
+
+    const emergencyLane =
+        emergency?.lane ?? "NONE";
+
+    // ==========================================
+    // Labels
+    // ==========================================
+
+    const phaseLabel = {
+
+        NORTH_SOUTH: "North ↕ South",
+
+        EAST_WEST: "East ↔ West",
+
+        ALL_RED: "All Red"
+
+    }[phase] ?? phase;
+
+    const stageLabel = {
+
+        VEHICLE_GREEN: "Vehicle Green",
+
+        VEHICLE_YELLOW: "Vehicle Yellow",
+
+        ALL_RED: "All Red",
+
+        PEDESTRIAN_WALK: "Pedestrian Walk",
+
+        PEDESTRIAN_FLASH: "Pedestrian Flash",
+
+        PEDESTRIAN_DONT_WALK: "Don't Walk"
+
+    }[stage] ?? stage;
+
+    const pedestrianLabel = {
+
+        WALK: "Walk",
+
+        DONT_WALK: "Don't Walk",
+
+        FLASHING_DONT_WALK: "Flashing"
+
+    }[pedestrian] ?? pedestrian.replaceAll("_", " ");
+
+    // ==========================================
+    // AI Mode
+    // ==========================================
+
+    const aiMode =
+        emergencyActive
+            ? "Emergency Override"
+            : running
+                ? "Adaptive AI"
+                : "Simulation Paused";
 
     return (
 
-        <div className={styles.junction}>
+        <>
 
-            <div className={styles.outerRing}></div>
+            {/* ==========================================
+                AI HUD
+            ========================================== */}
 
-            <div className={styles.innerRing}></div>
+            <div className={styles.hud}>
 
-            <div className={styles.content}>
+                <div className={styles.hudTop}>
 
-                <FaBrain className={styles.icon} />
+                    <div className={styles.ai}>
 
-                <h3>
+                        <FaBrain />
 
-                    {lane}
+                        <span>
 
-                </h3>
+                            {aiMode}
 
-                <span>
+                        </span>
 
-                    {active}
+                    </div>
 
-                </span>
+                    <div
+                        className={`
+                            ${
+                            emergencyActive
+                                ? styles.emergencyStatus
+                                : running
+                                    ? styles.online
+                                    : styles.offline
+                        }
+                        `}
+                    >
 
-                <div className={styles.status}>
+                        <FaCircle />
 
-                    <FaCircle />
+                        <span>
 
-                    <small>
+                            {scheduler}
 
-                        {status}
+                        </span>
 
-                    </small>
+                    </div>
+
+                </div>
+
+                <h2>
+
+                    {phaseLabel}
+
+                </h2>
+
+                <div className={styles.hudInfo}>
+
+                    <div className={styles.infoItem}>
+
+                        <FaTrafficLight />
+
+                        <span>
+
+                            {stageLabel}
+
+                        </span>
+
+                    </div>
+
+                    <div className={styles.infoItem}>
+
+                        <FaClock />
+
+                        <span>
+
+                            {running
+                                ? `${countdown}s`
+                                : "--"}
+
+                        </span>
+
+                    </div>
+
+                    <div className={styles.infoItem}>
+
+                        <FaWalking />
+
+                        <span>
+
+                            {pedestrianLabel}
+
+                        </span>
+
+                    </div>
+
+                    {
+
+                        emergencyActive && (
+
+                            <div
+                                className={`${styles.infoItem} ${styles.priority}`}
+                            >
+
+                                <FaAmbulance />
+
+                                <span>
+
+                                    {emergencyLane}
+
+                                </span>
+
+                            </div>
+
+                        )
+
+                    }
 
                 </div>
 
             </div>
 
-        </div>
+            {/* ==========================================
+                Connection Line
+            ========================================== */}
+
+            <div className={styles.hudConnector}></div>
+
+            {/* ==========================================
+                Junction Core
+            ========================================== */}
+
+            <div
+                className={`
+                    ${styles.junction}
+                    ${
+                    emergencyActive
+                        ? styles.emergency
+                        : ""
+                }
+                `}
+            >
+
+                <div
+                    className={`
+                        ${styles.aiCore}
+                        ${
+                        emergencyActive
+                            ? styles.emergencyCore
+                            : running
+                                ? styles.activeCore
+                                : styles.pausedCore
+                    }
+                    `}
+                >
+
+                    <FaBrain />
+
+                </div>
+
+            </div>
+
+        </>
 
     );
 

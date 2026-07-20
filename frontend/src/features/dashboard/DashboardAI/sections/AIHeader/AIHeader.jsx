@@ -1,55 +1,112 @@
+import {
+    FaRobot,
+    FaMicrochip,
+    FaServer,
+    FaClock
+} from "react-icons/fa";
+
 import StatusPill from "../../../../../components/ui/StatusPill";
 
 import styles from "./AIHeader.module.css";
 
 function AIHeader({
 
-                      status = "online",
+                      status = "offline",
 
-                      version = "v2.4.0",
+                      version = "--",
 
-                      mode = "Adaptive AI"
+                      mode = "Adaptive AI",
+
+                      scheduler = "UNKNOWN",
+
+                      uptime = 0,
+
+                      lastUpdated = "--:--:--"
 
                   }) {
+
+    const uptimeMinutes = Math.floor(uptime * 60);
 
     return (
 
         <header className={styles.header}>
 
-            <div>
+            <div className={styles.left}>
 
-                <h2 className={styles.title}>
+                <div className={styles.logo}>
 
-                    🤖 TRAFIQ AI
+                    <FaRobot />
 
-                </h2>
+                </div>
 
-                <p className={styles.subtitle}>
+                <div>
 
-                    Real-Time Traffic Intelligence Engine
+                    <h2 className={styles.title}>
 
-                </p>
+                        TRAFIQ AI
 
-                <small className={styles.mode}>
+                    </h2>
 
-                    {mode}
+                    <p className={styles.subtitle}>
 
-                </small>
+                        Real-Time Traffic Intelligence Engine
+
+                    </p>
+
+                    <div className={styles.modeRow}>
+
+                        <FaMicrochip />
+
+                        <span>{mode}</span>
+
+                    </div>
+
+                </div>
 
             </div>
 
-            <div className={styles.statusGroup}>
+            <div className={styles.right}>
 
                 <StatusPill
-                    label={status.toUpperCase()}
+                    label={
+                        status === "online"
+                            ? "ONLINE"
+                            : "OFFLINE"
+                    }
                     status={status}
                 />
 
-                <span className={styles.version}>
+                <div className={styles.meta}>
 
-                    {version}
+                    <div>
 
-                </span>
+                        <FaServer />
+
+                        <span>{scheduler}</span>
+
+                    </div>
+
+                    <div>
+
+                        <FaClock />
+
+                        <span>{lastUpdated}</span>
+
+                    </div>
+
+                </div>
+
+                <div className={styles.footer}>
+
+                    <span>Version {version}</span>
+
+                    <span>
+
+                        Uptime {uptimeMinutes} min
+
+                    </span>
+
+                </div>
 
             </div>
 

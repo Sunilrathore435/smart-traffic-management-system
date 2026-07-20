@@ -1,6 +1,6 @@
-/* ==========================================
+/* ==========================================================
    Traffic Signal
-========================================== */
+========================================================== */
 
 .signal{
 
@@ -12,46 +12,61 @@
 
     align-items:center;
 
-    z-index:60;
+    justify-content:center;
+
+    z-index:120;
+
+    pointer-events:none;
+
+    transition:transform .35s ease;
 
 }
 
-/* ==========================================
+/* ==========================================================
    Pole
-========================================== */
+========================================================== */
 
 .pole{
 
-    width:6px;
+    width:7px;
 
-    height:32px;
+    height:38px;
 
-    background:linear-gradient(
-            180deg,
-            #8B95A7,
-            #5F6878
-    );
+    border-radius:999px;
 
-    border-radius:3px;
+    background:
+            linear-gradient(
+                    180deg,
+                    #B7C1D1 0%,
+                    #737F93 35%,
+                    #505B6C 100%
+            );
 
     box-shadow:
-            inset 0 1px 1px rgba(255,255,255,.25);
+
+            inset 1px 1px 1px rgba(255,255,255,.25),
+
+            inset -1px -1px 2px rgba(0,0,0,.35),
+
+            0 4px 8px rgba(0,0,0,.25);
 
 }
 
-/* ==========================================
+/* ==========================================================
    Signal Housing
-========================================== */
+========================================================== */
 
 .body{
 
-    width:26px;
+    position:relative;
 
-    height:72px;
+    width:34px;
 
-    margin-bottom:-2px;
+    height:96px;
 
-    border-radius:14px;
+    margin-top:-2px;
+
+    border-radius:18px;
 
     display:flex;
 
@@ -61,87 +76,206 @@
 
     align-items:center;
 
-    background:linear-gradient(
-            180deg,
-            #2B3447,
-            #161D28
-    );
+    background:
 
-    border:1px solid rgba(255,255,255,.08);
+            linear-gradient(
+                    180deg,
+                    #343E51 0%,
+                    #232B39 45%,
+                    #161D28 100%
+            );
+
+    border:1px solid rgba(255,255,255,.10);
 
     box-shadow:
 
-            inset 0 2px 4px rgba(255,255,255,.05),
+            inset 0 2px 3px rgba(255,255,255,.05),
 
-            0 8px 18px rgba(0,0,0,.35);
+            inset 0 -3px 5px rgba(0,0,0,.45),
+
+            0 10px 22px rgba(0,0,0,.40);
+
+    transition:
+
+            box-shadow .35s ease,
+
+            transform .35s ease;
 
 }
 
-/* ==========================================
-   Light
-========================================== */
+/* Glass Reflection */
+
+.body::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:6px;
+
+    left:5px;
+
+    right:5px;
+
+    height:16px;
+
+    border-radius:12px;
+
+    background:
+
+            linear-gradient(
+
+                    180deg,
+
+                    rgba(255,255,255,.15),
+
+                    transparent
+
+            );
+
+    pointer-events:none;
+
+}
+
+/* ==========================================================
+   Lights
+========================================================== */
 
 .light{
 
-    font-size:11px;
+    font-size:14px;
 
-    color:#465166;
+    color:#2B3444;
 
-    transition:.35s;
+    opacity:.35;
+
+    transition:
+
+            color .3s,
+
+            filter .3s,
+
+            transform .3s,
+
+            opacity .3s;
 
 }
 
-/* ==========================================
-   RED
-========================================== */
+/* ==========================================================
+   Active Red
+========================================================== */
 
 .activeRed{
 
-    color:#EF4444;
+    color:#FF4D4F;
+
+    opacity:1;
+
+    transform:scale(1.12);
 
     filter:
-            drop-shadow(0 0 6px #EF4444)
-            drop-shadow(0 0 12px rgba(239,68,68,.9));
+
+            drop-shadow(0 0 4px #FF4D4F)
+
+            drop-shadow(0 0 10px #FF4D4F)
+
+            drop-shadow(0 0 18px rgba(255,77,79,.9));
+
+    animation:redPulse 2s infinite;
 
 }
 
-/* ==========================================
-   YELLOW
-========================================== */
+/* ==========================================================
+   Active Yellow
+========================================================== */
 
 .activeYellow{
 
     color:#FACC15;
 
+    opacity:1;
+
+    transform:scale(1.12);
+
     filter:
-            drop-shadow(0 0 6px #FACC15)
-            drop-shadow(0 0 12px rgba(250,204,21,.9));
+
+            drop-shadow(0 0 4px #FACC15)
+
+            drop-shadow(0 0 10px #FACC15)
+
+            drop-shadow(0 0 18px rgba(250,204,21,.9));
+
+    animation:yellowBlink 1s infinite;
 
 }
 
-/* ==========================================
-   GREEN
-========================================== */
+/* ==========================================================
+   Active Green
+========================================================== */
 
 .activeGreen{
 
     color:#22C55E;
 
+    opacity:1;
+
+    transform:scale(1.12);
+
     filter:
-            drop-shadow(0 0 6px #22C55E)
-            drop-shadow(0 0 12px rgba(34,197,94,.9));
+
+            drop-shadow(0 0 4px #22C55E)
+
+            drop-shadow(0 0 10px #22C55E)
+
+            drop-shadow(0 0 18px rgba(34,197,94,.9));
+
+    animation:greenPulse 2s infinite;
 
 }
 
-/* ==========================================
+/* ==========================================================
+   Emergency Mode
+========================================================== */
+
+.emergency{
+
+    animation:emergencyFlash .8s infinite;
+
+}
+
+.emergency::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:-6px;
+
+    border-radius:22px;
+
+    border:2px solid rgba(0,229,255,.35);
+
+    box-shadow:
+
+            0 0 12px rgba(0,229,255,.45),
+
+            0 0 24px rgba(0,229,255,.25);
+
+    pointer-events:none;
+
+}
+
+/* ==========================================================
    Signal Positions
-========================================== */
+========================================================== */
 
 .north{
 
-    top:20px;
+    top:24px;
 
-    left:48%;
+    left:50%;
+
+    transform:translateX(-50%);
 
 }
 
@@ -149,9 +283,9 @@
 
     bottom:24px;
 
-    right:48%;
+    left:50%;
 
-    transform:rotate(180deg);
+    transform:translateX(-50%) rotate(180deg);
 
 }
 
@@ -159,9 +293,9 @@
 
     right:24px;
 
-    top:48%;
+    top:50%;
 
-    transform:rotate(90deg);
+    transform:translateY(-50%) rotate(90deg);
 
 }
 
@@ -169,41 +303,21 @@
 
     left:24px;
 
-    top:48%;
+    top:50%;
 
-    transform:rotate(-90deg);
-
-}
-
-/* ==========================================
-   Blinking
-========================================== */
-
-.activeGreen{
-
-    animation:greenPulse 2s infinite;
+    transform:translateY(-50%) rotate(-90deg);
 
 }
 
-.activeYellow{
-
-    animation:yellowPulse 1s infinite;
-
-}
-
-.activeRed{
-
-    animation:redPulse 2s infinite;
-
-}
+/* ==========================================================
+   Animations
+========================================================== */
 
 @keyframes greenPulse{
 
     50%{
 
-        transform:scale(.92);
-
-        opacity:.75;
+        transform:scale(1.2);
 
     }
 
@@ -213,19 +327,67 @@
 
     50%{
 
-        transform:scale(.92);
-
-        opacity:.75;
+        transform:scale(1.18);
 
     }
 
 }
 
-@keyframes yellowPulse{
+@keyframes yellowBlink{
 
     50%{
 
-        opacity:.25;
+        opacity:.35;
+
+    }
+
+}
+
+@keyframes emergencyFlash{
+
+    0%{
+
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        transform:scale(1.04);
+
+    }
+
+    100%{
+
+        transform:scale(1);
+
+    }
+
+}
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@media(max-width:768px){
+
+    .body{
+
+        width:30px;
+
+        height:86px;
+
+    }
+
+    .pole{
+
+        height:32px;
+
+    }
+
+    .light{
+
+        font-size:12px;
 
     }
 

@@ -1,6 +1,7 @@
 package com.smarttraffic.backend.model;
 
 import com.smarttraffic.backend.enums.Direction;
+import com.smarttraffic.backend.enums.SignalPhase;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,6 +19,7 @@ public class TrafficSimulationRecord {
     private String simulationId;
     private final LocalDateTime simulationTime;
     private final long executionTimeMs;
+
     // =====================================================
     // Intersection
     // =====================================================
@@ -28,7 +30,9 @@ public class TrafficSimulationRecord {
     // AI Decision
     // =====================================================
 
-    private final Direction selectedLane;
+    private final SignalPhase signalPhase;
+
+    private final Direction dominantLane;
 
     private final int greenTime;
 
@@ -66,7 +70,9 @@ public class TrafficSimulationRecord {
 
             String intersectionId,
 
-            Direction selectedLane,
+            SignalPhase signalPhase,
+
+            Direction dominantLane,
 
             int greenTime,
 
@@ -94,7 +100,8 @@ public class TrafficSimulationRecord {
 
         this.intersectionId = intersectionId;
 
-        this.selectedLane = selectedLane;
+        this.signalPhase = signalPhase;
+        this.dominantLane = dominantLane;
 
         this.greenTime = greenTime;
 
@@ -138,8 +145,12 @@ public class TrafficSimulationRecord {
         return intersectionId;
     }
 
-    public Direction getSelectedLane() {
-        return selectedLane;
+    public SignalPhase getSignalPhase() {
+        return signalPhase;
+    }
+
+    public Direction getDominantLane() {
+        return dominantLane;
     }
 
     public int getGreenTime() {
@@ -183,7 +194,8 @@ public class TrafficSimulationRecord {
                 ", simulationTime=" + simulationTime +
                 ", executionTimeMs=" + executionTimeMs +
                 ", intersectionId='" + intersectionId + '\'' +
-                ", selectedLane=" + selectedLane +
+                ", signalPhase=" + signalPhase +
+                ", dominantLane=" + dominantLane +
                 ", greenTime=" + greenTime +
                 ", vehiclesPassed=" + vehiclesPassed +
                 ", remainingVehicles=" + remainingVehicles +

@@ -4,25 +4,30 @@ import com.smarttraffic.backend.enums.Direction;
 import com.smarttraffic.backend.enums.SignalStatus;
 import com.smarttraffic.backend.enums.VehicleType;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class TrafficLane {
 
-    private Direction direction;
+    private final Direction direction;
 
     private SignalStatus signalStatus;
 
-    private Queue<Vehicle> waitingVehicles;
+    private final Queue<Vehicle> waitingVehicles;
 
     public TrafficLane(Direction direction) {
+
         this.direction = direction;
         this.signalStatus = SignalStatus.RED;
-        this.waitingVehicles = new LinkedList<>();
+        this.waitingVehicles = new ConcurrentLinkedQueue<>();
+
     }
 
-    // ---------------- BASIC GETTERS ----------------
+    // ==========================================================
+    // BASIC GETTERS
+    // ==========================================================
 
     public Direction getDirection() {
         return direction;
@@ -60,6 +65,13 @@ public class TrafficLane {
         return List.copyOf(waitingVehicles);
     }
 
+    /**
+     * Creates a stable snapshot of the queue for analysis.
+     */
+    private List<Vehicle> snapshot() {
+        return new ArrayList<>(waitingVehicles);
+    }
+
     // ==========================================================
     // SMART ANALYSIS METHODS
     // ==========================================================
@@ -69,16 +81,19 @@ public class TrafficLane {
      */
     public boolean hasEmergencyVehicle() {
 
-        for (Vehicle vehicle : waitingVehicles) {
+        for (Vehicle vehicle : snapshot()) {
 
             if (vehicle.getVehicleType() == VehicleType.AMBULANCE
                     || vehicle.getVehicleType() == VehicleType.FIRE_TRUCK) {
 
                 return true;
+
             }
+
         }
 
         return false;
+
     }
 
     /**
@@ -90,18 +105,21 @@ public class TrafficLane {
 
         int position = 1;
 
-        for (Vehicle vehicle : waitingVehicles) {
+        for (Vehicle vehicle : snapshot()) {
 
             if (vehicle.getVehicleType() == VehicleType.AMBULANCE
                     || vehicle.getVehicleType() == VehicleType.FIRE_TRUCK) {
 
                 return position;
+
             }
 
             position++;
+
         }
 
         return -1;
+
     }
 
     /**
@@ -111,13 +129,14 @@ public class TrafficLane {
 
         int score = 0;
 
-        for (Vehicle vehicle : waitingVehicles) {
+        for (Vehicle vehicle : snapshot()) {
 
             score += vehicle.getPriorityScore();
 
         }
 
         return score;
+
     }
 
     /**
@@ -125,19 +144,22 @@ public class TrafficLane {
      */
     public double getAverageWaitingTime() {
 
-        if (waitingVehicles.isEmpty()) {
+        List<Vehicle> vehicles = snapshot();
+
+        if (vehicles.isEmpty()) {
             return 0;
         }
 
         long totalWaiting = 0;
 
-        for (Vehicle vehicle : waitingVehicles) {
+        for (Vehicle vehicle : vehicles) {
 
             totalWaiting += vehicle.getWaitingTimeSeconds();
 
         }
 
-        return (double) totalWaiting / waitingVehicles.size();
+        return (double) totalWaiting / vehicles.size();
+
     }
 
     /**
@@ -148,17 +170,21 @@ public class TrafficLane {
 
         int count = 0;
 
-        for (Vehicle vehicle : waitingVehicles) {
+        for (Vehicle vehicle : snapshot()) {
 
             if (vehicle.getVehicleType() == VehicleType.AMBULANCE
                     || vehicle.getVehicleType() == VehicleType.FIRE_TRUCK) {
 
                 return count;
+
             }
 
             count++;
+
         }
 
         return -1;
+
     }
+
 }

@@ -13,7 +13,7 @@ function AISystemStatus({
 
                             vehicles = 0,
 
-                            currentLane = "-",
+                            signalPhase = "Unknown",
 
                             emergency = false,
 
@@ -43,10 +43,10 @@ function AISystemStatus({
 
         {
             icon: <FaTrafficLight />,
-            title: "Green Signal",
-            value: currentLane.toUpperCase(),
+            title: "Current Signal Phase",
+            value: signalPhase,
             status: emergency ? "warning" : "online",
-            label: aiStatus
+            label: emergency ? "OVERRIDE" : "ACTIVE"
         },
 
         {

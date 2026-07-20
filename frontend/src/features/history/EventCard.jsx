@@ -1,55 +1,63 @@
 import {
-    FaBrain,
     FaTrafficLight,
     FaAmbulance,
-    FaServer
+    FaClock,
+    FaRoad
 } from "react-icons/fa";
 
 import styles from "./EventCard.module.css";
 
 function EventCard({ event }) {
 
-    const emergency =
-        event.emergencyTriggered;
+    const emergency = event.emergencyTriggered;
 
-    const icon =
-        emergency
-            ? <FaAmbulance />
-            : <FaTrafficLight />;
+    const phase =
+        event.signalPhase ??
+        event.currentSignalPhase ??
+        event.selectedLane ??
+        "UNKNOWN";
 
-    const iconClass =
-        emergency
-            ? styles.emergency
-            : styles.signal;
+    const phaseLabel = {
 
-    const title =
-        emergency
-            ? `Emergency Priority • ${event.selectedLane}`
-            : `${event.selectedLane} Signal Activated`;
+        NORTH_SOUTH: "North ↕ South",
 
-    const description =
+        EAST_WEST: "East ↔ West",
 
-        `${event.vehiclesPassed} vehicle(s) passed • Green ${event.greenTime}s • ${event.reason}`;
+        ALL_RED: "All Red"
 
-    const time = new Date(
-        event.simulationTime
-    ).toLocaleTimeString([], {
+    }[phase] ?? phase;
 
-        hour: "2-digit",
+    const icon = emergency
+        ? <FaAmbulance />
+        : <FaTrafficLight />;
 
-        minute: "2-digit",
+    const iconClass = emergency
+        ? styles.emergency
+        : styles.signal;
 
-        second: "2-digit"
+    const title = emergency
+        ? "Emergency Priority Activated"
+        : `${phaseLabel} Phase Activated`;
 
-    });
+    const description = `${event.vehiclesPassed ?? 0} vehicle(s) passed • Green ${event.greenTime ?? 0}s`;
+
+    const reason =
+        event.reason ??
+        "Adaptive traffic optimization";
+
+    const time = event.simulationTime
+        ? new Date(event.simulationTime).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        })
+        : "--:--:--";
 
     return (
 
         <article className={styles.card}>
 
-            <div
-                className={`${styles.icon} ${iconClass}`}
-            >
+            <div className={`${styles.icon} ${iconClass}`}>
 
                 {icon}
 
@@ -57,23 +65,55 @@ function EventCard({ event }) {
 
             <div className={styles.content}>
 
-                <h3>
+                <div className={styles.header}>
 
-                    {title}
+                    <h3>
 
-                </h3>
+                        {title}
+
+                    </h3>
+
+                    <span
+                        className={
+                            emergency
+                                ? styles.badgeEmergency
+                                : styles.badgeNormal
+                        }
+                    >
+
+                        {emergency
+                            ? "EMERGENCY"
+                            : "NORMAL"}
+
+                    </span>
+
+                </div>
 
                 <p>
+
+                    <FaRoad />
 
                     {description}
 
                 </p>
 
+                <small className={styles.reason}>
+
+                    {reason}
+
+                </small>
+
             </div>
 
-            <div className={styles.time}>
+            <div className={styles.meta}>
 
-                {time}
+                <span className={styles.time}>
+
+                    <FaClock />
+
+                    {time}
+
+                </span>
 
             </div>
 

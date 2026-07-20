@@ -11,14 +11,16 @@ function Road({ direction }) {
             {/* Asphalt Texture */}
             <div className={styles.texture}></div>
 
-            {/* Left Lane */}
+            {/* Road Highlight */}
+            <div className={styles.highlight}></div>
+
+            {/* Lane Dividers */}
             <div className={`${styles.divider} ${styles.first}`}></div>
-
-            {/* Center Divider */}
             <div className={`${styles.divider} ${styles.center}`}></div>
-
-            {/* Right Lane */}
             <div className={`${styles.divider} ${styles.last}`}></div>
+
+            {/* Stop Line */}
+            <div className={styles.stopLine}></div>
 
         </div>
 

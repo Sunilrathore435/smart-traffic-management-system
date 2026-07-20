@@ -10,41 +10,79 @@ import styles from "./CityMap.module.css";
 function CityMap({
 
                      signal,
-
                      emergency,
-
-                     ai
+                     ai,
+                     simulation
 
                  }) {
 
     // ==========================================
-    // Backend Signal State
+    // Backend Phase
     // ==========================================
 
-    const currentGreen =
+    const phase =
+        simulation?.currentSignalPhase ?? "NORTH_SOUTH";
 
-        signal?.currentGreenLane?.toLowerCase() ||
+    const stage =
+        simulation?.currentStage ?? "VEHICLE_GREEN";
 
-        "north";
+    // ==========================================
+    // Signal Colours
+    // ==========================================
 
     const signals = {
 
-        north: currentGreen === "north" ? "green" : "red",
-
-        south: currentGreen === "south" ? "green" : "red",
-
-        east: currentGreen === "east" ? "green" : "red",
-
-        west: currentGreen === "west" ? "green" : "red"
+        north: "red",
+        south: "red",
+        east: "red",
+        west: "red"
 
     };
 
+    if (
+        stage === "ALL_RED" ||
+        stage === "PEDESTRIAN_WALK"
+    ) {
+
+        // All signals remain RED
+
+    }
+    else if (stage === "VEHICLE_YELLOW") {
+
+        if (phase === "NORTH_SOUTH") {
+
+            signals.north = "yellow";
+            signals.south = "yellow";
+
+        } else {
+
+            signals.east = "yellow";
+            signals.west = "yellow";
+
+        }
+
+    }
+    else if (stage === "VEHICLE_GREEN") {
+
+        if (phase === "NORTH_SOUTH") {
+
+            signals.north = "green";
+            signals.south = "green";
+
+        } else {
+
+            signals.east = "green";
+            signals.west = "green";
+
+        }
+
+    }
+
     // ==========================================
-    // Vehicles
-    // (Later these will come from WebSocket)
+    // Placeholder Vehicles
     // ==========================================
 
-    const vehicles = [];
+    const vehicles = simulation?.vehicles ?? [];
 
     return (
 
@@ -53,7 +91,6 @@ function CityMap({
             {/* Roads */}
 
             <Road direction="horizontal" />
-
             <Road direction="vertical" />
 
             {/* Lane Arrows */}
@@ -84,7 +121,7 @@ function CityMap({
 
                     emergency={
                         emergency?.active &&
-                        emergency.lane.toLowerCase() === lane
+                        emergency?.lane?.toLowerCase() === lane
                     }
 
                 />
@@ -107,6 +144,8 @@ function CityMap({
 
                     stopped={vehicle.stopped}
 
+                    emergency={vehicle.emergency}
+
                 />
 
             ))}
@@ -115,7 +154,7 @@ function CityMap({
 
             <Junction
 
-                currentLane={currentGreen}
+                simulation={simulation}
 
                 emergency={emergency}
 

@@ -9,9 +9,9 @@ import styles from "./AIDecision.module.css";
 
 function AIDecision({
 
-                        currentLane = "NORTH",
+                        signalPhase = "Unknown",
 
-                        greenDuration = 10,
+                        greenDuration = 0,
 
                         trafficScore = 0,
 
@@ -23,8 +23,8 @@ function AIDecision({
 
         {
             icon: <FaTrafficLight />,
-            label: "Selected Lane",
-            value: currentLane.toUpperCase()
+            label: "Signal Phase",
+            value: signalPhase
         },
 
         {
@@ -36,7 +36,7 @@ function AIDecision({
         {
             icon: <FaChartLine />,
             label: "Traffic Score",
-            value: trafficScore.toFixed(1)
+            value: Number(trafficScore).toFixed(1)
         },
 
         {

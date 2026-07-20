@@ -1,11 +1,12 @@
+import { FaClockRotateLeft, FaFileCircleXmark } from "react-icons/fa6";
+
 import EventCard from "./EventCard";
 
 import styles from "./EventTimeline.module.css";
-import { FaFileCircleXmark } from "react-icons/fa6";
 
 function EventTimeline({ events = [] }) {
 
-    if (events.length === 0) {
+    if (!events.length) {
 
         return (
 
@@ -16,7 +17,9 @@ function EventTimeline({ events = [] }) {
                 <h2>No Events Yet</h2>
 
                 <p>
-                    Waiting for traffic simulation...
+
+                    Waiting for the traffic simulation to generate history.
+
                 </p>
 
             </section>
@@ -27,23 +30,53 @@ function EventTimeline({ events = [] }) {
 
     return (
 
-        <section className={styles.timeline}>
+        <section className={styles.container}>
 
-            {
+            <header className={styles.header}>
 
-                events.map(event => (
+                <div>
 
-                    <EventCard
+                    <h2>
 
-                        key={event.simulationId}
+                        <FaClockRotateLeft />
 
-                        event={event}
+                        Event Timeline
 
-                    />
+                    </h2>
 
-                ))
+                    <p>
 
-            }
+                        {events.length} recorded simulation event{events.length > 1 ? "s" : ""}
+
+                    </p>
+
+                </div>
+
+            </header>
+
+            <div className={styles.timeline}>
+
+                {
+
+                    events.map((event, index) => (
+
+                        <div
+                            key={event.simulationId ?? `${event.simulationTime}-${index}`}
+                            className={styles.item}
+                            style={{
+                                animationDelay: `${index * 60}ms`
+                            }}
+                        >
+
+                            <EventCard event={event} />
+
+                        </div>
+
+                    ))
+
+                }
+
+            </div>
 
         </section>
 

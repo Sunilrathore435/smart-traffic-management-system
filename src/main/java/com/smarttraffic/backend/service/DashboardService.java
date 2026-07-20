@@ -110,13 +110,22 @@ public class DashboardService {
                         trafficService.getIntersection()
                                 .getIntersectionName(),
 
-                        trafficService.getIntersection()
-                                .getCurrentGreenLane() == null
+                        runtimeState.getCurrentSignalPhase() == null
                                 ? "NONE"
-                                : trafficService
-                                .getIntersection()
-                                .getCurrentGreenLane()
-                                .name(),
+                                : runtimeState.getCurrentSignalPhase().name(),
+
+                        runtimeState.getCurrentStage() == null
+                                ? "NONE"
+                                : runtimeState.getCurrentStage().name(),
+
+                        runtimeState.getPedestrianSignal() == null
+                                ? "NONE"
+                                : runtimeState.getPedestrianSignal().name(),
+
+                        runtimeState.getRemainingTime(),
+
+                        trafficService.getIntersection()
+                                .isPedestrianWaiting(),
 
                         autoSimulation
                                 ? SchedulerStatus.RUNNING

@@ -58,13 +58,17 @@ function DashboardAI() {
 
     };
 
-    const currentGreenLane =
+    const signalPhase =
+        dashboard.signal?.currentSignalPhase ??
+        dashboard.traffic?.currentSignalPhase ??
+        dashboard.simulation?.currentSignalPhase ??
+        "UNKNOWN";
 
-        emergency.active
-
-            ? emergency.lane
-
-            : signal.currentGreenLane || "-";
+    const signalPhaseLabel = {
+        NORTH_SOUTH: "North ↕ South",
+        EAST_WEST: "East ↔ West",
+        ALL_RED: "All Red"
+    };
 
     const vehicleCount =
 
@@ -89,14 +93,16 @@ function DashboardAI() {
         <GlassCard className={styles.container}>
 
             <AIHeader
-
                 status={
                     dashboard.simulation?.simulationRunning
                         ? "online"
                         : "offline"
                 }
 
-                version="v2.4.0"
+                version={
+                    dashboard.analytics?.systemHealth?.version ??
+                    "v2.4.0"
+                }
 
                 mode={
                     emergency.active
@@ -104,11 +110,30 @@ function DashboardAI() {
                         : "Adaptive AI"
                 }
 
+                scheduler={
+                    dashboard.simulation?.schedulerStatus ??
+                    "UNKNOWN"
+                }
+
+                uptime={
+                    dashboard.analytics?.systemHealth?.uptime ?? 0
+                }
+
+                lastUpdated={
+                    dashboard.latestHistory?.simulationTime
+                        ? new Date(
+                            dashboard.latestHistory.simulationTime
+                        ).toLocaleTimeString()
+                        : "--:--:--"
+                }
             />
 
             <AISystemStatus
                 vehicles={vehicleCount}
-                currentLane={currentGreenLane}
+                signalPhase={
+                    signalPhaseLabel[signalPhase] ??
+                    signalPhase
+                }
                 emergency={emergency.active}
                 aiStatus={
                     emergency.active
@@ -123,9 +148,15 @@ function DashboardAI() {
             />
 
             <AIDecision
-                currentLane={currentGreenLane}
-                greenDuration={ai.greenTime || 10}
-                trafficScore={ai.trafficScore || 0}
+                signalPhase={
+                    signalPhaseLabel[signalPhase] ??
+                    signalPhase
+                }
+                greenDuration={
+                    dashboard.simulation?.remainingTime ??
+                    0
+                }
+                trafficScore={ai.trafficScore ?? 0}
                 priority={
                     emergency.active
                         ? "EMERGENCY"
@@ -134,16 +165,25 @@ function DashboardAI() {
             />
 
             <AIConfidence
-                value={analytics.prediction?.confidence ?? 99}
+                value={
+                    analytics.prediction?.confidence ?? 0
+                }
                 prediction={analytics.prediction?.confidence ?? 99}
-                lastPrediction={new Date(dashboard.timestamp).toLocaleTimeString()}
+                lastPrediction={
+                    dashboard.timestamp
+                        ? new Date(dashboard.timestamp).toLocaleTimeString()
+                        : "--:--:--"
+                }
             />
 
             <AIRecommendation
 
                 queues={queues}
 
-                currentLane={currentGreenLane}
+                signalPhase={
+                    signalPhaseLabel[signalPhase] ??
+                    signalPhase
+                }
 
                 greenTime={
 
@@ -152,15 +192,13 @@ function DashboardAI() {
                 }
 
                 fuelSaving={
-
-                    analytics.fuelSaving || 0
-
+                    analytics.performance?.fuelSaving ??
+                    analytics.fuelSaving ??
+                    0
                 }
 
                 congestion={
-
-                    analytics.congestion || 0
-
+                    analytics.congestion ?? 0
                 }
 
                 emergency={
@@ -180,9 +218,13 @@ function DashboardAI() {
                 responseTime="<100 ms"
                 lastSync={new Date(dashboard.timestamp).toLocaleTimeString()}
                 backend={
-                    dashboard.simulation?.schedulerStatus || "CONNECTED"
+                    dashboard.simulation?.schedulerStatus ??
+                    "UNKNOWN"
                 }
-                websocket="ONLINE"
+                websocket={
+                    analytics.systemHealth?.status ??
+                    "UNKNOWN"
+                }
             />
         </GlassCard>
 

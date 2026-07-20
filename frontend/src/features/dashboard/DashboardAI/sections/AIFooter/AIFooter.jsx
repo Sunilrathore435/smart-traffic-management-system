@@ -11,80 +11,101 @@ import styles from "./AIFooter.module.css";
 
 function AIFooter({
 
-                      status = "online",
+                      status = "offline",
 
                       responseTime = "--",
 
-                      lastSync = "--",
+                      lastSync = "--:--:--",
 
-                      backend = "CONNECTED",
+                      backend = "UNKNOWN",
 
-                      websocket = "ONLINE"
+                      websocket = "UNKNOWN"
 
                   }) {
+
+    const items = [
+
+        {
+            icon: <FaBolt />,
+            title: "Response",
+            value: responseTime
+        },
+
+        {
+            icon: <FaClock />,
+            title: "Last Sync",
+            value: lastSync
+        },
+
+        {
+            icon: <FaServer />,
+            title: "Backend",
+            value: backend
+        },
+
+        {
+            icon: <FaWifi />,
+            title: "WebSocket",
+            value: websocket
+        }
+
+    ];
 
     return (
 
         <footer className={styles.footer}>
 
-            <StatusPill
-                label={
-                    status === "online"
-                        ? "AI ACTIVE"
-                        : "AI OFFLINE"
-                }
-                status={status}
-            />
+            <div className={styles.header}>
 
-            <div className={styles.info}>
+                <span className={styles.title}>
+                    AI SYSTEM
+                </span>
 
-                <div className={styles.item}>
+                <StatusPill
+                    label={
+                        status === "online"
+                            ? "AI ACTIVE"
+                            : "AI OFFLINE"
+                    }
+                    status={status}
+                />
 
-                    <FaBolt />
+            </div>
 
-                    <span>
+            <div className={styles.grid}>
 
-                        {responseTime}
+                {items.map(item => (
 
-                    </span>
+                    <div
+                        key={item.title}
+                        className={styles.card}
+                    >
 
-                </div>
+                        <div className={styles.icon}>
 
-                <div className={styles.item}>
+                            {item.icon}
 
-                    <FaClock />
+                        </div>
 
-                    <span>
+                        <div>
 
-                        {lastSync}
+                            <p className={styles.label}>
 
-                    </span>
+                                {item.title}
 
-                </div>
+                            </p>
 
-                <div className={styles.item}>
+                            <strong className={styles.value}>
 
-                    <FaServer />
+                                {item.value}
 
-                    <span>
+                            </strong>
 
-                        {backend}
+                        </div>
 
-                    </span>
+                    </div>
 
-                </div>
-
-                <div className={styles.item}>
-
-                    <FaWifi />
-
-                    <span>
-
-                        {websocket}
-
-                    </span>
-
-                </div>
+                ))}
 
             </div>
 

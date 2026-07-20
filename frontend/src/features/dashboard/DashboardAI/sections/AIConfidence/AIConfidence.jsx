@@ -4,20 +4,21 @@ import styles from "./AIConfidence.module.css";
 
 function AIConfidence({
 
-                          value = 98,
+                          value = 0,
 
-                          prediction = 98,
+                          prediction = 0,
 
-                          lastPrediction = "Live"
+                          lastPrediction = "--:--:--"
 
                       }) {
+    const confidence = Math.max(0, Math.min(100, value));
 
     const label =
-        value >= 95
+        confidence >= 95
             ? "Excellent"
-            : value >= 85
+            : confidence >= 85
                 ? "Good"
-                : value >= 70
+                : confidence >= 70
                     ? "Average"
                     : "Low";
 
@@ -32,7 +33,7 @@ function AIConfidence({
             </h3>
 
             <ProgressBar
-                value={value}
+                value={confidence}
                 label={label}
                 animated
                 glow
@@ -48,11 +49,7 @@ function AIConfidence({
 
                     </span>
 
-                    <strong>
-
-                        {prediction}%
-
-                    </strong>
+                    <strong>{confidence}%</strong>
 
                 </div>
 

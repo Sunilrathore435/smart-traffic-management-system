@@ -32,6 +32,7 @@ public class AnalyticsService {
             AnalyticsResponse response = new AnalyticsResponse();
 
             response.setBusiestLane("NONE");
+            response.setBusiestPhase("NONE");
 
             return response;
         }
@@ -60,6 +61,8 @@ public class AnalyticsService {
         String busiestLane =
                 findMostUsedLane(records);
 
+        String busiestPhase =
+                findMostUsedPhase(records);
 
         AnalyticsResponse response = new AnalyticsResponse();
 
@@ -69,6 +72,7 @@ public class AnalyticsService {
         response.setAverageVehiclesPassed(averageVehiclesPassed);
         response.setAverageTrafficScore(averageTrafficScore);
         response.setBusiestLane(busiestLane);
+        response.setBusiestPhase(busiestPhase);
         response.setEmergencyVehiclesHandled(emergencyVehiclesHandled);
 // Add chart history
         response.setTrafficHistory(buildTrafficHistory(records));
@@ -185,7 +189,7 @@ public class AnalyticsService {
 
         for (TrafficSimulationRecord record : records) {
 
-            String lane = record.getSelectedLane().name();
+            String lane = record.getDominantLane().name();
 
             laneCount.put(
                     lane,
@@ -208,5 +212,39 @@ public class AnalyticsService {
         }
 
         return busiestLane;
+    }
+    private String findMostUsedPhase(
+            List<TrafficSimulationRecord> records) {
+
+        Map<String, Integer> phaseCount = new HashMap<>();
+
+        for (TrafficSimulationRecord record : records) {
+
+            if (record.getSignalPhase() == null) {
+                continue;
+            }
+
+            String phase = record.getSignalPhase().name();
+
+            phaseCount.put(
+                    phase,
+                    phaseCount.getOrDefault(phase, 0) + 1
+            );
+        }
+
+        String busiestPhase = "NONE";
+
+        int max = 0;
+
+        for (Map.Entry<String, Integer> entry : phaseCount.entrySet()) {
+
+            if (entry.getValue() > max) {
+
+                max = entry.getValue();
+                busiestPhase = entry.getKey();
+            }
+        }
+
+        return busiestPhase;
     }
 }

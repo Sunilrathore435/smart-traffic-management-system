@@ -1,13 +1,25 @@
 import {
-    FaClockRotateLeft,
     FaDatabase,
     FaWifi,
-    FaCircle
+    FaCircle,
+    FaServer
 } from "react-icons/fa6";
 
 import styles from "./LogsHeader.module.css";
 
-function LogsHeader() {
+function LogsHeader({
+
+                        connected = true,
+
+                        database = "MongoDB",
+
+                        api = "Spring Boot",
+
+                        live = true,
+
+                        uptime = "--"
+
+                    }) {
 
     return (
 
@@ -23,8 +35,9 @@ function LogsHeader() {
 
                 <p>
 
-                    Audit trail of AI decisions, emergency actions,
-                    analytics alerts and system events.
+                    Complete audit trail of AI traffic decisions,
+                    emergency overrides, pedestrian requests,
+                    analytics and system activity.
 
                 </p>
 
@@ -38,9 +51,41 @@ function LogsHeader() {
 
                     <div>
 
-                        <strong>MongoDB</strong>
+                        <strong>
 
-                        <small>Simulation History</small>
+                            {database}
+
+                        </strong>
+
+                        <small>
+
+                            Simulation History
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+                <div className={styles.badge}>
+
+                    <FaServer />
+
+                    <div>
+
+                        <strong>
+
+                            {api}
+
+                        </strong>
+
+                        <small>
+
+                            {connected
+                                ? "Connected"
+                                : "Disconnected"}
+
+                        </small>
 
                     </div>
 
@@ -52,21 +97,38 @@ function LogsHeader() {
 
                     <div>
 
-                        <strong>Spring Boot API</strong>
+                        <strong>
 
-                        <small>Connected</small>
+                            Uptime
+
+                        </strong>
+
+                        <small>
+
+                            {uptime}
+
+                        </small>
 
                     </div>
 
                 </div>
 
-                <div className={styles.live}>
+                <div
+                    className={`${styles.live}
+                    ${
+                        live
+                            ? styles.online
+                            : styles.offline
+                    }`}
+                >
 
                     <FaCircle />
 
                     <span>
 
-                        LIVE
+                        {live
+                            ? "LIVE"
+                            : "OFFLINE"}
 
                     </span>
 

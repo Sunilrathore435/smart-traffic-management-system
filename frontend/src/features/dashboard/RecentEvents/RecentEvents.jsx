@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { FaArrowRight } from "react-icons/fa";
+import { useEffect, useState, useCallback } from "react";
+import { FaArrowRight, FaHistory } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 import { historyApi } from "../../../services/api";
@@ -13,23 +13,9 @@ function RecentEvents() {
 
     const [events, setEvents] = useState([]);
 
-    useEffect(() => {
+    const [loading, setLoading] = useState(true);
 
-        loadHistory();
-
-        const timer = setInterval(
-
-            loadHistory,
-
-            3000
-
-        );
-
-        return () => clearInterval(timer);
-
-    }, []);
-
-    async function loadHistory() {
+    const loadHistory = useCallback(async () => {
 
         try {
 
@@ -41,11 +27,36 @@ function RecentEvents() {
 
         catch (error) {
 
-            console.error("Failed to load recent events", error);
+            console.error(
+                "Failed to load recent events",
+                error
+            );
 
         }
 
-    }
+        finally {
+
+            setLoading(false);
+
+        }
+
+    }, []);
+
+    useEffect(() => {
+
+        loadHistory();
+
+        const timer = setInterval(
+
+            loadHistory,
+
+            5000
+
+        );
+
+        return () => clearInterval(timer);
+
+    }, [loadHistory]);
 
     return (
 
@@ -56,11 +67,17 @@ function RecentEvents() {
                 <div>
 
                     <h2>
-                        📋 Recent Events
+
+                        <FaHistory />
+
+                        Recent Events
+
                     </h2>
 
                     <p>
-                        Latest traffic activities
+
+                        Live simulation history
+
                     </p>
 
                 </div>
@@ -69,7 +86,7 @@ function RecentEvents() {
                     onClick={() => navigate("/history")}
                 >
 
-                    View All
+                    View History
 
                     <FaArrowRight />
 
@@ -78,16 +95,35 @@ function RecentEvents() {
             </header>
 
             {
-                events.length === 0 ? (
+
+                loading ? (
+
+                    <div className={styles.loading}>
+
+                        <div className={styles.loader}></div>
+
+                        <span>
+
+                            Loading events...
+
+                        </span>
+
+                    </div>
+
+                ) : events.length === 0 ? (
 
                     <div className={styles.empty}>
 
                         <h3>
-                            No Recent Events
+
+                            No Events Yet
+
                         </h3>
 
                         <p>
-                            Waiting for simulation...
+
+                            Waiting for the first simulation cycle...
+
                         </p>
 
                     </div>
@@ -97,21 +133,27 @@ function RecentEvents() {
                     <div className={styles.list}>
 
                         {
+
                             events
                                 .slice(0, 5)
                                 .map(event => (
 
                                     <RecentEventItem
+
                                         key={event.simulationId}
+
                                         event={event}
+
                                     />
 
                                 ))
+
                         }
 
                     </div>
 
                 )
+
             }
 
         </section>

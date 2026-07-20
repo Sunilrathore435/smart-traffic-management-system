@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class SignalResponse {
 
-    private String currentGreenLane;
+    private String currentSignalPhase;
 
     private Map<String, Integer> laneQueues;
 
@@ -14,21 +14,21 @@ public class SignalResponse {
     }
 
     public SignalResponse(
-            String currentGreenLane,
+            String currentSignalPhase,
             Map<String, Integer> laneQueues,
             int totalWaitingVehicles) {
 
-        this.currentGreenLane = currentGreenLane;
+        this.currentSignalPhase = currentSignalPhase;
         this.laneQueues = laneQueues;
         this.totalWaitingVehicles = totalWaitingVehicles;
     }
 
-    public String getCurrentGreenLane() {
-        return currentGreenLane;
+    public String getCurrentSignalPhase() {
+        return currentSignalPhase;
     }
 
-    public void setCurrentGreenLane(String currentGreenLane) {
-        this.currentGreenLane = currentGreenLane;
+    public void setCurrentSignalPhase(String currentSignalPhase) {
+        this.currentSignalPhase = currentSignalPhase;
     }
 
     public Map<String, Integer> getLaneQueues() {
@@ -46,5 +46,4 @@ public class SignalResponse {
     public void setTotalWaitingVehicles(int totalWaitingVehicles) {
         this.totalWaitingVehicles = totalWaitingVehicles;
     }
-
 }

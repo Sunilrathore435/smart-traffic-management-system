@@ -1,24 +1,24 @@
-/* ==========================================
-   Wrapper
-========================================== */
+/* ==========================================================
+   WRAPPER
+========================================================== */
 
 .wrapper{
+
+    width:100%;
 
     display:flex;
 
     flex-direction:column;
 
+    gap:20px;
+
     align-items:center;
-
-    gap:18px;
-
-    width:100%;
 
 }
 
-/* ==========================================
-   Header
-========================================== */
+/* ==========================================================
+   HEADER
+========================================================== */
 
 .header{
 
@@ -30,7 +30,7 @@
 
     align-items:center;
 
-    gap:12px;
+    gap:16px;
 
 }
 
@@ -40,9 +40,9 @@
 
     align-items:center;
 
-    gap:8px;
+    gap:10px;
 
-    padding:8px 14px;
+    padding:10px 18px;
 
     border-radius:999px;
 
@@ -50,11 +50,15 @@
 
     font-weight:700;
 
-    letter-spacing:.6px;
+    letter-spacing:.7px;
 
     text-transform:uppercase;
 
+    backdrop-filter:blur(18px);
+
     border:1px solid rgba(255,255,255,.08);
+
+    transition:.35s;
 
 }
 
@@ -68,19 +72,33 @@
 
     background:currentColor;
 
-    box-shadow:0 0 10px currentColor;
+    box-shadow:
+
+            0 0 12px currentColor,
+
+            0 0 22px currentColor;
 
 }
 
 .aiStatus{
 
-    padding:8px 14px;
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    min-width:110px;
+
+    padding:10px 18px;
 
     border-radius:999px;
 
     background:rgba(0,229,255,.08);
 
-    border:1px solid rgba(0,229,255,.15);
+    border:1px solid rgba(0,229,255,.16);
 
     color:#00E5FF;
 
@@ -88,11 +106,13 @@
 
     font-weight:700;
 
+    letter-spacing:.6px;
+
 }
 
-/* ==========================================
-   Priority Colors
-========================================== */
+/* ==========================================================
+   PRIORITY COLORS
+========================================================== */
 
 .priorityLow{
 
@@ -110,7 +130,7 @@
 
     background:rgba(245,158,11,.12);
 
-    border-color:rgba(245,158,11,.25);
+    border-color:rgba(245,158,11,.28);
 
 }
 
@@ -120,7 +140,7 @@
 
     background:rgba(255,176,32,.12);
 
-    border-color:rgba(255,176,32,.25);
+    border-color:rgba(255,176,32,.32);
 
 }
 
@@ -128,41 +148,59 @@
 
     color:#FF4D4F;
 
-    background:rgba(255,77,79,.12);
+    background:rgba(255,77,79,.14);
 
-    border-color:rgba(255,77,79,.30);
+    border-color:rgba(255,77,79,.35);
 
     animation:emergencyPulse 1.2s infinite;
 
 }
 
-/* ==========================================
-   Smart Junction
-========================================== */
+/* ==========================================================
+   SMART JUNCTION
+========================================================== */
 
 .map{
 
     position:relative;
 
-    width:190px;
+    width:220px;
 
-    height:190px;
-
-    border-radius:22px;
+    height:220px;
 
     overflow:hidden;
 
+    border-radius:24px;
+
     background:
-            radial-gradient(circle at center,
-            rgba(0,229,255,.05),
-            transparent 70%),
-            #171C2C;
+
+            radial-gradient(
+
+                    circle at center,
+
+                    rgba(0,229,255,.08),
+
+                    transparent 65%
+
+            ),
+
+            linear-gradient(
+
+                    145deg,
+
+                    #1A2135,
+
+                    #131927
+
+            );
 
     border:1px solid rgba(255,255,255,.08);
 
     box-shadow:
-            inset 0 0 25px rgba(255,255,255,.03),
-            0 15px 35px rgba(0,0,0,.35);
+
+            inset 0 0 30px rgba(255,255,255,.04),
+
+            0 18px 45px rgba(0,0,0,.45);
 
     transition:.35s;
 
@@ -170,17 +208,19 @@
 
 .map:hover{
 
-    transform:translateY(-3px);
+    transform:translateY(-4px);
 
     box-shadow:
-            inset 0 0 30px rgba(255,255,255,.05),
-            0 18px 45px rgba(0,229,255,.10);
+
+            inset 0 0 35px rgba(255,255,255,.06),
+
+            0 20px 55px rgba(0,229,255,.12);
 
 }
 
-/* ==========================================
-   Roads
-========================================== */
+/* ==========================================================
+   ROADS
+========================================================== */
 
 .vertical{
 
@@ -192,7 +232,7 @@
 
     transform:translateX(-50%);
 
-    width:42px;
+    width:48px;
 
     height:100%;
 
@@ -212,11 +252,15 @@
 
     width:100%;
 
-    height:42px;
+    height:48px;
 
     background:#30384E;
 
 }
+
+/* ==========================================================
+   ROAD MARKINGS
+========================================================== */
 
 .verticalLine{
 
@@ -232,15 +276,17 @@
 
     height:100%;
 
-    background:repeating-linear-gradient(
+    background:
 
-            to bottom,
+            repeating-linear-gradient(
 
-            rgba(255,255,255,.8) 0 8px,
+                    to bottom,
 
-            transparent 8px 18px
+                    rgba(255,255,255,.9) 0 8px,
 
-    );
+                    transparent 8px 18px
+
+            );
 
 }
 
@@ -258,47 +304,51 @@
 
     height:2px;
 
-    background:repeating-linear-gradient(
+    background:
 
-            to right,
+            repeating-linear-gradient(
 
-            rgba(255,255,255,.8) 0 8px,
+                    to right,
 
-            transparent 8px 18px
+                    rgba(255,255,255,.9) 0 8px,
 
-    );
+                    transparent 8px 18px
+
+            );
 
 }
 
-/* ==========================================
-   Crosswalks
-========================================== */
+/* ==========================================================
+   CROSSWALKS
+========================================================== */
 
 .crosswalk{
 
     position:absolute;
 
-    background:repeating-linear-gradient(
+    opacity:.55;
 
-            90deg,
+    background:
 
-            rgba(255,255,255,.85) 0 4px,
+            repeating-linear-gradient(
 
-            transparent 4px 8px
+                    90deg,
 
-    );
+                    rgba(255,255,255,.9) 0 4px,
 
-    opacity:.45;
+                    transparent 4px 8px
+
+            );
 
 }
 
 .crossTop{
 
-    width:42px;
+    width:48px;
 
     height:10px;
 
-    top:36px;
+    top:42px;
 
     left:50%;
 
@@ -308,11 +358,11 @@
 
 .crossBottom{
 
-    width:42px;
+    width:48px;
 
     height:10px;
 
-    bottom:36px;
+    bottom:42px;
 
     left:50%;
 
@@ -324,9 +374,9 @@
 
     width:10px;
 
-    height:42px;
+    height:48px;
 
-    left:36px;
+    left:42px;
 
     top:50%;
 
@@ -338,9 +388,9 @@
 
     width:10px;
 
-    height:42px;
+    height:48px;
 
-    right:36px;
+    right:42px;
 
     top:50%;
 
@@ -348,9 +398,9 @@
 
 }
 
-/* ==========================================
-   AI Core
-========================================== */
+/* ==========================================================
+   AI CORE
+========================================================== */
 
 .center{
 
@@ -362,15 +412,11 @@
 
     transform:translate(-50%,-50%);
 
-    width:56px;
+    width:68px;
 
-    height:56px;
+    height:68px;
 
     border-radius:50%;
-
-    background:#222B42;
-
-    border:2px solid rgba(0,229,255,.35);
 
     display:flex;
 
@@ -378,13 +424,33 @@
 
     align-items:center;
 
+    background:
+
+            linear-gradient(
+
+                    145deg,
+
+                    #24324D,
+
+                    #182133
+
+            );
+
     color:#00E5FF;
+
+    font-size:18px;
 
     font-weight:800;
 
-    font-size:14px;
+    border:2px solid rgba(0,229,255,.35);
 
-    z-index:5;
+    box-shadow:
+
+            inset 0 0 15px rgba(255,255,255,.06),
+
+            0 0 22px rgba(0,229,255,.18);
+
+    z-index:10;
 
 }
 
@@ -392,53 +458,57 @@
 
     position:absolute;
 
-    inset:-6px;
+    inset:-8px;
 
     border-radius:50%;
 
-    border:2px solid rgba(0,229,255,.12);
+    border:2px solid rgba(0,229,255,.15);
 
-    animation:ringPulse 2.5s infinite;
+    animation:ringPulse 2.4s infinite;
 
 }
 
-/* ==========================================
-   Cars
-========================================== */
+/* ==========================================================
+   VEHICLES
+========================================================== */
 
 .car{
 
     position:absolute;
 
-    width:12px;
+    width:15px;
 
-    height:22px;
+    height:28px;
 
-    border-radius:5px;
+    border-radius:6px;
 
-    background:linear-gradient(
+    background:
 
-            180deg,
+            linear-gradient(
 
-            #59E7FF,
+                    180deg,
 
-            #00B7FF
+                    #7DEBFF,
 
-    );
+                    #00BFFF
 
-    border:1px solid rgba(255,255,255,.25);
+            );
+
+    border:1px solid rgba(255,255,255,.28);
 
     box-shadow:
 
-            0 0 12px rgba(0,229,255,.55);
+            0 0 16px rgba(0,229,255,.45);
 
-    z-index:10;
+    animation:vehicleFloat 2s ease-in-out infinite;
+
+    z-index:20;
 
 }
 
 .top{
 
-    top:16px;
+    top:14px;
 
     left:50%;
 
@@ -448,7 +518,7 @@
 
 .bottom{
 
-    bottom:16px;
+    bottom:14px;
 
     left:50%;
 
@@ -458,7 +528,7 @@
 
 .left{
 
-    left:16px;
+    left:14px;
 
     top:50%;
 
@@ -468,7 +538,7 @@
 
 .right{
 
-    right:16px;
+    right:14px;
 
     top:50%;
 
@@ -476,173 +546,195 @@
 
 }
 
-/* ==========================================
-   Emergency
-========================================== */
+/* ==========================================================
+   EMERGENCY VEHICLE
+========================================================== */
 
 .carEmergency{
 
-    background:linear-gradient(
+    background:
 
-            180deg,
+            linear-gradient(
 
-            #FF6B6B,
+                    180deg,
 
-            #D90429
+                    #FF8080,
 
-    );
+                    #D90429
+
+            );
 
     box-shadow:
 
-            0 0 16px rgba(255,77,79,.8),
+            0 0 18px rgba(255,77,79,.8),
 
-            0 0 28px rgba(255,77,79,.4);
+            0 0 34px rgba(255,77,79,.45);
 
     animation:siren .8s infinite;
 
 }
 
-/* ==========================================
-   Active Lane Glow
-========================================== */
+/* ==========================================================
+   ACTIVE SIGNAL LANE GLOW
+========================================================== */
 
 .activeLane{
 
     position:absolute;
 
+    inset:0;
+
     pointer-events:none;
 
-}
+    border-radius:24px;
 
-.glowNorth{
+    overflow:hidden;
 
-    left:50%;
-
-    top:0;
-
-    transform:translateX(-50%);
-
-    width:42px;
-
-    height:50%;
-
-    background:linear-gradient(
-
-            to bottom,
-
-            rgba(0,229,255,.28),
-
-            transparent
-
-    );
+    z-index:2;
 
 }
 
-.glowSouth{
+.glowNorthSouth{
 
-    left:50%;
+    background:
 
-    bottom:0;
+            linear-gradient(
 
-    transform:translateX(-50%);
+                    to bottom,
 
-    width:42px;
+                    transparent 0%,
 
-    height:50%;
+                    transparent 35%,
 
-    background:linear-gradient(
+                    rgba(0,255,153,.18) 42%,
 
-            to top,
+                    rgba(0,255,153,.55) 50%,
 
-            rgba(0,229,255,.28),
+                    rgba(0,255,153,.18) 58%,
 
-            transparent
+                    transparent 65%,
 
-    );
+                    transparent 100%
 
-}
+            );
 
-.glowEast{
-
-    right:0;
-
-    top:50%;
-
-    transform:translateY(-50%);
-
-    width:50%;
-
-    height:42px;
-
-    background:linear-gradient(
-
-            to left,
-
-            rgba(0,229,255,.28),
-
-            transparent
-
-    );
+    animation:laneGlow 1.8s infinite;
 
 }
 
-.glowWest{
+.glowEastWest{
 
-    left:0;
+    background:
 
-    top:50%;
+            linear-gradient(
 
-    transform:translateY(-50%);
+                    to right,
 
-    width:50%;
+                    transparent 0%,
 
-    height:42px;
+                    transparent 35%,
 
-    background:linear-gradient(
+                    rgba(0,255,153,.18) 42%,
 
-            to right,
+                    rgba(0,255,153,.55) 50%,
 
-            rgba(0,229,255,.28),
+                    rgba(0,255,153,.18) 58%,
 
-            transparent
+                    transparent 65%,
 
-    );
+                    transparent 100%
+
+            );
+
+    animation:laneGlow 1.8s infinite;
 
 }
 
-/* ==========================================
-   Footer
-========================================== */
+.glowAllRed{
+
+    background:
+
+            radial-gradient(
+
+                    circle,
+
+                    rgba(255,70,70,.28),
+
+                    transparent 70%
+
+            );
+
+    animation:allRedBlink .9s infinite;
+
+}
+
+/* ==========================================================
+   FOOTER
+========================================================== */
 
 .footer{
 
     width:100%;
 
-    display:flex;
+    display:grid;
 
-    justify-content:space-between;
+    grid-template-columns:1fr 1fr;
 
-    align-items:center;
-
-    margin-top:6px;
+    gap:16px;
 
 }
 
-.footer div{
+.footer>div{
 
     display:flex;
 
     flex-direction:column;
 
-    gap:4px;
+    gap:8px;
+
+    padding:16px;
+
+    border-radius:18px;
+
+    background:
+
+            linear-gradient(
+
+                    145deg,
+
+                    rgba(255,255,255,.05),
+
+                    rgba(255,255,255,.02)
+
+            );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(18px);
+
+    transition:.35s;
+
+}
+
+.footer>div:hover{
+
+    transform:translateY(-4px);
+
+    border-color:rgba(0,229,255,.25);
+
+    box-shadow:
+
+            0 12px 28px rgba(0,229,255,.12);
 
 }
 
 .footer small{
 
-    color:#94A3B8;
+    color:#8EA3C1;
 
     font-size:11px;
+
+    letter-spacing:.6px;
 
     text-transform:uppercase;
 
@@ -652,37 +744,165 @@
 
     color:#FFFFFF;
 
-    font-size:14px;
+    font-size:17px;
+
+    font-weight:700;
 
 }
 
-/* ==========================================
-   Animations
-========================================== */
+/* ==========================================================
+   MAP OVERLAY GRID
+========================================================== */
 
-@keyframes ringPulse{
+.map::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background-image:
+
+            linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+
+            linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+
+    background-size:20px 20px;
+
+    opacity:.5;
+
+    pointer-events:none;
+
+}
+
+.map::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:24px;
+
+    background:
+
+            radial-gradient(
+
+                    circle,
+
+                    transparent 55%,
+
+                    rgba(255,255,255,.04)
+
+            );
+
+    pointer-events:none;
+
+}
+
+/* ==========================================================
+   HOVER EFFECTS
+========================================================== */
+
+.map:hover .center{
+
+    transform:translate(-50%,-50%) scale(1.08);
+
+}
+
+.map:hover .car{
+
+    transform-origin:center;
+
+    filter:brightness(1.15);
+
+}
+
+.map:hover .centerRing{
+
+    animation-duration:1.2s;
+
+}
+
+/* ==========================================================
+   ANIMATIONS
+========================================================== */
+
+@keyframes laneGlow{
 
     0%{
 
-        transform:scale(1);
+        opacity:.35;
 
-        opacity:.8;
+        filter:blur(2px);
 
     }
 
-    70%{
+    50%{
 
-        transform:scale(1.2);
+        opacity:1;
 
-        opacity:0;
+        filter:blur(5px);
 
     }
 
     100%{
 
-        transform:scale(1);
+        opacity:.35;
+
+        filter:blur(2px);
+
+    }
+
+}
+
+@keyframes ringPulse{
+
+    0%{
+
+        transform:scale(.95);
+
+        opacity:.2;
+
+    }
+
+    50%{
+
+        transform:scale(1.12);
+
+        opacity:.9;
+
+    }
+
+    100%{
+
+        transform:scale(1.28);
 
         opacity:0;
+
+    }
+
+}
+
+@keyframes vehicleFloat{
+
+    0%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-3px);
+
+    }
+
+    100%{
+
+        transform:translateY(0);
 
     }
 
@@ -690,15 +910,21 @@
 
 @keyframes siren{
 
-    0%,100%{
+    0%{
 
-        transform:scale(1);
+        filter:brightness(1);
 
     }
 
     50%{
 
-        transform:scale(1.15);
+        filter:brightness(1.8);
+
+    }
+
+    100%{
+
+        filter:brightness(1);
 
     }
 
@@ -706,16 +932,205 @@
 
 @keyframes emergencyPulse{
 
-    0%,100%{
+    0%{
 
-        box-shadow:0 0 6px rgba(255,77,79,.25);
+        box-shadow:0 0 0 rgba(255,77,79,0);
 
     }
 
     50%{
 
-        box-shadow:0 0 22px rgba(255,77,79,.55);
+        box-shadow:0 0 22px rgba(255,77,79,.45);
 
     }
+
+    100%{
+
+        box-shadow:0 0 0 rgba(255,77,79,0);
+
+    }
+
+}
+
+@keyframes allRedBlink{
+
+    0%{
+
+        opacity:.2;
+
+    }
+
+    50%{
+
+        opacity:.9;
+
+    }
+
+    100%{
+
+        opacity:.2;
+
+    }
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media (max-width:768px){
+
+    .map{
+
+        width:190px;
+
+        height:190px;
+
+    }
+
+    .center{
+
+        width:58px;
+
+        height:58px;
+
+        font-size:16px;
+
+    }
+
+    .vertical{
+
+        width:42px;
+
+    }
+
+    .horizontal{
+
+        height:42px;
+
+    }
+
+    .footer{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+@media (max-width:480px){
+
+    .header{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+    .priority{
+
+        justify-content:center;
+
+    }
+
+    .aiStatus{
+
+        width:100%;
+
+    }
+
+    .map{
+
+        width:165px;
+
+        height:165px;
+
+    }
+
+    .center{
+
+        width:50px;
+
+        height:50px;
+
+        font-size:12px;
+
+    }
+
+    .car{
+
+        width:12px;
+
+        height:22px;
+
+    }
+
+    .footer strong{
+
+        font-size:15px;
+
+    }
+
+}
+.aiContent{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:6px;
+
+    z-index:5;
+
+}
+
+.aiText{
+
+    font-size:24px;
+
+    font-weight:800;
+
+    color:#1DD8FF;
+
+    line-height:1;
+
+}
+
+.phaseText{
+
+    font-size:10px;
+
+    font-weight:700;
+
+    color: #c9c8f0;
+
+    letter-spacing:.6px;
+
+    text-transform:uppercase;
+
+    white-space:nowrap;
+
+}
+
+.score{
+
+    margin-left:10px;
+
+    padding:2px 8px;
+
+    border-radius:999px;
+
+    background:rgba(255,255,255,.08);
+
+    color:#FFFFFF;
+
+    font-size:11px;
+
+    font-weight:700;
 
 }

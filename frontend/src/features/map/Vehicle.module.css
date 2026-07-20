@@ -1,46 +1,50 @@
-/* ==========================================
+/* ==========================================================
    Vehicle Wrapper
-========================================== */
+========================================================== */
 
 .vehicle{
 
     position:absolute;
 
-    z-index:20;
+    z-index:90;
 
-    transition:all .04s linear;
+    transition:
 
-}
-
-/* ==========================================
-   Lane Positions + Animation
-========================================== */
-.stopped{
-
-    filter:brightness(.75);
-
-    transition:.2s;
+            left .35s linear,
+            right .35s linear,
+            top .35s linear,
+            bottom .35s linear,
+            transform .35s linear;
 
 }
 
-/* ==========================================
-   Vehicle
-========================================== */
+/* ==========================================================
+   Car Body
+========================================================== */
 
 .car{
 
     position:relative;
 
-    width:34px;
+    width:40px;
 
-    height:18px;
+    height:20px;
 
-    border-radius:8px;
+    border-radius:10px;
+
+    overflow:hidden;
 
     box-shadow:
-            0 6px 14px rgba(0,0,0,.35);
 
-    transition:transform .3s;
+            0 6px 16px rgba(0,0,0,.35),
+
+            inset 0 2px 2px rgba(255,255,255,.18);
+
+    transition:
+
+            transform .25s,
+
+            filter .25s;
 
 }
 
@@ -54,55 +58,33 @@
 
     top:2px;
 
-    left:6px;
-
-    width:22px;
-
-    height:8px;
-
-    border-radius:4px;
-
-    background:rgba(255,255,255,.28);
-
-}
-
-/* Wheels */
-
-.car::after{
-
-    content:"";
-
-    position:absolute;
-
-    left:5px;
-
-    bottom:-2px;
+    left:8px;
 
     width:24px;
 
-    height:4px;
+    height:8px;
 
-    background:#111827;
+    border-radius:5px;
 
-    border-radius:4px;
+    background:rgba(255,255,255,.30);
 
 }
 
-/* ==========================================
+/* ==========================================================
    Window
-========================================== */
+========================================================== */
 
 .window{
 
     position:absolute;
 
-    top:4px;
+    top:5px;
 
-    left:9px;
+    left:10px;
 
-    width:14px;
+    width:18px;
 
-    height:5px;
+    height:6px;
 
     border-radius:3px;
 
@@ -110,9 +92,9 @@
 
 }
 
-/* ==========================================
+/* ==========================================================
    Headlight
-========================================== */
+========================================================== */
 
 .headlight{
 
@@ -128,17 +110,78 @@
 
     border-radius:50%;
 
-    background:#FFF;
+    background:white;
 
     box-shadow:
-            0 0 8px #FFF,
-            0 0 14px rgba(255,255,255,.8);
+
+            0 0 8px white,
+
+            0 0 18px rgba(255,255,255,.9);
 
 }
 
-/* ==========================================
+/* ==========================================================
+   Tail Light
+========================================================== */
+
+.taillight{
+
+    position:absolute;
+
+    left:-2px;
+
+    top:6px;
+
+    width:5px;
+
+    height:5px;
+
+    border-radius:50%;
+
+    background:#EF4444;
+
+    box-shadow:
+
+            0 0 8px #EF4444;
+
+}
+
+/* ==========================================================
+   Wheels
+========================================================== */
+
+.wheelFront,
+.wheelRear{
+
+    position:absolute;
+
+    width:5px;
+
+    height:5px;
+
+    border-radius:50%;
+
+    background:#111827;
+
+    bottom:-2px;
+
+}
+
+.wheelFront{
+
+    left:6px;
+
+}
+
+.wheelRear{
+
+    right:6px;
+
+}
+
+/* ==========================================================
    Colors
-========================================== */
+========================================================== */
 
 .cyan{
 
@@ -164,9 +207,57 @@
 
 }
 
-/* ==========================================
-   Vehicle Hover
-========================================== */
+/* ==========================================================
+   Stopped
+========================================================== */
+
+.stopped{
+
+    filter:brightness(.72);
+
+}
+
+/* ==========================================================
+   Emergency Vehicle
+========================================================== */
+
+.emergency{
+
+    animation:emergencyFlash .7s infinite;
+
+}
+
+.emergency::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:2px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:10px;
+
+    height:4px;
+
+    border-radius:2px;
+
+    background:#00E5FF;
+
+    box-shadow:
+
+            0 0 8px #00E5FF,
+
+            0 0 18px #00E5FF;
+
+}
+
+/* ==========================================================
+   Hover
+========================================================== */
 
 .vehicle:hover .car{
 
@@ -174,56 +265,50 @@
 
 }
 
-/* ==========================================
+/* ==========================================================
    Animations
-========================================== */
+========================================================== */
 
+@keyframes emergencyFlash{
 
+    0%{
 
-.vehicle:nth-child(1){
+        filter:drop-shadow(0 0 4px #00E5FF);
 
-    animation-delay:0s;
+    }
 
-}
+    50%{
 
-.vehicle:nth-child(2){
+        filter:drop-shadow(0 0 14px #00E5FF);
 
-    animation-delay:.8s;
+    }
 
-}
+    100%{
 
-.vehicle:nth-child(3){
+        filter:drop-shadow(0 0 4px #00E5FF);
 
-    animation-delay:1.6s;
-
-}
-
-.vehicle:nth-child(4){
-
-    animation-delay:2.2s;
+    }
 
 }
 
-.vehicle:nth-child(5){
+/* ==========================================================
+   Responsive
+========================================================== */
 
-    animation-delay:3s;
+@media(max-width:768px){
 
-}
+    .car{
 
-.vehicle:nth-child(6){
+        width:34px;
 
-    animation-delay:3.8s;
+        height:18px;
 
-}
+    }
 
-.vehicle:nth-child(7){
+    .window{
 
-    animation-delay:4.6s;
+        width:15px;
 
-}
-
-.vehicle:nth-child(8){
-
-    animation-delay:5.4s;
+    }
 
 }

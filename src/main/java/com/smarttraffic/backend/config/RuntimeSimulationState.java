@@ -1,5 +1,9 @@
 package com.smarttraffic.backend.config;
 
+import com.smarttraffic.backend.enums.Direction;
+import com.smarttraffic.backend.enums.PedestrianSignal;
+import com.smarttraffic.backend.enums.SignalPhase;
+import com.smarttraffic.backend.enums.SimulationStage;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,7 +33,7 @@ public class RuntimeSimulationState {
 
     private int minGreenTime = 10;
 
-    private int maxGreenTime = 40;
+    private int maxGreenTime = 20;
 
     private int vehiclesPerGreen = 3;
 
@@ -39,20 +43,62 @@ public class RuntimeSimulationState {
 
     private boolean emergencyPriority = true;
 
-    private int emergencyGreenTime = 30;
+    private int emergencyGreenTime =30;
 
     // =====================================================
     // Dashboard
     // =====================================================
+// =====================================================
+// Live Signal Runtime State
+// =====================================================
 
+    private SimulationStage currentStage =
+            SimulationStage.VEHICLE_GREEN;
+
+    private SignalPhase currentSignalPhase =
+            SignalPhase.NORTH_SOUTH;
+
+    private PedestrianSignal pedestrianSignal =
+            PedestrianSignal.DONT_WALK;
+
+    private Direction dominantLane =
+            Direction.NORTH;
+
+    private int remainingTime = 10;
     private int refreshRate = 500;
 
     private int historyLimit = 100;
+    // =====================================================
+// Traffic Signal Timing
+// =====================================================
+
+    private int yellowTime = 3;
+
+    private int allRedTime = 2;
+
+    private boolean emergencyTriggered;
+// =====================================================
+// Pedestrian
+// =====================================================
+
+    private boolean pedestrianEnabled = true;
+
+    private int pedestrianWalkTime = 10;
+
+    private int pedestrianFlashTime = 3;
+
+    
 
     // =====================================================
     // Constructor
     // =====================================================
+    public boolean isEmergencyTriggered() {
+        return emergencyTriggered;
+    }
 
+    public void setEmergencyTriggered(boolean emergencyTriggered) {
+        this.emergencyTriggered = emergencyTriggered;
+    }
     public RuntimeSimulationState() {
     }
 
@@ -182,6 +228,116 @@ public class RuntimeSimulationState {
     }
 
     // =====================================================
+// Traffic Signal Timing
+// =====================================================
+
+    public int getYellowTime() {
+        return yellowTime;
+    }
+
+    public void setYellowTime(int yellowTime) {
+
+        if (yellowTime < 2) {
+            yellowTime = 2;
+        }
+
+        this.yellowTime = yellowTime;
+    }
+
+    public int getAllRedTime() {
+        return allRedTime;
+    }
+
+    public void setAllRedTime(int allRedTime) {
+
+        if (allRedTime < 1) {
+            allRedTime = 1;
+        }
+
+        this.allRedTime = allRedTime;
+    }
+
+// =====================================================
+// Pedestrian
+// =====================================================
+
+    public boolean isPedestrianEnabled() {
+        return pedestrianEnabled;
+    }
+
+    public void setPedestrianEnabled(boolean pedestrianEnabled) {
+        this.pedestrianEnabled = pedestrianEnabled;
+    }
+
+    public int getPedestrianWalkTime() {
+        return pedestrianWalkTime;
+    }
+
+    public void setPedestrianWalkTime(int pedestrianWalkTime) {
+
+        if (pedestrianWalkTime < 5) {
+            pedestrianWalkTime = 5;
+        }
+
+        this.pedestrianWalkTime = pedestrianWalkTime;
+    }
+
+    public int getPedestrianFlashTime() {
+        return pedestrianFlashTime;
+    }
+
+    public void setPedestrianFlashTime(int pedestrianFlashTime) {
+
+        if (pedestrianFlashTime < 2) {
+            pedestrianFlashTime = 2;
+        }
+
+        this.pedestrianFlashTime = pedestrianFlashTime;
+    }
+// =====================================================
+// Live Traffic Signal State
+// =====================================================
+
+    public SimulationStage getCurrentStage() {
+        return currentStage;
+    }
+
+    public void setCurrentStage(SimulationStage currentStage) {
+        this.currentStage = currentStage;
+    }
+
+    public SignalPhase getCurrentSignalPhase() {
+        return currentSignalPhase;
+    }
+
+    public void setCurrentSignalPhase(SignalPhase currentSignalPhase) {
+        this.currentSignalPhase = currentSignalPhase;
+    }
+
+    public PedestrianSignal getPedestrianSignal() {
+        return pedestrianSignal;
+    }
+
+    public void setPedestrianSignal(PedestrianSignal pedestrianSignal) {
+        this.pedestrianSignal = pedestrianSignal;
+    }
+
+    public Direction getDominantLane() {
+        return dominantLane;
+    }
+
+    public void setDominantLane(Direction dominantLane) {
+        this.dominantLane = dominantLane;
+    }
+
+    public int getRemainingTime() {
+        return remainingTime;
+    }
+
+    public void setRemainingTime(int remainingTime) {
+        this.remainingTime = Math.max(0, remainingTime);
+    }
+    // =====================================================
     // Debug
     // =====================================================
 
@@ -201,6 +357,16 @@ public class RuntimeSimulationState {
                 ", emergencyGreenTime=" + emergencyGreenTime +
                 ", refreshRate=" + refreshRate +
                 ", historyLimit=" + historyLimit +
+                ", yellowTime=" + yellowTime +
+                ", allRedTime=" + allRedTime +
+                ", pedestrianEnabled=" + pedestrianEnabled +
+                ", pedestrianWalkTime=" + pedestrianWalkTime +
+                ", pedestrianFlashTime=" + pedestrianFlashTime +
+                ", currentStage=" + currentStage +
+                ", currentSignalPhase=" + currentSignalPhase +
+                ", pedestrianSignal=" + pedestrianSignal +
+                ", dominantLane=" + dominantLane +
+                ", remainingTime=" + remainingTime +
                 '}';
     }
 }

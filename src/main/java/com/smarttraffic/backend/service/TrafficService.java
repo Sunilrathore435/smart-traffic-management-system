@@ -4,14 +4,14 @@ import com.smarttraffic.backend.config.RuntimeSimulationState;
 import com.smarttraffic.backend.dto.AddVehicleRequest;
 import com.smarttraffic.backend.dto.TrafficLiveUpdate;
 import com.smarttraffic.backend.dto.TrafficStatusResponse;
-import com.smarttraffic.backend.engine.AdaptiveTrafficOptimizer;
-import com.smarttraffic.backend.engine.FixedTrafficOptimizer;
-import com.smarttraffic.backend.engine.SimulationResult;
-import com.smarttraffic.backend.engine.TrafficEngine;
+import com.smarttraffic.backend.engine.*;
 import com.smarttraffic.backend.enums.Direction;
+import com.smarttraffic.backend.enums.SignalPhase;
 import com.smarttraffic.backend.model.*;
 import com.smarttraffic.backend.websocket.TrafficUpdatePublisher;
 import org.springframework.stereotype.Service;
+import com.smarttraffic.backend.dto.PedestrianRequest;
+import java.time.LocalDateTime;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +31,7 @@ public class TrafficService {
                     23.2599,
                     77.4126
             );
-
+    private final TrafficSignalStateMachine stateMachine;
     private final TrafficEngine trafficEngine;
 
    // private final AdaptiveTrafficOptimizer optimizer;
@@ -45,9 +45,11 @@ public class TrafficService {
     public TrafficService(TrafficEngine trafficEngine,
                           SimulationHistoryService historyService,TrafficUpdatePublisher publisher, AdaptiveTrafficOptimizer adaptiveTrafficOptimizer,
                           FixedTrafficOptimizer fixedTrafficOptimizer,
+                          TrafficSignalStateMachine stateMachine,
                           RuntimeSimulationState runtimeState) {
 
         this.trafficEngine = trafficEngine;
+        this.stateMachine = stateMachine;
         this.adaptiveTrafficOptimizer = adaptiveTrafficOptimizer;
         this.fixedTrafficOptimizer = fixedTrafficOptimizer;
         this.runtimeState = runtimeState;
@@ -69,7 +71,20 @@ public class TrafficService {
                 .getLane(request.getDirection())
                 .addVehicle(vehicle);
     }
+    /**
+     * Register a pedestrian crossing request.
+     */
+    public void requestPedestrianCrossing(
+            PedestrianRequest request) {
 
+        intersection.setPedestrianWaiting(true);
+
+        intersection.setPedestrianDirection(
+                request.getDirection());
+
+        intersection.setPedestrianRequestTime(
+                LocalDateTime.now());
+    }
     /**
      * Get current traffic status.
      */
@@ -88,54 +103,115 @@ public class TrafficService {
         TrafficDecision decision = getCurrentDecision();
 
         return new TrafficStatusResponse(
-                decision.getGreenLane().name(),
-                counts
+                runtimeState.getCurrentSignalPhase().name(),
+                runtimeState.getDominantLane().name(),
+                counts,
+                runtimeState.isEmergencyTriggered(),
+                runtimeState.isEmergencyTriggered()
+                        ? runtimeState.getDominantLane().name()
+                        : null,
+                runtimeState.getRemainingTime()
         );
     }
 
     /**
      * Execute one simulation cycle.
      */
+//    public TrafficDecision simulateTraffic() {
+//
+//        TrafficDecision decision = getCurrentDecision();
+//
+//        SimulationResult result =
+//                trafficEngine.simulateCycle(
+//                        intersection,
+//                        decision
+//                );
+//
+//        this.latestDecision = decision;
+//
+//        // Count one simulation cycle
+//        runtimeState.incrementSimulationCycle();
+//
+//        if (result.getVehiclesPassed() > 0) {
+//
+//            TrafficSimulationRecord record =
+//                    buildSimulationRecord(result);
+//
+//            historyService.saveSimulation(record);
+//
+//            // Count processed vehicles only once
+//            intersection.incrementProcessedVehicles(
+//                    result.getVehiclesPassed()
+//            );
+//
+//            publisher.publishTrafficUpdate(
+//                    buildLiveUpdate(record)
+//            );
+//
+//            if (emergencyActive) {
+//                clearEmergency();
+//            }
+//        }
+//
+//        return decision;
+//    }
     public TrafficDecision simulateTraffic() {
 
         TrafficDecision decision = getCurrentDecision();
+        latestDecision = decision;
+        // Request emergency preemption if a cycle is already running
+        if (stateMachine.isCycleRunning()
+                && decision.getReason() != null
+                && decision.getReason().toLowerCase().contains("emergency")
+                && !stateMachine.isCurrentCycleEmergency()) {
 
-        SimulationResult result =
-                trafficEngine.simulateCycle(
-                        intersection,
-                        decision
-                );
+            stateMachine.requestEmergencyPreemption(decision);
+        }
 
-        this.latestDecision = decision;
+        if (!stateMachine.isCycleRunning()) {
 
-        if (result.getVehiclesPassed() > 0) {
-
-            TrafficSimulationRecord record =
-                    buildSimulationRecord(result);
-
-            historyService.saveSimulation(record);
-
-            intersection.incrementProcessedVehicles(
-                    result.getVehiclesPassed()
+            stateMachine.startCycle(
+                    intersection,
+                    decision
             );
 
-            publisher.publishTrafficUpdate(
-                    buildLiveUpdate(record)
-            );
+            this.latestDecision = decision;
 
-            // ==========================================
-            // Clear manual emergency after simulation
-            // ==========================================
+            runtimeState.incrementSimulationCycle();
 
-            if (emergencyActive) {
+        } else {
 
-                clearEmergency();
+            stateMachine.tick();
 
+            if (!stateMachine.isCycleRunning()) {
+
+                SimulationResult result =
+                        stateMachine.getLatestResult();
+
+                if (result != null && result.getVehiclesPassed() > 0) {
+
+                    TrafficSimulationRecord record =
+                            buildSimulationRecord(result);
+
+                    historyService.saveSimulation(record);
+
+                    intersection.incrementProcessedVehicles(
+                            result.getVehiclesPassed()
+                    );
+
+                    publisher.publishTrafficUpdate(
+                            buildLiveUpdate(record)
+                    );
+                }
+
+                // ALWAYS clear emergency after the cycle finishes
+                if (emergencyActive) {
+                    clearEmergency();
+                }
             }
         }
 
-        return decision;
-
+        return latestDecision;
     }
     /**
      * Build simulation history record.
@@ -149,7 +225,9 @@ public class TrafficService {
 
                 intersection.getIntersectionId(),
 
-                decision.getGreenLane(),
+                decision.getSignalPhase(),
+
+                decision.getDominantLane(),
 
                 decision.getGreenTime(),
 
@@ -168,7 +246,9 @@ public class TrafficService {
                 decision.getReason()
                         .toLowerCase()
                         .contains("emergency"),
+
                 result.getSimulationTime(),
+
                 result.getExecutionTimeMs()
         );
     }
@@ -208,18 +288,53 @@ public class TrafficService {
 
         if (emergencyActive && emergencyLane != null) {
 
+            SignalPhase phase =
+                    (emergencyLane == Direction.NORTH || emergencyLane == Direction.SOUTH)
+                            ? SignalPhase.NORTH_SOUTH
+                            : SignalPhase.EAST_WEST;
+
+            int greenTime = runtimeState.getEmergencyGreenTime();
+
+            int northAllowed = 0;
+            int southAllowed = 0;
+            int eastAllowed = 0;
+            int westAllowed = 0;
+
+            if (phase == SignalPhase.NORTH_SOUTH) {
+
+                northAllowed = intersection.getLane(Direction.NORTH).getVehicleCount();
+
+                southAllowed = intersection.getLane(Direction.SOUTH).getVehicleCount();
+
+            } else {
+
+                eastAllowed = intersection.getLane(Direction.EAST).getVehicleCount();
+
+                westAllowed = intersection.getLane(Direction.WEST).getVehicleCount();
+            }
+
             return new TrafficDecision(
+
+                    phase,
+
                     emergencyLane,
-                    runtimeState.getEmergencyGreenTime(),
-                    Math.max(
-                            1,
-                            intersection
-                                    .getLane(emergencyLane)
-                                    .getVehicleCount()
-                    ),
-                    9999,
+
+                    greenTime,
+
+                    northAllowed,
+
+                    southAllowed,
+
+                    eastAllowed,
+
+                    westAllowed,
+
+                    100.0,
+
                     "Manual emergency override"
+
             );
+
         }
 
         if (runtimeState.isAdaptiveAI()) {
@@ -237,7 +352,9 @@ public class TrafficService {
 
         emergencyLane = direction;
 
-        intersection.setCurrentGreenLane(direction);
+        intersection.setEmergencyActive(true);
+        intersection.setEmergencyLane(direction);
+        intersection.setDominantLane(direction);
 
     }
 
@@ -250,7 +367,8 @@ public class TrafficService {
 
         emergencyLane = null;
 
-        intersection.setCurrentGreenLane(Direction.NORTH);
+        intersection.setEmergencyActive(false);
+        intersection.setEmergencyLane(null);
 
     }
 
@@ -270,7 +388,13 @@ public class TrafficService {
 
         return new TrafficLiveUpdate(
 
-                record.getSelectedLane().name(),
+                record.getSignalPhase() == null
+                        ? "NONE"
+                        : record.getSignalPhase().name(),
+
+                record.getDominantLane() == null
+                        ? "NONE"
+                        : record.getDominantLane().name(),
 
                 record.getGreenTime(),
 
@@ -289,4 +413,6 @@ public class TrafficService {
                 record.getSimulationTime()
         );
     }
-}
+
+
+    }

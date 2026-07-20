@@ -3,9 +3,10 @@ import styles from "./Vehicle.module.css";
 function Vehicle({
 
                      lane,
-                     color,
-                     position,
-                     stopped = false
+                     color = "cyan",
+                     position = 0,
+                     stopped = false,
+                     emergency = false
 
                  }) {
 
@@ -39,7 +40,7 @@ function Vehicle({
 
         case "west":
 
-            style.left = `${start + (position / 180) * range}%`;
+            style.left = `${start + (position /180) * range}%`;
             style.top = "50%";
             style.transform = "translateY(-50%)";
             break;
@@ -61,12 +62,19 @@ function Vehicle({
                     ${styles.car}
                     ${styles[color]}
                     ${stopped ? styles.stopped : ""}
+                    ${emergency ? styles.emergency : ""}
                 `}
             >
 
                 <div className={styles.window}></div>
 
                 <div className={styles.headlight}></div>
+
+                <div className={styles.taillight}></div>
+
+                <div className={styles.wheelFront}></div>
+
+                <div className={styles.wheelRear}></div>
 
             </div>
 

@@ -49,7 +49,7 @@ public class DashboardStateService {
         return new SignalResponse(
 
                 intersection
-                        .getCurrentGreenLane()
+                        .getCurrentSignalPhase()
                         .name(),
 
                 queues,
@@ -74,18 +74,19 @@ public class DashboardStateService {
 
         return new AIResponse(
 
-                decision.getGreenLane().name(),
+                decision.getSignalPhase().name(),
+
+                decision.getDominantLane().name(),
 
                 decision.getGreenTime(),
 
-                decision.getVehiclesAllowed(),
+                decision.getTotalVehiclesAllowed(),
 
                 decision.getTrafficScore(),
 
                 decision.getReason()
 
         );
-
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.smarttraffic.backend.repository;
 
 import com.smarttraffic.backend.enums.Direction;
+import com.smarttraffic.backend.enums.SignalPhase;
 import com.smarttraffic.backend.model.TrafficSimulationRecord;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -23,10 +23,17 @@ public interface TrafficSimulationRepository
     );
 
     /**
-     * Find simulations by selected lane.
+     * Find simulations by dominant lane.
      */
-    List<TrafficSimulationRecord> findBySelectedLane(
-            Direction selectedLane
+    List<TrafficSimulationRecord> findByDominantLane(
+            Direction dominantLane
+    );
+
+    /**
+     * Find simulations by signal phase.
+     */
+    List<TrafficSimulationRecord> findBySignalPhase(
+            SignalPhase signalPhase
     );
 
     /**

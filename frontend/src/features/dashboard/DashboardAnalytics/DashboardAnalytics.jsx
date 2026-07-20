@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useDashboard } from "../../../hooks";
 
@@ -14,10 +14,6 @@ import styles from "./DashboardAnalytics.module.css";
 
 function DashboardAnalytics() {
 
-    const [simulation, setSimulation] = useState(
-        SimulationEngine.getState()
-    );
-
     const {
 
         dashboard,
@@ -28,11 +24,15 @@ function DashboardAnalytics() {
 
     } = useDashboard();
 
+    const [simulationState, setSimulationState] = useState(
+        SimulationEngine.getState()
+    );
+
     useEffect(() => {
 
-        const listener = (state) => {
+        const listener = state => {
 
-            setSimulation(state);
+            setSimulationState(state);
 
         };
 
@@ -46,21 +46,80 @@ function DashboardAnalytics() {
 
     }, []);
 
-    if (loading) {
+    const offlineMode = loading || error || !dashboard;
 
-        return <div className={styles.loading}>Loading Dashboard...</div>;
+    const analytics = useMemo(() => {
 
-    }
+        if (!offlineMode) {
 
-    if (error) {
+            return dashboard.analytics;
 
-        return (
-            <div className={styles.error}>
-                Failed to load dashboard.
-            </div>
-        );
+        }
 
-    }
+        const totalVehicles =
+            simulationState?.vehicles?.length ?? 0;
+
+        return {
+
+            totalVehicles,
+
+            averageWaitingTime: 0,
+
+            trafficDensity: totalVehicles,
+
+            congestionLevel:
+                totalVehicles > 40
+                    ? "HIGH"
+                    : totalVehicles > 20
+                        ? "MEDIUM"
+                        : "LOW"
+
+        };
+
+    }, [dashboard, simulationState, offlineMode]);
+
+    const ai = offlineMode
+        ? {
+
+            recommendation: "Frontend Simulation",
+
+            signalPhase:
+                simulationState?.signals?.currentPhase ??
+                "NORTH_SOUTH",
+
+            confidence: 100,
+
+            trafficScore: 0,
+
+            reason:
+                "Backend unavailable"
+
+        }
+        : dashboard.ai;
+
+    const emergency = offlineMode
+        ? {
+
+            active: false,
+
+            lane: null
+
+        }
+        : dashboard.emergency;
+
+    const signal = offlineMode
+        ? {
+
+            currentSignalPhase:
+                simulationState?.signals?.currentPhase ??
+                "NORTH_SOUTH"
+
+        }
+        : dashboard.signal;
+
+    const simulation = offlineMode
+        ? simulationState
+        : dashboard.simulation;
 
     return (
 
@@ -76,11 +135,37 @@ function DashboardAnalytics() {
 
                 </span>
 
+                <div className={styles.mode}>
+
+                    {
+
+                        offlineMode
+                            ? (
+
+                                <span className={styles.offline}>
+
+                                    🔴 Frontend Simulation
+
+                                </span>
+
+                            )
+                            : (
+
+                                <span className={styles.online}>
+
+                                    🟢 Live Backend
+
+                                </span>
+
+                            )
+
+                    }
+
+                </div>
+
             </h2>
 
             <div className={styles.grid}>
-
-                {/* Vehicle Animation (still frontend) */}
 
                 <div className={styles.flow}>
 
@@ -88,19 +173,17 @@ function DashboardAnalytics() {
 
                         <VehicleFlow
 
-                            analytics={dashboard?.analytics}
+                            analytics={analytics}
 
-                            vehicles={simulation.vehicles}
+                            vehicles={simulationState?.vehicles}
 
-                            signals={simulation.signals}
+                            signals={simulationState?.signals}
 
                         />
 
                     </AnalyticsCard>
 
                 </div>
-
-                {/* Backend */}
 
                 <div className={styles.density}>
 
@@ -108,15 +191,13 @@ function DashboardAnalytics() {
 
                         <TrafficDensity
 
-                            analytics={dashboard?.analytics}
+                            analytics={analytics}
 
                         />
 
                     </AnalyticsCard>
 
                 </div>
-
-                {/* Backend */}
 
                 <div className={styles.peak}>
 
@@ -124,20 +205,22 @@ function DashboardAnalytics() {
 
                         <PeakHourCard
 
-                            analytics={dashboard?.analytics}
+                            analytics={analytics}
 
-                            ai={dashboard?.ai}
+                            ai={ai}
 
-                            emergency={dashboard?.emergency}
+                            emergency={emergency}
 
-                            timestamp={dashboard?.timestamp}
+                            timestamp={
+                                dashboard?.timestamp ??
+                                new Date().toISOString()
+                            }
 
                         />
+
                     </AnalyticsCard>
 
                 </div>
-
-                {/* Backend */}
 
                 <div className={styles.ai}>
 
@@ -145,17 +228,20 @@ function DashboardAnalytics() {
 
                         <AIInsightCard
 
-                            analytics={dashboard?.analytics}
+                            analytics={analytics}
 
-                            ai={dashboard?.ai}
+                            ai={ai}
 
-                            emergency={dashboard?.emergency}
+                            emergency={emergency}
 
-                            signal={dashboard?.signal}
+                            signal={signal}
 
-                            simulation={dashboard?.simulation}
+                            simulation={simulation}
 
-                            timestamp={dashboard?.timestamp}
+                            timestamp={
+                                dashboard?.timestamp ??
+                                new Date().toISOString()
+                            }
 
                         />
 

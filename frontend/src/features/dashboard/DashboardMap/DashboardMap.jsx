@@ -37,30 +37,89 @@ function DashboardMap() {
 
     }, []);
 
+    // =====================================================
+    // Loading
+    // =====================================================
+
+    if (
+        !dashboard ||
+        !dashboard.signal ||
+        !dashboard.simulation
+    ) {
+        return (
+            <GlassCard className={styles.loading}>
+                <div className={styles.loader} />
+                <h3>Connecting to Smart Traffic Controller...</h3>
+            </GlassCard>
+        );
+    }
+
+    // =====================================================
+    // Dashboard State
+    // =====================================================
+
+    const signal = dashboard.signal ?? {};
+    const simulation = dashboard.simulation ?? {};
+    const emergency = dashboard.emergency ?? {};
+    const analytics = dashboard.analytics ?? {};
+    const ai = dashboard.ai ?? {};
+
     return (
 
         <GlassCard className={styles.container}>
 
+            {/* ==========================================
+                Dashboard Header
+            ========================================== */}
+
             <MapHeader
-                simulation={dashboard.simulation}
-                signal={dashboard.signal}
-                emergency={dashboard.emergency}
+
+                simulation={simulation}
+
+                signal={signal}
+
+                emergency={emergency}
+
             />
+
+            {/* ==========================================
+                Live Traffic Intersection
+            ========================================== */}
 
             <CityMap
-                signal={dashboard.signal}
-                emergency={dashboard.emergency}
-                ai={dashboard.ai}
-                analytics={dashboard.analytics}
+
+                signal={signal}
+
+                simulation={simulation}
+
+                emergency={emergency}
+
+                ai={ai}
+
+                analytics={analytics}
+
             />
+
+            {/* ==========================================
+                Lane Statistics
+            ========================================== */}
 
             <LaneSummary
-                signal={dashboard.signal}
-                analytics={dashboard.analytics}
+
+                signal={signal}
+
+                analytics={analytics}
+
             />
 
+            {/* ==========================================
+                Footer
+            ========================================== */}
+
             <MapFooter
-                simulation={dashboard.simulation}
+
+                simulation={simulation}
+
             />
 
         </GlassCard>

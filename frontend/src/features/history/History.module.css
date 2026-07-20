@@ -11,3 +11,51 @@
     width:100%;
 
 }
+
+.loading{
+
+    min-height:350px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.loader{
+
+    width:48px;
+
+    height:48px;
+
+    border-radius:50%;
+
+    border:4px solid rgba(255,255,255,.08);
+
+    border-top-color:var(--color-primary);
+
+    animation:spin .8s linear infinite;
+
+}
+
+.loading p{
+
+    color:var(--color-text-secondary);
+
+}
+
+@keyframes spin{
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}

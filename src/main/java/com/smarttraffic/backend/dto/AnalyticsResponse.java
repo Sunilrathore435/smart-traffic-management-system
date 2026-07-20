@@ -10,7 +10,7 @@ public class AnalyticsResponse {
     // ======================================================
     // Historical Analytics
     // ======================================================
-
+    private String busiestPhase;
     private long totalSimulations;
 
     private long totalVehiclesProcessed;
@@ -57,7 +57,13 @@ public class AnalyticsResponse {
     // ======================================================
     // Getters & Setters
     // ======================================================
+    public String getBusiestPhase() {
+        return busiestPhase;
+    }
 
+    public void setBusiestPhase(String busiestPhase) {
+        this.busiestPhase = busiestPhase;
+    }
     public long getTotalSimulations() {
         return totalSimulations;
     }

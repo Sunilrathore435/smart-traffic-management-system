@@ -1,6 +1,8 @@
 package com.smarttraffic.backend.dto;
 
 import com.smarttraffic.backend.enums.SchedulerStatus;
+import com.smarttraffic.backend.enums.PedestrianSignal;
+import com.smarttraffic.backend.enums.SimulationStage;
 
 public class SimulationStatusResponse {
 
@@ -17,8 +19,15 @@ public class SimulationStatusResponse {
     private String intersectionId;
 
     private String intersectionName;
+    private String currentStage;
 
-    private String currentGreenLane;
+    private String pedestrianSignal;
+
+    private int remainingTime;
+
+    private boolean pedestrianWaiting;
+    // Changed from currentGreenLane
+    private String currentSignalPhase;
 
     private SchedulerStatus schedulerStatus;
 
@@ -33,7 +42,11 @@ public class SimulationStatusResponse {
             long historyRecords,
             String intersectionId,
             String intersectionName,
-            String currentGreenLane,
+            String currentSignalPhase,
+            String currentStage,
+            String pedestrianSignal,
+            int remainingTime,
+            boolean pedestrianWaiting,
             SchedulerStatus schedulerStatus) {
 
         this.simulationRunning = simulationRunning;
@@ -43,10 +56,28 @@ public class SimulationStatusResponse {
         this.historyRecords = historyRecords;
         this.intersectionId = intersectionId;
         this.intersectionName = intersectionName;
-        this.currentGreenLane = currentGreenLane;
+        this.currentSignalPhase = currentSignalPhase;
+        this.currentStage = currentStage;
+        this.pedestrianSignal = pedestrianSignal;
+        this.remainingTime = remainingTime;
+        this.pedestrianWaiting = pedestrianWaiting;
         this.schedulerStatus = schedulerStatus;
     }
+    public String getCurrentStage() {
+        return currentStage;
+    }
 
+    public String getPedestrianSignal() {
+        return pedestrianSignal;
+    }
+
+    public int getRemainingTime() {
+        return remainingTime;
+    }
+
+    public boolean isPedestrianWaiting() {
+        return pedestrianWaiting;
+    }
     public boolean isSimulationRunning() {
         return simulationRunning;
     }
@@ -75,8 +106,8 @@ public class SimulationStatusResponse {
         return intersectionName;
     }
 
-    public String getCurrentGreenLane() {
-        return currentGreenLane;
+    public String getCurrentSignalPhase() {
+        return currentSignalPhase;
     }
 
     public SchedulerStatus getSchedulerStatus() {

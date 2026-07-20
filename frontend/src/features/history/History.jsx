@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 
 import LogsHeader from "./LogsHeader";
 import StatisticsBar from "./StatisticsBar";
@@ -13,29 +13,21 @@ function History() {
 
     const [events, setEvents] = useState([]);
 
+    const [loading, setLoading] = useState(true);
+
     const [search, setSearch] = useState("");
 
     const [filter, setFilter] = useState("ALL");
 
-    useEffect(() => {
+    const [refreshing, setRefreshing] = useState(false);
 
-        loadHistory();
+    const loadHistory = useCallback(async () => {
 
-        const timer = setInterval(
-
-            loadHistory,
-
-            3000
-
-        );
-
-        return () => clearInterval(timer);
-
-    }, []);
-
-    async function loadHistory() {
+        if (refreshing) return;
 
         try {
+
+            setRefreshing(true);
 
             const history = await historyApi.getAll();
 
@@ -49,50 +41,94 @@ function History() {
 
         }
 
-    }
+        finally {
+
+            setRefreshing(false);
+
+            setLoading(false);
+
+        }
+
+    }, [refreshing]);
+
+    useEffect(() => {
+
+        loadHistory();
+
+        const timer = setInterval(() => {
+
+            if (!document.hidden) {
+
+                loadHistory();
+
+            }
+
+        }, 5000);
+
+        return () => clearInterval(timer);
+
+    }, [loadHistory]);
 
     const filteredEvents = useMemo(() => {
+
+        const keyword = search.trim().toLowerCase();
 
         return events.filter(event => {
 
             const category =
+
                 event.emergencyTriggered
                     ? "EMERGENCY"
                     : "SIMULATION";
 
             const matchesFilter =
+
                 filter === "ALL" ||
                 filter === category;
 
-            const text = (
+            const searchable = [
 
-                event.selectedLane +
-                " " +
-                event.reason
+                event.signalPhase,
 
-            ).toLowerCase();
+                event.currentSignalPhase,
 
-            return matchesFilter &&
-                text.includes(
-                    search.toLowerCase()
-                );
+                event.reason,
+
+                event.greenTime,
+
+                event.vehiclesPassed
+
+            ]
+                .filter(Boolean)
+                .join(" ")
+                .toLowerCase();
+
+            const matchesSearch =
+
+                searchable.includes(keyword);
+
+            return matchesFilter && matchesSearch;
 
         });
 
-    }, [
-        events,
-        search,
-        filter
-    ]);
+    }, [events, search, filter]);
 
     return (
 
         <section className={styles.container}>
 
-            <LogsHeader />
+            <LogsHeader
+                connected={true}
+                live={true}
+                uptime="History Mode"
+                database="MongoDB Atlas"
+                api="Spring Boot 3.5"
+            />
 
             <StatisticsBar
+
                 events={events}
+
             />
 
             <LogsToolbar
@@ -109,10 +145,33 @@ function History() {
 
             />
 
+            {
 
-            <EventTimeline
-                events={filteredEvents}
-            />
+                loading ? (
+
+                    <div className={styles.loading}>
+
+                        <div className={styles.loader}></div>
+
+                        <p>
+
+                            Loading traffic history...
+
+                        </p>
+
+                    </div>
+
+                ) : (
+
+                    <EventTimeline
+
+                        events={filteredEvents}
+
+                    />
+
+                )
+
+            }
 
         </section>
 

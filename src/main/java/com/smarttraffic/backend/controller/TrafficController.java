@@ -2,6 +2,7 @@ package com.smarttraffic.backend.controller;
 
 import com.smarttraffic.backend.dto.AddVehicleRequest;
 import com.smarttraffic.backend.dto.TrafficStatusResponse;
+import com.smarttraffic.backend.dto.PedestrianRequest;
 import com.smarttraffic.backend.model.TrafficDecision;
 import com.smarttraffic.backend.model.TrafficSimulationRecord;
 import com.smarttraffic.backend.service.TrafficService;
@@ -31,7 +32,18 @@ public class TrafficController {
 
         return ResponseEntity.ok("Vehicle Added Successfully");
     }
+    /**
+     * Request pedestrian crossing.
+     */
+    @PostMapping("/pedestrian/request")
+    public ResponseEntity<String> requestPedestrianCrossing(
+            @RequestBody PedestrianRequest request) {
 
+        trafficService.requestPedestrianCrossing(request);
+
+        return ResponseEntity.ok(
+                "Pedestrian crossing request accepted.");
+    }
     /**
      * Get current traffic status.
      */

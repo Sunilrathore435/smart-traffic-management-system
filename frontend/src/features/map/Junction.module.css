@@ -1,6 +1,250 @@
-/* ==========================================
-   Smart AI Junction
-========================================== */
+/* ==========================================================
+   AI HUD
+========================================================== */
+
+.hud{
+
+    position:absolute;
+
+    left:25%;
+
+    top:5%;
+
+    transform:translateX(-60%);
+
+    width:300px;
+
+    padding:10px 12px;
+
+    z-index:140;
+
+    border-radius:18px;
+
+    background:
+            linear-gradient(
+                    145deg,
+                    rgba(32,38,52,.94),
+                    rgba(18,22,34,.92)
+            );
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+            0 18px 40px rgba(0,0,0,.35),
+            0 0 28px rgba(0,229,255,.10);
+
+}
+
+.hud::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+    top:0;
+
+    width:100%;
+    height:3px;
+
+    background:
+            linear-gradient(
+                    90deg,
+                    #00E5FF,
+                    #22C55E,
+                    #00E5FF
+            );
+
+    background-size:250%;
+
+    animation:borderFlow 8s linear infinite;
+
+}
+
+/* ==========================================================
+   HUD Header
+========================================================== */
+
+.hudTop{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:14px;
+
+}
+
+.ai{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:#00E5FF;
+
+    font-size:.9rem;
+
+    font-weight:700;
+
+}
+
+.online,
+.emergencyStatus{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    padding:5px 12px;
+
+    border-radius:999px;
+
+    font-size:.75rem;
+
+    font-weight:700;
+
+}
+
+.online{
+
+    color:#22C55E;
+
+    background:rgba(34,197,94,.12);
+
+    border:1px solid rgba(34,197,94,.25);
+
+}
+
+.online svg{
+
+    font-size:8px;
+
+    animation:blink 1.4s infinite;
+
+}
+
+.emergencyStatus{
+
+    color:white;
+
+    background:linear-gradient(
+            135deg,
+            #ef4444,
+            #dc2626
+    );
+
+}
+
+/* ==========================================================
+   Phase
+========================================================== */
+
+.hud h2{
+
+    margin:0;
+
+    text-align:center;
+
+    color:white;
+
+    font-size:1.8rem;
+
+    letter-spacing:1px;
+
+}
+
+/* ==========================================================
+   Bottom Info
+========================================================== */
+
+.hudInfo{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:14px;
+
+    margin-top:18px;
+
+}
+
+.infoItem{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(255,255,255,.05);
+
+    color:white;
+
+    font-size:.82rem;
+
+    font-weight:600;
+
+}
+
+.priority{
+
+    color:#ffb454;
+
+}
+
+/* ==========================================================
+   Connector Line
+========================================================== */
+
+.hudConnector{
+
+    position:absolute;
+
+    left:50%;
+
+    top:165px;
+
+    transform:translateX(-50%);
+
+    width:2px;
+
+    height:95px;
+
+    z-index:140;
+
+    background:
+            linear-gradient(
+                    to bottom,
+                    rgba(0,229,255,.7),
+                    rgba(0,229,255,.05)
+            );
+
+    box-shadow:
+            0 0 12px rgba(0,229,255,.35);
+
+}
+
+/* ==========================================================
+   AI Core
+========================================================== */
 
 .junction{
 
@@ -12,9 +256,9 @@
 
     transform:translate(-50%,-50%);
 
-    width:110px;
+    width:70px;
 
-    height:110px;
+    height:70px;
 
     border-radius:50%;
 
@@ -25,162 +269,74 @@
     align-items:center;
 
     background:
-            radial-gradient(circle,
-            #45506A 0%,
-            #2D3649 55%,
-            #202736 100%);
+            radial-gradient(
+                    circle,
+                    #3e4c67,
+                    #222b39
+            );
 
-    border:3px solid rgba(255,255,255,.08);
-
-    z-index:40;
-
-    overflow:hidden;
+    border:2px solid rgba(0,229,255,.20);
 
     box-shadow:
-            inset 0 0 25px rgba(255,255,255,.05),
-            0 0 25px rgba(0,229,255,.15);
+            inset 0 0 12px rgba(255,255,255,.08),
+            0 0 18px rgba(0,229,255,.25);
+
+    z-index:150;
 
 }
 
-/* ==========================================
-   Rotating Rings
-========================================== */
-
-.outerRing{
-
-    position:absolute;
-
-    inset:-8px;
-
-    border-radius:50%;
-
-    border:2px dashed rgba(0,229,255,.25);
-
-    animation:rotateClockwise 14s linear infinite;
-
-}
-
-.innerRing{
-
-    position:absolute;
-
-    inset:8px;
-
-    border-radius:50%;
-
-    border:2px solid rgba(0,229,255,.15);
-
-    animation:rotateAnti 8s linear infinite;
-
-}
-
-/* ==========================================
-   Content
-========================================== */
-
-.content{
-
-    position:relative;
-
-    z-index:5;
+.aiCore{
 
     display:flex;
 
-    flex-direction:column;
+    justify-content:center;
 
     align-items:center;
 
-    gap:4px;
+    width:100%;
 
-}
-
-.icon{
+    height:100%;
 
     color:#00E5FF;
 
-    font-size:18px;
+    font-size:28px;
 
-    filter:drop-shadow(0 0 10px rgba(0,229,255,.5));
-
-}
-
-.content h3{
-
-    margin:0;
-
-    color:white;
-
-    font-size:22px;
-
-    font-weight:700;
+    animation:brainPulse 2s ease-in-out infinite;
 
 }
 
-.content span{
+/* ==========================================================
+   Emergency
+========================================================== */
 
-    font-size:12px;
+.emergency{
 
-    color:#A8B4C9;
+    border-color:#ef4444;
 
-}
-
-.status{
-
-    margin-top:4px;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:6px;
-
-    color:#22C55E;
-
-    font-size:11px;
-
-    font-weight:700;
+    box-shadow:
+            0 0 20px rgba(239,68,68,.35);
 
 }
 
-.status svg{
-
-    font-size:8px;
-
-    animation:blink 1.5s infinite;
-
-}
-
-/* ==========================================
+/* ==========================================================
    Animations
-========================================== */
+========================================================== */
 
-@keyframes rotateClockwise{
+@keyframes brainPulse{
 
-    from{
+    0%,100%{
 
-        transform:rotate(0deg);
+        transform:scale(1);
 
-    }
-
-    to{
-
-        transform:rotate(360deg);
+        filter:drop-shadow(0 0 8px rgba(0,229,255,.5));
 
     }
 
-}
+    50%{
 
-@keyframes rotateAnti{
+        transform:scale(1.12);
 
-    from{
-
-        transform:rotate(360deg);
-
-    }
-
-    to{
-
-        transform:rotate(0deg);
+        filter:drop-shadow(0 0 18px rgba(0,229,255,.9));
 
     }
 
@@ -190,7 +346,117 @@
 
     50%{
 
-        opacity:.25;
+        opacity:.3;
+
+    }
+
+}
+
+@keyframes borderFlow{
+
+    from{
+
+        background-position:0%;
+
+    }
+
+    to{
+
+        background-position:250%;
+
+    }
+
+}
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@media(max-width:768px){
+
+    .hud{
+
+        width:90%;
+
+        top:20px;
+
+    }
+
+    .hudConnector{
+
+        display:none;
+
+    }
+
+    .hudInfo{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .hud h2{
+
+        font-size:1.35rem;
+
+    }
+
+}
+.offline{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    color:#9ca3af;
+
+}
+
+.activeCore{
+
+    animation:pulse 2s infinite;
+
+}
+
+.pausedCore{
+
+    opacity:.6;
+    filter:grayscale(.3);
+
+}
+
+.emergencyCore{
+
+    animation:emergencyPulse .8s infinite;
+
+}
+
+@keyframes pulse{
+
+    0%,100%{
+
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        transform:scale(1.08);
+
+    }
+
+}
+
+@keyframes emergencyPulse{
+
+    0%,100%{
+
+        transform:scale(1);
+
+    }
+
+    50%{
+
+        transform:scale(1.15);
 
     }
 

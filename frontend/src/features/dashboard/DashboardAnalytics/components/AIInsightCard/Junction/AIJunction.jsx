@@ -3,78 +3,118 @@ import styles from "./AIJunction.module.css";
 function AIJunction({
 
                         analytics,
-
                         ai,
-
-                        emergency
+                        emergency,
+                        signal
 
                     }) {
 
-    const congestion = analytics?.congestion ?? 0;
+    // ==========================================
+    // Signal Phase
+    // ==========================================
 
-    // =====================================
-    // Active Lane
-    // =====================================
-
-    const activeLane = (
+    const signalPhase =
 
         emergency?.active
 
-            ? emergency.lane
+            ? emergency?.lane
 
-            : ai?.selectedLane ||
+            : signal?.currentSignalPhase ??
 
-            analytics?.busiestLane ||
+            ai?.signalPhase ??
 
-            "NORTH"
+            "NORTH_SOUTH";
 
-    ).toLowerCase();
+    const northSouth =
+        signalPhase === "NORTH_SOUTH";
 
-    // =====================================
+    const eastWest =
+        signalPhase === "EAST_WEST";
+
+    const allRed =
+        signalPhase === "ALL_RED";
+
+    // ==========================================
+    // Congestion
+    // ==========================================
+
+    const congestion =
+
+        analytics?.trafficScore ??
+
+        ai?.trafficScore ??
+
+        0;
+
+    // ==========================================
     // Priority
-    // =====================================
+    // ==========================================
 
     let priority = "LOW PRIORITY";
+
     let status = "NORMAL";
 
     if (emergency?.active) {
 
         priority = "EMERGENCY PRIORITY";
+
         status = "EMERGENCY";
 
     }
 
-    else if (congestion >= 70) {
+    else if (congestion >= 80) {
 
         priority = "HIGH PRIORITY";
+
         status = "HIGH";
 
     }
 
-    else if (congestion >= 40) {
+    else if (congestion >= 50) {
 
         priority = "MEDIUM PRIORITY";
+
         status = "MEDIUM";
 
     }
 
-    const badgeClass = emergency?.active
+    const badgeClass =
 
-        ? styles.priorityEmergency
+        emergency?.active
 
-        : congestion >= 70
+            ? styles.priorityEmergency
 
-            ? styles.priorityHigh
+            : congestion >= 80
 
-            : congestion >= 40
+                ? styles.priorityHigh
 
-                ? styles.priorityMedium
+                : congestion >= 50
 
-                : styles.priorityLow;
+                    ? styles.priorityMedium
+
+                    : styles.priorityLow;
+
+    // ==========================================
+    // Label
+    // ==========================================
+
+    const phaseLabel =
+
+        northSouth
+
+            ? "North ↕ South"
+
+            : eastWest
+
+                ? "East ↔ West"
+
+                : "All Red";
 
     return (
 
         <div className={styles.wrapper}>
+
+            {/* ================================= */}
 
             <div className={styles.header}>
 
@@ -94,6 +134,8 @@ function AIJunction({
 
             </div>
 
+            {/* ================================= */}
+
             <div className={styles.map}>
 
                 <div className={styles.vertical}></div>
@@ -105,78 +147,129 @@ function AIJunction({
                 <div className={styles.horizontalLine}></div>
 
                 <div className={`${styles.crosswalk} ${styles.crossTop}`}></div>
+
                 <div className={`${styles.crosswalk} ${styles.crossBottom}`}></div>
+
                 <div className={`${styles.crosswalk} ${styles.crossLeft}`}></div>
+
                 <div className={`${styles.crosswalk} ${styles.crossRight}`}></div>
 
                 <div className={styles.center}>
 
                     <div className={styles.centerRing}></div>
 
-                    <span>AI</span>
+                    <div className={styles.aiContent}>
+
+        <span className={styles.aiText}>
+            AI
+        </span>
+
+                        <span className={styles.phaseText}>
+    {northSouth
+        ? "N ↕ S"
+        : eastWest
+            ? "E ↔ W"
+            : "STOP"}
+</span>
+
+                    </div>
+
+
 
                 </div>
 
-                {activeLane === "north" && (
-                    <span className={`${styles.car} ${styles.top} ${emergency?.active ? styles.carEmergency : ""}`} />
+                {/* ================================= */}
+                {/* Active Vehicles */}
+                {/* ================================= */}
+
+                {northSouth && (
+
+                    <>
+
+                        <span
+                            className={`${styles.car} ${styles.top}
+                            ${emergency?.active ? styles.carEmergency : ""}`}
+                        />
+
+                        <span
+                            className={`${styles.car} ${styles.bottom}
+                            ${emergency?.active ? styles.carEmergency : ""}`}
+                        />
+
+                    </>
+
                 )}
 
-                {activeLane === "south" && (
-                    <span className={`${styles.car} ${styles.bottom} ${emergency?.active ? styles.carEmergency : ""}`} />
+                {eastWest && (
+
+                    <>
+
+                        <span
+                            className={`${styles.car} ${styles.left}
+                            ${emergency?.active ? styles.carEmergency : ""}`}
+                        />
+
+                        <span
+                            className={`${styles.car} ${styles.right}
+                            ${emergency?.active ? styles.carEmergency : ""}`}
+                        />
+
+                    </>
+
                 )}
 
-                {activeLane === "east" && (
-                    <span className={`${styles.car} ${styles.right} ${emergency?.active ? styles.carEmergency : ""}`} />
-                )}
+                {/* ================================= */}
+                {/* Active Glow */}
+                {/* ================================= */}
 
-                {activeLane === "west" && (
-                    <span className={`${styles.car} ${styles.left} ${emergency?.active ? styles.carEmergency : ""}`} />
-                )}
+                {
 
-                <div
-                    className={`
-                        ${styles.activeLane}
-                        ${
-                        activeLane === "north"
-                            ? styles.glowNorth
-                            : activeLane === "south"
-                                ? styles.glowSouth
-                                : activeLane === "east"
-                                    ? styles.glowEast
-                                    : styles.glowWest
-                    }
-                    `}
-                />
+                    northSouth && (
+
+                        <div
+
+                            className={`${styles.activeLane}
+                            ${styles.glowNorthSouth}`}
+
+                        />
+
+                    )
+
+                }
+
+                {
+
+                    eastWest && (
+
+                        <div
+
+                            className={`${styles.activeLane}
+                            ${styles.glowEastWest}`}
+
+                        />
+
+                    )
+
+                }
+
+                {
+
+                    allRed && (
+
+                        <div
+
+                            className={`${styles.activeLane}
+                            ${styles.glowAllRed}`}
+
+                        />
+
+                    )
+
+                }
 
             </div>
 
-            <div className={styles.footer}>
-
-                <div>
-
-                    <small>Active Lane</small>
-
-                    <strong>
-
-                        {activeLane.toUpperCase()}
-
-                    </strong>
-
-                </div>
-
-                <div>
-
-                    <small>Congestion</small>
-
-                    <strong>
-
-                        {congestion}%
-
-                    </strong>
-
-                </div>
-
-            </div>
+            {/* ================================= */}
 
         </div>
 

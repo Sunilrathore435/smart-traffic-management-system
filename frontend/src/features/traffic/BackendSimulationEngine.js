@@ -1,4 +1,4 @@
-import { dashboardApi, emergencyApi } from "../../services/api";
+import { dashboardApi, emergencyApi ,pedestrianApi} from "../../services/api";
 
 class BackendSimulationEngine {
 
@@ -23,7 +23,7 @@ class BackendSimulationEngine {
 
             this.load();
 
-        }, 3000);
+        }, 1000);
 
     }
 
@@ -102,7 +102,21 @@ class BackendSimulationEngine {
         return this.state;
 
     }
+    async requestPedestrianCrossing() {
 
+        try {
+
+            await pedestrianApi.requestPedestrianCrossing();
+
+            await this.load();
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    }
 }
 
 export default new BackendSimulationEngine();

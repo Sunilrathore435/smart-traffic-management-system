@@ -24,29 +24,26 @@ public class TrafficScheduler {
         this.runtimeState = runtimeState;
         this.vehicleGeneratorService = vehicleGeneratorService;
     }
-
     @Scheduled(fixedRate = 5000)
-    public void runSimulation() {
-        // Auto Simulation OFF
+    public void generateTraffic() {
+
         if (!runtimeState.isRunning()) {
             return;
         }
 
-        // Generate random vehicles according to Vehicle Spawn Rate
         vehicleGeneratorService.generateTraffic();
+    }
+    @Scheduled(fixedRate = 1000)
+    public void runSimulation() {
 
-        // If still no vehicles, skip simulation
-        if (!trafficService.getIntersection().hasWaitingVehicles()) {
-
-            System.out.println("🚦 Scheduler Idle - No vehicles waiting.");
-
+        if (!runtimeState.isRunning()) {
             return;
         }
 
-        System.out.println("\n========== AUTO SIMULATION ==========");
+        if (!trafficService.getIntersection().hasWaitingVehicles()) {
+            return;
+        }
 
         trafficService.simulateTraffic();
-
-        runtimeState.incrementSimulationCycle();
     }
 }

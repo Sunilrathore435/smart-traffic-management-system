@@ -6,7 +6,9 @@ import java.time.LocalDateTime;
 
 public class TrafficLiveUpdate {
 
-    private String greenLane;
+    private String signalPhase;
+
+    private String dominantLane;
 
     private int greenTime;
 
@@ -25,7 +27,8 @@ public class TrafficLiveUpdate {
     private LocalDateTime simulationTime;
 
     public TrafficLiveUpdate(
-            String greenLane,
+            String signalPhase,
+            String dominantLane,
             int greenTime,
             int vehiclesPassed,
             int remainingVehicles,
@@ -35,7 +38,8 @@ public class TrafficLiveUpdate {
             QueueSnapshot queueAfter,
             LocalDateTime simulationTime) {
 
-        this.greenLane = greenLane;
+        this.signalPhase = signalPhase;
+        this.dominantLane = dominantLane;
         this.greenTime = greenTime;
         this.vehiclesPassed = vehiclesPassed;
         this.remainingVehicles = remainingVehicles;
@@ -46,8 +50,12 @@ public class TrafficLiveUpdate {
         this.simulationTime = simulationTime;
     }
 
-    public String getGreenLane() {
-        return greenLane;
+    public String getSignalPhase() {
+        return signalPhase;
+    }
+
+    public String getDominantLane() {
+        return dominantLane;
     }
 
     public int getGreenTime() {

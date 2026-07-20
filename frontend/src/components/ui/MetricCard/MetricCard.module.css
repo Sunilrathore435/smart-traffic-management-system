@@ -1,6 +1,95 @@
+/* ==========================================================
+   Metric Card
+========================================================== */
+
 .card{
-    height:160px;
+
+    position:relative;
+
+    min-height:clamp(135px, 16vh, 155px);
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+    padding:clamp(16px,1.2vw,20px);
+
+    transition:
+            transform .28s ease,
+            box-shadow .28s ease,
+            border-color .28s ease;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    background:
+            linear-gradient(
+                    160deg,
+                    rgba(255,255,255,.05),
+                    rgba(255,255,255,.015)
+            );
+
+    backdrop-filter:blur(18px);
+
 }
+
+.card::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0 auto auto 0;
+
+    width:100%;
+
+    height:3px;
+
+    background:linear-gradient(
+            90deg,
+            #00E5FF,
+            #00FFA3,
+            #00E5FF
+    );
+
+    background-size:220%;
+
+    animation:borderFlow 7s linear infinite;
+
+}
+
+.card::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:inherit;
+
+    pointer-events:none;
+
+    box-shadow:
+            inset 0 0 0 1px rgba(255,255,255,.04),
+            0 0 20px rgba(0,229,255,.05);
+
+}
+
+.card:hover{
+
+    transform:translateY(-5px);
+
+    border-color:rgba(0,229,255,.25);
+
+    box-shadow:
+
+            0 16px 28px rgba(0,0,0,.28),
+
+            0 0 20px rgba(0,229,255,.14);
+
+}
+
+/* ============================================= */
 
 .header{
 
@@ -10,47 +99,119 @@
 
     align-items:flex-start;
 
+    gap:16px;
+
     height:100%;
 
 }
 
-.title{
+.left{
 
-    color:var(--color-text-secondary);
+    display:flex;
 
-    font-size:var(--font-sm);
+    flex-direction:column;
+
+    flex:1;
+
+    min-width:0;
+
+}
+
+/* ============================================= */
+
+.status{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
 
     margin-bottom:12px;
+
+    font-size:.68rem;
+
+    letter-spacing:1px;
+
+    font-weight:700;
+
+    color:#AAB7C8;
+
+}
+
+.online{
+
+    color:#00FF84;
+
+}
+
+.warning{
+
+    color:#FFD54F;
+
+}
+
+.error{
+
+    color:#FF5252;
+
+}
+
+/* ============================================= */
+
+.title{
+
+    color:#AAB7C8;
+
+    font-size:clamp(.72rem,.9vw,.82rem);
+
+    text-transform:uppercase;
+
+    letter-spacing:1.4px;
+
+    font-weight:600;
+
+    margin-bottom:10px;
 
 }
 
 .value{
 
-    color:var(--color-text);
+    color:white;
 
-    font-size:2.5rem;
+    font-size:clamp(2rem,2.4vw,2.45rem);
+
+    line-height:1.05;
 
     font-weight:800;
+
+    letter-spacing:-1px;
+
+    word-break:break-word;
 
 }
 
 .subtitle{
 
-    margin-top:12px;
+    margin-top:10px;
 
-    color:var(--color-primary);
+    color:#00E5FF;
 
-    font-size:var(--font-sm);
+    font-size:.82rem;
+
+    font-weight:600;
 
 }
 
+/* ============================================= */
+
 .icon{
 
-    width:56px;
+    width:clamp(54px,3.8vw,62px);
 
-    height:56px;
+    height:clamp(54px,3.8vw,62px);
 
-    border-radius:50%;
+    border-radius:16px;
 
     display:flex;
 
@@ -58,10 +219,119 @@
 
     align-items:center;
 
-    background:rgba(0,229,255,.08);
+    flex-shrink:0;
 
-    color:var(--color-primary);
+    font-size:clamp(1.4rem,1.6vw,1.7rem);
 
-    font-size:1.5rem;
+    color:#00E5FF;
+
+    background:
+            linear-gradient(
+                    145deg,
+                    rgba(0,229,255,.15),
+                    rgba(255,255,255,.05)
+            );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.28s;
+
+}
+
+.card:hover .icon{
+
+    transform:scale(1.06);
+
+}
+
+/* ============================================= */
+
+.trend{
+
+    margin-top:10px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    color:#00E5FF;
+
+    font-size:.78rem;
+
+    font-weight:600;
+
+}
+
+.trend small{
+
+    color:#94A3B8;
+
+    font-size:.72rem;
+
+}
+
+/* ============================================= */
+
+@keyframes borderFlow{
+
+    from{
+
+        background-position:0%;
+
+    }
+
+    to{
+
+        background-position:220%;
+
+    }
+
+}
+
+/* ============================================= */
+
+@media (max-width:1400px){
+
+    .value{
+
+        font-size:2.15rem;
+
+    }
+
+}
+
+@media (max-width:992px){
+
+    .card{
+
+        min-height:140px;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .card{
+
+        padding:16px;
+
+        min-height:130px;
+
+    }
+
+    .header{
+
+        gap:12px;
+
+    }
+
+    .value{
+
+        font-size:1.8rem;
+
+    }
 
 }
