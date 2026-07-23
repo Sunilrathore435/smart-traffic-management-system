@@ -59,7 +59,13 @@ public class DashboardStateService {
         );
 
     }
+    private double normalizeTrafficScore(double score) {
 
+        return Math.max(
+                0,
+                Math.min(100, score / 2.5)
+        );
+    }
     /**
      * Build AI decision.
      */
@@ -82,7 +88,9 @@ public class DashboardStateService {
 
                 decision.getTotalVehiclesAllowed(),
 
-                decision.getTrafficScore(),
+                normalizeTrafficScore(
+                        decision.getTrafficScore()
+                ),
 
                 decision.getReason()
 

@@ -1,57 +1,113 @@
 import {
     FaBrain,
-    FaEllipsisV
+    FaEllipsisV,
+    FaCircle,
+    FaMicrochip,
+    FaClock
 } from "react-icons/fa";
 
 import styles from "./AIInsightHeader.module.css";
 
-function AIInsightHeader({ analytics }) {
+function AIInsightHeader({
+
+                             analytics,
+                             simulation,
+                             traffic,
+                             emergency
+
+                         }) {
 
     const prediction =
-        analytics?.prediction || {};
+        analytics?.prediction ?? {};
+
+    const health =
+        analytics?.systemHealth ?? {};
 
     const confidence =
-        prediction.confidence || 0;
+        prediction.confidence ?? 0;
 
-    let status = "Learning";
-    let statusClass = styles.low;
+    const uptime =
+        health.uptime?.toFixed(2) ?? "--";
 
-    if (confidence >= 95) {
+    const systemStatus =
+        health.status ?? "OFFLINE";
 
-        status = "OPTIMAL";
-        statusClass = styles.high;
+    const stage =
+        simulation?.currentStage ?? "--";
+    const remainingTime =
+        simulation?.remainingTime ?? 0;
+    const intersection =
+        simulation?.intersectionName ??
+
+        "Main Intersection";
+
+    let status = "ANALYZING";
+
+    let statusClass = styles.medium;
+
+    if (emergency?.active){
+
+        status = "EMERGENCY";
+
+        statusClass = styles.emergency;
 
     }
-    else if (confidence >= 80) {
 
-        status = "ANALYZING";
-        statusClass = styles.medium;
+    else if(confidence>=95){
+
+        status="OPTIMAL";
+
+        statusClass=styles.high;
 
     }
 
-    return (
+    else if(confidence<60){
+
+        status="LEARNING";
+
+        statusClass=styles.low;
+
+    }
+
+    return(
 
         <header className={styles.header}>
 
             <div className={styles.left}>
 
                 <div className={styles.icon}>
-                    <FaBrain />
+
+                    <FaBrain/>
+
                 </div>
 
                 <div className={styles.info}>
 
                     <h2 className={styles.title}>
+
                         AI Traffic Optimizer
+
                     </h2>
 
-                    <div className={`${styles.subtitle} ${statusClass}`}>
+                    <p className={styles.subtitle}>
+
+                        Adaptive Traffic Intelligence Engine
+
+                    </p>
+
+                    <div className={`${styles.statusBar} ${statusClass}`}>
+
+                        <FaCircle/>
 
                         <span>{status}</span>
 
-                        <span className={styles.dot}></span>
+                        <span>•</span>
 
                         <span>{confidence}% Confidence</span>
+
+                        <span>•</span>
+
+                        <span>{intersection}</span>
 
                     </div>
 
@@ -59,12 +115,51 @@ function AIInsightHeader({ analytics }) {
 
             </div>
 
-            <button
-                className={styles.menu}
-                aria-label="More"
-            >
-                <FaEllipsisV />
-            </button>
+            <div className={styles.right}>
+
+                <div className={styles.metric}>
+
+                    <FaMicrochip/>
+
+                    <div>
+
+                        <small>Stage</small>
+
+                        <strong>{stage}</strong>
+
+                    </div>
+
+                </div>
+
+                <div className={styles.metric}>
+
+                    <FaClock/>
+
+                    <div>
+
+                        <small>Countdown</small>
+
+                        <strong>{remainingTime}s</strong>
+
+                    </div>
+
+                </div>
+
+                <div className={styles.metric}>
+
+                    <small>Uptime</small>
+
+                    <strong>{uptime}h</strong>
+
+                </div>
+
+                <button className={styles.menu}>
+
+                    <FaEllipsisV/>
+
+                </button>
+
+            </div>
 
         </header>
 

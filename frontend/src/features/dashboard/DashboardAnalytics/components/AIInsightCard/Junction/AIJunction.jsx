@@ -14,15 +14,9 @@ function AIJunction({
     // ==========================================
 
     const signalPhase =
-
         emergency?.active
-
-            ? emergency?.lane
-
-            : signal?.currentSignalPhase ??
-
-            ai?.signalPhase ??
-
+            ? emergency.lane
+            : ai?.signalPhase ??
             "NORTH_SOUTH";
 
     const northSouth =

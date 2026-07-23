@@ -1,8 +1,8 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowRight, FaHistory } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-import { historyApi } from "../../../services/api";
+import BackendSimulationEngine from "../../traffic/BackendSimulationEngine";
 import RecentEventItem from "./RecentEventItem";
 
 import styles from "./RecentEvents.module.css";
@@ -15,48 +15,29 @@ function RecentEvents() {
 
     const [loading, setLoading] = useState(true);
 
-    const loadHistory = useCallback(async () => {
+    useEffect(() => {
 
-        try {
+        const update = (state) => {
 
-            const history = await historyApi.getAll();
-
-            setEvents(history);
-
-        }
-
-        catch (error) {
-
-            console.error(
-                "Failed to load recent events",
-                error
-            );
-
-        }
-
-        finally {
+            setEvents(state.history.slice(0, 5));
 
             setLoading(false);
 
-        }
+        };
+
+        // Subscribe to backend state changes
+        BackendSimulationEngine.subscribe(update);
+
+        // Load current state immediately
+        update(BackendSimulationEngine.getState());
+
+        return () => {
+
+            BackendSimulationEngine.unsubscribe(update);
+
+        };
 
     }, []);
-
-    useEffect(() => {
-
-        loadHistory();
-
-        const timer = setInterval(
-
-            loadHistory,
-
-            5000
-
-        );
-
-        return () => clearInterval(timer);
-
-    }, [loadHistory]);
 
     return (
 
@@ -139,11 +120,8 @@ function RecentEvents() {
                                 .map(event => (
 
                                     <RecentEventItem
-
                                         key={event.simulationId}
-
                                         event={event}
-
                                     />
 
                                 ))

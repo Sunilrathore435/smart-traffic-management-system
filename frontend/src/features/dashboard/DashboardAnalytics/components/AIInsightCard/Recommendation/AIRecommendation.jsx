@@ -1,122 +1,252 @@
-import { FaTag } from "react-icons/fa";
+import {
+    FaTag,
+    FaRobot,
+    FaClock,
+    FaTrafficLight
+} from "react-icons/fa";
 
 import styles from "./AIRecommendation.module.css";
 
 function AIRecommendation({
 
                               analytics,
-
                               ai,
-
-                              emergency
+                              emergency,
+                              signal,
+                              simulation
 
                           }) {
 
-    // =====================================
-    // Active Lane
-    // =====================================
-
-    const activeLane =
+    // ==================================================
+    // Signal Phase
+    // ==================================================
+    const simulationStatus =
+        simulation?.status ??
+        (simulation?.simulationRunning ? "RUNNING" : "STOPPED");
+    const signalPhase =
 
         emergency?.active
 
-            ? emergency.lane
+            ? emergency?.lane
 
-            : ai?.selectedLane ||
+            : signal?.currentSignalPhase ??
 
-            analytics?.busiestLane ||
+            ai?.signalPhase ??
 
-            "NORTH";
+            "NORTH_SOUTH";
 
-    // =====================================
+    const phaseLabel =
+
+        signalPhase === "NORTH_SOUTH"
+
+            ? "North ↕ South"
+
+            : signalPhase === "EAST_WEST"
+
+                ? "East ↔ West"
+
+                : "All Red";
+
+    // ==================================================
     // Green Time
-    // =====================================
+    // ==================================================
 
     const greenTime =
 
         ai?.greenTime ??
 
-        Math.round(analytics?.averageGreenTime ?? 10);
+        signal?.greenTime ??
 
-    // =====================================
+        10;
+
+    // ==================================================
+    // Traffic Score
+    // ==================================================
+
+    const trafficScore =
+
+        Number(
+
+            ai?.trafficScore ??
+
+            analytics?.trafficScore ??
+
+            0
+
+        ).toFixed(1);
+
+    // ==================================================
     // Recommendation
-    // =====================================
+    // ==================================================
+    const currentPhase = signal?.currentSignalPhase ?? "NONE";
 
+    const nextPhase = ai?.signalPhase ?? "NONE";
+    const formatPhase = (phase) => {
+        switch (phase) {
+            case "NORTH_SOUTH":
+                return "North ↕ South";
+            case "EAST_WEST":
+                return "East ↔ West";
+            case "ALL_RED":
+                return "All Red";
+            default:
+                return "Unknown";
+        }
+    };
+
+    const currentPhaseLabel = formatPhase(currentPhase);
+    const nextPhaseLabel = formatPhase(nextPhase);
     const recommendation =
 
         emergency?.active
 
-            ? "Emergency Override Active"
+            ? "Emergency vehicle detected. AI has overridden the normal traffic cycle."
 
-            : ai?.reason ||
+            : ai?.reason ??
 
-            analytics?.prediction?.recommendation ||
+            "Traffic conditions are stable. AI recommends maintaining the current signal phase.";
 
-            "Traffic Flow Normal";
+    // ==================================================
+    // Confidence
+    // ==================================================
 
-    // =====================================
-    // Reason
-    // =====================================
+    const confidence =
 
-    const reason =
+        ai?.confidence ??
 
-        emergency?.active
-
-            ? `Emergency vehicle detected on ${activeLane}. AI has overridden normal optimization.`
-
-            : ai?.reason ||
-
-            "Traffic optimization running normally.";
+        100;
 
     return (
 
         <section className={styles.wrapper}>
 
-            <h2 className={styles.title}>
+            <div className={styles.header}>
 
-                {activeLane} Junction
+                <div>
 
-            </h2>
+                    <h2 className={styles.title}>
 
-            <p className={styles.description}>
+                        AI Traffic Decision
 
-                AI recommends{" "}
+                    </h2>
 
-                <strong>
+                    <p className={styles.subtitle}>
 
-                    {recommendation}
+                        Real-time adaptive signal optimization
 
-                </strong>{" "}
+                    </p>
 
-                with a green signal duration of{" "}
+                </div>
 
-                <span className={styles.seconds}>
+                <div className={styles.confidence}>
 
-                    {greenTime} sec
+                    <FaRobot />
 
-                </span>
+                    {confidence}% AI
 
-                .
-
-            </p>
-
-            <div className={styles.reasonTag}>
-
-                <FaTag />
-
-                <span>
-
-                    Reason
-
-                </span>
+                </div>
 
             </div>
 
-            <p className={styles.reason}>
+            <div className={styles.metrics}>
 
-                {reason}
+                <div className={styles.metric}>
 
-            </p>
+                    <FaTrafficLight />
+
+                    <div>
+
+                        <small>
+
+                            Current Signal
+
+                        </small>
+
+                        <strong>
+
+                            {currentPhaseLabel}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <div className={styles.metric}>
+
+                    <FaClock />
+
+                    <div>
+
+                        <small>
+
+                            Planned Green Time
+
+                        </small>
+
+                        <strong>
+
+                            {greenTime}s
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div className={styles.card}>
+
+                <div className={styles.reasonTag}>
+
+                    <FaTag />
+
+                    Next AI Decision
+
+                </div>
+
+                <p className={styles.description}>
+
+                    {nextPhaseLabel}
+
+                </p>
+
+            </div>
+
+            <div className={styles.footer}>
+
+                <div>
+
+                    <small>
+
+                        Traffic Score
+
+                    </small>
+
+                    <strong>
+
+                        {trafficScore}
+
+                    </strong>
+
+                </div>
+
+                <div>
+
+                    <small>
+
+                        Simulation
+
+                    </small>
+
+                    <strong>
+                        {simulationStatus === "RUNNING" ? "Running" : "Stopped"}
+                    </strong>
+
+                </div>
+
+            </div>
 
         </section>
 

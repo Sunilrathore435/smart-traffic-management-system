@@ -8,12 +8,10 @@ import styles from "./AIContent.module.css";
 function AIContent({
 
                        analytics,
-
                        ai,
-
                        emergency,
-
-                       signal
+                       signal,
+                       simulation
 
                    }) {
 
@@ -25,18 +23,22 @@ function AIContent({
                 analytics={analytics}
                 ai={ai}
                 emergency={emergency}
+                signal={signal}
             />
 
             <AIRecommendation
                 analytics={analytics}
                 ai={ai}
                 emergency={emergency}
+                signal={signal}
+                simulation={simulation}
             />
 
             <AIMetrics
                 analytics={analytics}
                 ai={ai}
                 emergency={emergency}
+                signal={signal}
             />
 
             <AIConfidence

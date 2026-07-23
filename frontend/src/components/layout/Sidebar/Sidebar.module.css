@@ -1,396 +1,521 @@
-/* ==========================================
-   Sidebar
-========================================== */
+/* ==========================================================
+   SIDEBAR
+========================================================== */
 
 .sidebar{
 
-    position: sticky;
+    position:sticky;
 
-    top: 0;
+    top:0;
 
-    width: 250px;
+    width:280px;
 
-    min-width: 250px;
+    min-width:280px;
 
-    height: 100vh;
+    height:100vh;
 
-    display: flex;
+    display:flex;
 
-    flex-direction: column;
+    flex-direction:column;
 
-    background: #101625;
+    background:linear-gradient(
+            180deg,
+            #0E1525,
+            #111B2E
+    );
 
-    border-right: 1px solid rgba(255,255,255,.06);
+    border-right:1px solid rgba(255,255,255,.06);
 
-    overflow-y: auto;
+    overflow-y:auto;
 
-    overflow-x: hidden;
+    overflow-x:hidden;
 
-    flex-shrink: 0;
+    scrollbar-width:thin;
+
+    scrollbar-color:rgba(255,255,255,.15) transparent;
 
 }
-
-/* ==========================================
-   Scrollbar
-========================================== */
 
 .sidebar::-webkit-scrollbar{
 
-    width: 6px;
-
-}
-
-.sidebar::-webkit-scrollbar-track{
-
-    background: transparent;
+    width:6px;
 
 }
 
 .sidebar::-webkit-scrollbar-thumb{
 
-    background: rgba(255,255,255,.08);
+    background:rgba(255,255,255,.12);
 
-    border-radius: 999px;
-
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover{
-
-    background: rgba(0,229,255,.22);
+    border-radius:999px;
 
 }
 
-/* ==========================================
-   Logo
-========================================== */
+/* ==========================================================
+   LOGO
+========================================================== */
 
 .logo{
 
-    display: flex;
+    display:flex;
 
-    align-items: center;
+    align-items:center;
 
-    gap: 14px;
+    gap:16px;
 
-    padding: 26px 22px;
+    padding:26px 22px;
 
-    border-bottom: 1px solid rgba(255,255,255,.06);
+    border-bottom:1px solid rgba(255,255,255,.06);
 
 }
 
 .logoIcon{
 
-    width: 48px;
+    width:58px;
 
-    height: 48px;
+    height:58px;
 
-    display: flex;
+    display:flex;
 
-    align-items: center;
+    justify-content:center;
 
-    justify-content: center;
+    align-items:center;
 
-    border-radius: 14px;
+    border-radius:18px;
 
-    background: rgba(0,229,255,.08);
+    background:rgba(0,229,255,.08);
 
-    border: 1px solid rgba(0,229,255,.16);
+    border:1px solid rgba(0,229,255,.18);
 
-    color: #00E5FF;
+    font-size:28px;
 
-    font-size: 22px;
-
-    box-shadow: 0 0 18px rgba(0,229,255,.08);
+    box-shadow:0 0 22px rgba(0,229,255,.12);
 
 }
 
 .logo h2{
 
-    margin: 0;
+    margin:0;
 
-    color: #FFFFFF;
+    color:#FFF;
 
-    font-size: 27px;
+    font-size:30px;
 
-    font-weight: 800;
-
-    letter-spacing: .3px;
+    font-weight:800;
 
 }
 
 .logo p{
 
-    margin-top: 4px;
+    margin-top:4px;
 
-    color: #94A3B8;
+    color:#94A3B8;
 
-    font-size: 12px;
+    font-size:12px;
 
-    line-height: 1.45;
+    line-height:1.5;
 
 }
 
-/* ==========================================
-   Navigation
-========================================== */
+/* ==========================================================
+   NAVIGATION
+========================================================== */
 
 .navigation{
 
-    flex: 1;
+    flex:1;
 
-    display: flex;
+    display:flex;
 
-    flex-direction: column;
+    flex-direction:column;
 
-    gap: 8px;
+    gap:8px;
 
-    padding: 20px 14px;
+    padding:18px 14px;
 
 }
 
-/* ==========================================
-   Links
-========================================== */
-
 .link{
 
-    height: 56px;
+    display:flex;
 
-    display: flex;
+    align-items:center;
 
-    align-items: center;
+    gap:14px;
 
-    gap: 14px;
+    height:58px;
 
-    padding: 0 16px;
+    padding:0 16px;
 
-    border-radius: 14px;
+    border-radius:16px;
 
-    text-decoration: none;
+    color:#AAB7CF;
 
-    color: #A7B4CF;
+    text-decoration:none;
 
-    font-size: 15px;
-
-    font-weight: 500;
-
-    transition: all .25s ease;
-
-    position: relative;
+    transition:.3s;
 
 }
 
 .link:hover{
 
-    color: #00E5FF;
+    background:rgba(0,229,255,.06);
 
-    background: rgba(0,229,255,.05);
+    color:#00E5FF;
 
-    transform: translateX(4px);
+    transform:translateX(5px);
 
 }
-
-/* ==========================================
-   Active Link
-========================================== */
 
 .active{
 
-    color: #00E5FF;
+    background:rgba(0,229,255,.08);
 
-    background: rgba(0,229,255,.08);
+    color:#00E5FF;
 
-    border-left: 3px solid #00E5FF;
+    border-left:3px solid #00E5FF;
 
     box-shadow:
             inset 0 0 0 1px rgba(0,229,255,.08),
-            0 0 20px rgba(0,229,255,.08);
+            0 0 18px rgba(0,229,255,.08);
 
 }
-
-/* ==========================================
-   Icon
-========================================== */
 
 .icon{
 
-    width: 38px;
+    width:42px;
 
-    height: 38px;
+    height:42px;
 
-    border-radius: 11px;
+    display:flex;
 
-    display: flex;
+    align-items:center;
 
-    justify-content: center;
+    justify-content:center;
 
-    align-items: center;
+    border-radius:12px;
 
-    background: rgba(255,255,255,.04);
+    background:rgba(255,255,255,.04);
 
-    color: inherit;
-
-    font-size: 16px;
-
-    transition: .25s;
-
-}
-
-.link:hover .icon{
-
-    background: rgba(0,229,255,.08);
-
-    transform: scale(1.05);
+    font-size:17px;
 
 }
 
 .active .icon{
 
-    background: rgba(0,229,255,.12);
+    background:rgba(0,229,255,.12);
 
 }
 
-/* ==========================================
-   Footer
-========================================== */
+.link:hover .icon{
+
+    transform:scale(1.08);
+
+}
+
+/* ==========================================================
+   FOOTER
+========================================================== */
 
 .footer{
 
-    margin-top: auto;
+    padding:20px;
 
-    padding: 22px;
+    border-top:1px solid rgba(255,255,255,.06);
 
-    border-top: 1px solid rgba(255,255,255,.06);
-
-    background: linear-gradient(
+    background:linear-gradient(
             180deg,
-            transparent,
-            rgba(255,255,255,.015)
+            rgba(255,255,255,.01),
+            rgba(255,255,255,.03)
     );
 
 }
 
-/* ==========================================
-   Footer Header
-========================================== */
+/* ==========================================================
+   AI CARD
+========================================================== */
 
-.footerHeader{
+.aiCard{
 
-    display: flex;
+    display:flex;
 
-    align-items: center;
+    align-items:center;
 
-    gap: 12px;
-
-}
-
-.footerHeader svg{
-
-    font-size: 22px;
-
-    color: #22C55E;
+    gap:16px;
 
 }
 
-.footerHeader strong{
+.aiAvatar{
 
-    display: block;
+    position:relative;
 
-    color: #FFFFFF;
+    width:64px;
 
-    font-size: 20px;
+    height:64px;
 
-    font-weight: 700;
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:rgba(0,229,255,.08);
+
+    color:#00E5FF;
+
+    font-size:28px;
 
 }
 
-.footerHeader p{
+.scanRing,
+.scanRing2{
 
-    margin-top: 4px;
+    position:absolute;
 
-    color: #94A3B8;
+    inset:-3px;
 
-    font-size: 12px;
+    border-radius:50%;
+
+    border:2px solid rgba(0,229,255,.20);
 
 }
 
-/* ==========================================
-   Status
-========================================== */
+.scanRing{
+
+    animation:scan 2s linear infinite;
+
+}
+
+.scanRing2{
+
+    animation:scan 2s linear infinite 1s;
+
+}
+
+.aiInfo h3{
+
+    margin:0;
+
+    color:#FFF;
+
+    font-size:18px;
+
+}
+
+.aiInfo p{
+
+    margin-top:4px;
+
+    color:#94A3B8;
+
+    font-size:12px;
+
+}
+
+/* ==========================================================
+   STATUS
+========================================================== */
 
 .status{
 
-    display: flex;
+    display:flex;
 
-    align-items: center;
+    align-items:center;
 
-    gap: 8px;
+    gap:8px;
 
-    margin-top: 16px;
+    margin-top:18px;
 
-    color: #22C55E;
+    color:#22C55E;
 
-    font-size: 14px;
-
-    font-weight: 600;
+    font-weight:600;
 
 }
 
 .status svg{
 
-    font-size: 9px;
+    font-size:10px;
 
-    animation: pulse 2s infinite;
+    animation:pulse 2s infinite;
 
 }
 
-/* ==========================================
-   Tech Stack
-========================================== */
+/* ==========================================================
+   MESSAGE
+========================================================== */
+
+.aiMessage{
+
+    margin-top:18px;
+
+    padding:14px;
+
+    border-radius:14px;
+
+    background:rgba(0,229,255,.05);
+
+    border:1px solid rgba(0,229,255,.08);
+
+    color:#D6E4F5;
+
+    font-size:13px;
+
+    line-height:1.6;
+
+    font-style:italic;
+
+}
+
+/* ==========================================================
+   METRICS
+========================================================== */
+
+.metrics{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+    margin-top:20px;
+
+}
+
+.metrics div{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.04);
+
+}
+
+.metrics svg{
+
+    color:#00E5FF;
+
+}
+
+.metrics span{
+
+    flex:1;
+
+    color:#94A3B8;
+
+    font-size:13px;
+
+}
+
+.metrics strong{
+
+    color:#FFF;
+
+    font-size:13px;
+
+}
+
+/* ==========================================================
+   AI STATS
+========================================================== */
+
+.stats{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:12px;
+
+    margin-top:18px;
+
+}
+
+.stats div{
+
+    padding:14px;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.04);
+
+    text-align:center;
+
+}
+
+.stats span{
+
+    display:block;
+
+    color:#94A3B8;
+
+    font-size:12px;
+
+}
+
+.stats strong{
+
+    display:block;
+
+    margin-top:8px;
+
+    color:#00E5FF;
+
+    font-size:18px;
+
+}
+
+/* ==========================================================
+   TECH STACK
+========================================================== */
 
 .techStack{
 
-    display: flex;
+    display:flex;
 
-    flex-wrap: wrap;
+    flex-wrap:wrap;
 
-    gap: 8px;
+    gap:8px;
 
-    margin-top: 18px;
+    margin-top:18px;
 
 }
 
 .techStack span{
 
-    padding: 6px 11px;
+    padding:7px 12px;
 
-    border-radius: 999px;
+    border-radius:999px;
 
-    background: rgba(255,255,255,.05);
+    background:rgba(255,255,255,.04);
 
-    border: 1px solid rgba(255,255,255,.04);
+    color:#B8C6DD;
 
-    color: #9FB0C9;
+    font-size:11px;
 
-    font-size: 11px;
-
-    font-weight: 600;
-
-    transition: .25s;
+    transition:.3s;
 
 }
 
 .techStack span:hover{
 
-    background: rgba(0,229,255,.08);
+    background:rgba(0,229,255,.08);
 
-    color: #00E5FF;
+    color:#00E5FF;
 
 }
 
-/* ==========================================
-   Live Pulse
-========================================== */
+/* ==========================================================
+   ANIMATIONS
+========================================================== */
 
 @keyframes pulse{
 
@@ -398,21 +523,57 @@
 
         opacity:1;
 
+        transform:scale(1);
+
     }
 
     50%{
 
-        opacity:.35;
+        opacity:.5;
+
+        transform:scale(1.35);
 
     }
 
 }
 
-/* ==========================================
-   Responsive
-========================================== */
+@keyframes scan{
 
-@media (max-width:1200px){
+    from{
+
+        transform:scale(.9);
+
+        opacity:1;
+
+    }
+
+    to{
+
+        transform:scale(1.45);
+
+        opacity:0;
+
+    }
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media(max-width:1200px){
+
+    .sidebar{
+
+        width:240px;
+
+        min-width:240px;
+
+    }
+
+}
+
+@media(max-width:900px){
 
     .sidebar{
 

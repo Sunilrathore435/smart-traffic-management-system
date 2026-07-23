@@ -18,32 +18,41 @@ function OverviewCards({
         {
             title: "Vehicles Passed",
             value: analytics.totalVehiclesProcessed ?? 0,
-            subtitle: "Today",
-            icon: <FaCar />
+            subtitle: "Processed Today",
+            badge: "LIVE",
+            icon: <FaCar />,
+            color: styles.blue
         },
 
         {
             title: "Congestion",
             value: `${analytics.congestion ?? 0}%`,
-            subtitle: "Live Queue",
-            icon: <FaTrafficLight />
+            subtitle: "Current Traffic",
+            badge: "REAL-TIME",
+            icon: <FaTrafficLight />,
+            color: styles.orange
         },
 
         {
             title: "AI Efficiency",
             value: `${analytics.fuelSaving ?? 0}%`,
-            subtitle: "Optimization",
-            icon: <FaBrain />
+            subtitle: "Traffic Optimization",
+            badge: "AI",
+            icon: <FaBrain />,
+            color: styles.green
         },
 
         {
             title: "Emergencies",
             value: analytics.emergencyVehiclesHandled ?? 0,
-            subtitle: "Handled",
-            icon: <FaAmbulance />
+            subtitle: "Priority Vehicles",
+            badge: "SAFE",
+            icon: <FaAmbulance />,
+            color: styles.red
         }
 
     ];
+    
 
     return (
 
@@ -55,36 +64,42 @@ function OverviewCards({
 
                     <article
                         key={card.title}
-                        className={styles.card}
+                        className={`${styles.card} ${card.color}`}
                     >
 
-                        <div className={styles.icon}>
+                        <div className={styles.top}>
 
-                            {card.icon}
+                            <div className={styles.icon}>
 
-                        </div>
+                                {card.icon}
 
-                        <div className={styles.info}>
+                            </div>
 
-                            <h2>
+                            <span className={styles.badge}>
 
-                                {card.value}
-
-                            </h2>
-
-                            <span className={styles.title}>
-
-                                {card.title}
+                                {card.badge}
 
                             </span>
 
-                            <small className={styles.subtitle}>
-
-                                {card.subtitle}
-
-                            </small>
-
                         </div>
+
+                        <h2 className={styles.value}>
+
+                            {card.value}
+
+                        </h2>
+
+                        <h3 className={styles.title}>
+
+                            {card.title}
+
+                        </h3>
+
+                        <p className={styles.subtitle}>
+
+                            {card.subtitle}
+
+                        </p>
 
                     </article>
 

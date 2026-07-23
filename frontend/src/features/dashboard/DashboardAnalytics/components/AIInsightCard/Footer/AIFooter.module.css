@@ -1,266 +1,122 @@
-/* ==========================
-   Footer
-========================== */
-
 .footer{
 
-    display:flex;
+    display:grid;
 
-    align-items:center;
+    grid-template-columns:repeat(6,1fr);
 
-    justify-content:space-between;
+    gap:18px;
 
     margin-top:24px;
 
-    padding:clamp(18px,1.5vw,24px);
+}
+
+.card{
+
+    padding:18px;
 
     border-radius:18px;
 
-    border:1px solid rgba(255,255,255,.07);
-
     background:linear-gradient(
+
             180deg,
-            rgba(255,255,255,.025),
-            rgba(255,255,255,.01)
+
+            rgba(255,255,255,.04),
+
+            rgba(255,255,255,.02)
+
     );
 
-    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.07);
 
     transition:.3s;
 
 }
 
-.footer:hover{
+.card:hover{
 
-    border-color:rgba(0,229,255,.14);
+    transform:translateY(-3px);
 
-    box-shadow:0 12px 28px rgba(0,229,255,.06);
+    border-color:rgba(0,229,255,.2);
 
-}
+    box-shadow:
 
-/* ==========================
-   Item
-========================== */
-
-.item{
-
-    flex:1;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    transition:.25s;
+            0 10px 24px rgba(0,229,255,.08);
 
 }
-
-.item:hover{
-
-    transform:translateY(-2px);
-
-}
-
-/* ==========================
-   Icon
-========================== */
 
 .icon{
 
-    width:44px;
-
-    height:44px;
-
-    border-radius:14px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    background:rgba(0,229,255,.08);
-
-    border:1px solid rgba(0,229,255,.14);
-
     color:#00E5FF;
 
-    font-size:18px;
+    font-size:22px;
 
-    transition:.3s;
-
-}
-
-.item:hover .icon{
-
-    transform:scale(1.08);
-
-    box-shadow:
-            0 0 14px rgba(0,229,255,.16),
-            0 0 24px rgba(0,229,255,.06);
+    margin-bottom:14px;
 
 }
 
-/* ==========================
-   Text
-========================== */
+.card small{
 
-.label{
-
-    margin:0;
+    display:block;
 
     color:#94A3B8;
 
-    font-size:.82rem;
+    font-size:.78rem;
 
-    font-weight:500;
+    margin-bottom:6px;
 
-}
-
-.value{
-
-    margin-top:4px;
-
-    color:#FFFFFF;
-
-    font-size:clamp(1.2rem,1.6vw,1.5rem);
-
-    font-weight:700;
-
-    line-height:1.2;
+    text-transform:uppercase;
 
 }
 
-.status{
+.card strong{
 
-    display:flex;
+    color:#FFF;
 
-    align-items:center;
-
-    gap:8px;
-
-    margin-top:4px;
-
-    color:#22C55E;
-
-    font-size:1.1rem;
+    font-size:1rem;
 
     font-weight:700;
 
 }
-
-/* ==========================
-   Divider
-========================== */
-
-.divider{
-
-    width:1px;
-
-    height:48px;
-
-    margin:0 18px;
-
-    background:linear-gradient(
-            transparent,
-            rgba(255,255,255,.12),
-            transparent
-    );
-
-}
-
-/* ==========================
-   Live Animation
-========================== */
 
 .live{
 
-    animation:livePulse 1.8s infinite;
+    color:#22C55E;
 
 }
 
-@keyframes livePulse{
-
-    0%{
-
-        transform:scale(.95);
-
-        opacity:.7;
-
-    }
-
-    50%{
-
-        transform:scale(1.1);
-
-        opacity:1;
-
-    }
-
-    100%{
-
-        transform:scale(.95);
-
-        opacity:.7;
-
-    }
-
-}
-
-/* ==========================
-   Responsive
-========================== */
-
-@media (max-width:900px){
-
-    .footer{
-
-        flex-direction:column;
-
-        align-items:flex-start;
-
-        gap:18px;
-
-    }
-
-    .divider{
-
-        display:none;
-
-    }
-
-    .item{
-
-        width:100%;
-
-    }
-
-}
 .emergency{
 
     color:#FF4D4F;
 
-    font-weight:700;
-
-    text-shadow:
-            0 0 10px rgba(255,77,79,.6);
-
-    animation:emergencyBlink 1s infinite;
+    animation:blink 1s infinite;
 
 }
 
-@keyframes emergencyBlink{
-
-    0%,100%{
-
-        opacity:1;
-
-    }
+@keyframes blink{
 
     50%{
 
         opacity:.45;
+
+    }
+
+}
+
+@media(max-width:1400px){
+
+    .footer{
+
+        grid-template-columns:repeat(3,1fr);
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .footer{
+
+        grid-template-columns:1fr;
 
     }
 

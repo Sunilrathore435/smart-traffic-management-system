@@ -4,7 +4,7 @@
 
     flex-direction:column;
 
-    gap:18px;
+    gap:14px;
 
 }
 
@@ -32,7 +32,7 @@
 
 .card{
 
-    padding:18px;
+    padding:10px;
 
     border-radius:var(--radius-lg);
 
@@ -44,7 +44,7 @@
 
     flex-direction:column;
 
-    gap:10px;
+    gap:5px;
 
     transition:var(--transition-normal);
 

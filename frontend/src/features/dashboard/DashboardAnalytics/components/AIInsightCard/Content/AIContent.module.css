@@ -1,54 +1,79 @@
 .content{
 
-    display:grid;
+    display:flex;
 
     grid-template-columns:
-        minmax(180px,220px)
-        minmax(0,1.8fr)
-        minmax(260px,320px)
-        minmax(130px,170px);
+
+        210px
+        minmax(440px,1.25fr)
+        390px
+        220px;
+
+    gap:16px;
 
     align-items:start;
 
-    gap:clamp(16px,2vw,28px);
-
-    width:100%;
-
-    margin:16px 0;
-
 }
 
-/* ===========================
-   Large Desktop
-=========================== */
+/* ===================================
+   Large Desktop (1600px)
+=================================== */
 
 @media (max-width:1600px){
 
     .content{
 
         grid-template-columns:
-            180px
-            minmax(0,1.7fr)
-            280px
-            150px;
+
+            190px
+
+            minmax(460px,1.45fr)
+
+            330px
+
+            210px;
+
+        gap:18px;
 
     }
 
 }
 
-/* ===========================
-   Laptop
-=========================== */
+/* ===================================
+   Laptop (1400px)
+=================================== */
 
 @media (max-width:1400px){
 
     .content{
 
         grid-template-columns:
-            160px
-            minmax(0,1fr)
-            260px
-            140px;
+
+            170px
+
+            minmax(420px,1fr)
+
+            300px
+
+            190px;
+
+        gap:16px;
+
+    }
+
+}
+
+/* ===================================
+   Small Laptop
+=================================== */
+
+@media (max-width:1200px){
+
+    .content{
+
+        grid-template-columns:
+
+            repeat(2,minmax(0,1fr));
 
         gap:20px;
 
@@ -56,17 +81,17 @@
 
 }
 
-/* ===========================
+/* ===================================
    Tablet
-=========================== */
+=================================== */
 
-@media (max-width:1200px){
+@media (max-width:900px){
 
     .content{
 
         grid-template-columns:1fr;
 
-        gap:22px;
+        gap:18px;
 
     }
 

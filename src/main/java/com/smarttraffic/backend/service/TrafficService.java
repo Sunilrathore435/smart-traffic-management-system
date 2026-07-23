@@ -182,6 +182,8 @@ public class TrafficService {
         } else {
 
             stateMachine.tick();
+            // Notify frontend every second
+            publisher.publishTrafficUpdate("REFRESH");
 
             if (!stateMachine.isCycleRunning()) {
 
@@ -199,9 +201,9 @@ public class TrafficService {
                             result.getVehiclesPassed()
                     );
 
-                    publisher.publishTrafficUpdate(
-                            buildLiveUpdate(record)
-                    );
+//                    publisher.publishTrafficUpdate(
+//                            buildLiveUpdate(record)
+//                    );
                 }
 
                 // ALWAYS clear emergency after the cycle finishes

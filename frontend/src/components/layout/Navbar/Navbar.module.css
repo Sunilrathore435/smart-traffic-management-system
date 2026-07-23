@@ -1,48 +1,366 @@
-.navbar{
+/* ==========================================================
+   NAVBAR
+========================================================== */
+
+.navbar {
+
+    position: relative;
+
+    overflow: hidden;
+
+    display: grid;
+
+    grid-template-columns: 380px 1fr 200px;
+
+    align-items: center;
+
+    gap: 20px;
+
+    height: 100px;
+
+    padding: 0 24px;
+
+    border-radius: 18px;
+
+    background:
+            linear-gradient(
+                    135deg,
+                    #101827,
+                    #0B1220
+            );
+
+    border: 1px solid rgba(255,255,255,.06);
+
+    box-shadow:
+            0 20px 45px rgba(0,0,0,.35),
+            inset 0 1px 0 rgba(255,255,255,.05);
+
+}
+
+/* ==========================================================
+   GRID BACKGROUND
+========================================================== */
+
+.navbar::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    pointer-events:none;
+
+    opacity:.15;
+
+    background:
+
+            linear-gradient(
+                    rgba(255,255,255,.04) 1px,
+                    transparent 1px
+            ),
+
+            linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.04) 1px,
+                    transparent 1px
+            );
+
+    background-size:36px 36px;
+
+}
+
+/* ==========================================================
+   SCAN BAR
+========================================================== */
+
+.navbar::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+            linear-gradient(
+                    110deg,
+                    transparent 30%,
+                    rgba(0,229,255,.08) 50%,
+                    transparent 70%
+            );
+
+    transform:translateX(-120%);
+
+    animation:navbarScan 8s linear infinite;
+
+}
+
+/* ==========================================================
+   LEFT
+========================================================== */
+
+.left{
 
     display:flex;
-
-    justify-content:space-between;
 
     align-items:center;
-
-    padding:28px 36px;
-
-    border-bottom:1px solid var(--color-border);
-
-    background:var(--background-surface);
-
-}
-
-.title{
-
-    font-size:2rem;
-
-    color:var(--color-text);
-
-    font-weight:700;
-
-}
-
-.subtitle{
-
-    margin-top:6px;
-
-    color:var(--color-text-secondary);
-
-}
-
-.statusContainer{
-
-    display:flex;
 
     gap:18px;
 
+    z-index:5;
+
+}
+
+/* ==========================================================
+   AI RADAR
+========================================================== */
+
+.aiRadar{
+
+    position:relative;
+
+    width:90px;
+
+    height:90px;
+
+    display:flex;
+
+    justify-content:center;
+
     align-items:center;
 
 }
 
-.status{
+/* ==========================================================
+   RADAR RINGS
+========================================================== */
+
+.outerRing,
+.middleRing,
+.innerRing{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    border:1px solid rgba(0,229,255,.18);
+
+}
+
+.outerRing{
+
+    width:90px;
+
+    height:90px;
+
+    animation:rotateClockwise 12s linear infinite;
+
+}
+
+.middleRing{
+
+    width:68px;
+
+    height:68px;
+
+    border-style:dashed;
+
+    animation:rotateAnti 9s linear infinite;
+
+}
+
+.innerRing{
+
+    width:46px;
+
+    height:46px;
+
+    opacity:.6;
+
+}
+
+/* ==========================================================
+   RADAR SCAN
+========================================================== */
+
+.scanLine{
+
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    width:38px;
+    height:3px;
+
+    background:linear-gradient(
+            90deg,
+            #00E5FF 0%,
+            rgba(0,229,255,.85) 35%,
+            rgba(0,229,255,.35) 70%,
+            transparent 100%
+    );
+
+    transform-origin:0% 50%;
+    transform:translateY(-50%) rotate(0deg);
+
+    border-radius:10px;
+
+    box-shadow:
+            0 0 8px #00E5FF,
+            0 0 18px rgba(0,229,255,.45);
+
+    animation:radarSweep 2.8s linear infinite;
+
+    z-index:4;
+
+}
+
+/* ==========================================================
+   RADAR DOTS
+========================================================== */
+
+.dot1,
+.dot2,
+.dot3{
+
+    position:absolute;
+
+    width:6px;
+
+    height:6px;
+
+    border-radius:50%;
+
+    background:#00E5FF;
+
+    box-shadow:
+
+            0 0 8px #00E5FF;
+
+}
+
+.dot1{
+
+    top:10px;
+
+    right:18px;
+
+}
+
+.dot2{
+
+    bottom:14px;
+
+    left:16px;
+
+}
+
+.dot3{
+
+    top:42px;
+
+    right:6px;
+
+}
+
+/* ==========================================================
+   AI CORE
+========================================================== */
+
+.aiCore{
+
+    width:34px;
+
+    height:34px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-size:17px;
+
+    z-index:5;
+
+    transition:.35s;
+
+}
+
+.coreNormal{
+
+    background:
+
+            linear-gradient(
+                    180deg,
+                    #00E5FF,
+                    #008DFF
+            );
+
+    box-shadow:
+
+            0 0 18px rgba(0,229,255,.55);
+
+}
+
+.coreEmergency{
+
+    background:
+
+            linear-gradient(
+                    180deg,
+                    #EF4444,
+                    #B91C1C
+            );
+
+    box-shadow:
+
+            0 0 18px rgba(239,68,68,.65);
+
+}
+
+/* ==========================================================
+   TITLE
+========================================================== */
+
+.titleSection{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:0px;
+
+}
+
+.titleSection h1{
+
+    margin:0;
+
+    color:#FFFFFF;
+
+    font-size:1.45rem;
+
+    font-weight:800;
+
+    line-height:1.1;
+
+    letter-spacing:-0.4px;
+
+}
+
+/* ==========================================================
+   AI STATUS
+========================================================== */
+
+.aiStatus{
 
     display:flex;
 
@@ -50,22 +368,1164 @@
 
     gap:8px;
 
-    padding:10px 18px;
+    color:#A8BBD3;
 
-    border-radius:var(--radius-md);
+    font-size:.82rem;
 
-    background:var(--background-card);
-
-    color:var(--status-online);
+    font-weight:600;
 
 }
 
-.clock{
+.onlineDot,
+.offlineDot{
 
-    font-size:1.1rem;
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+}
+
+.onlineDot{
+
+    background:#22C55E;
+
+    box-shadow:
+
+            0 0 10px #22C55E;
+
+}
+
+.offlineDot{
+
+    background:#EF4444;
+
+    box-shadow:
+
+            0 0 10px #EF4444;
+
+}
+
+/* ==========================================================
+   TICKER
+========================================================== */
+
+.ticker{
+
+    margin-top:0px;
+
+    min-height:18px;
+
+    color:#9FB3C8;
+
+    font-size:.80rem;
+
+    animation:tickerFade .35s ease;
+
+}
+/* ==========================================================
+   CENTER METRICS
+========================================================== */
+
+.metrics{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:12px;
+
+    z-index:5;
+
+}
+
+/* ==========================================================
+   METRIC CARD
+========================================================== */
+
+.metric{
+
+    position:relative;
+
+    overflow:hidden;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    min-width:150px;
+
+    height:64px;
+
+    padding:0 18px;
+
+    border-radius:16px;
+
+    background:
+            linear-gradient(
+                    180deg,
+                    rgba(255,255,255,.06),
+                    rgba(255,255,255,.03)
+            );
+
+    border:1px solid rgba(255,255,255,.07);
+
+    backdrop-filter:blur(12px);
+
+    transition:
+            transform .35s,
+            box-shadow .35s,
+            border-color .35s;
+
+    cursor:pointer;
+
+}
+
+/* Shine Effect */
+
+.metric::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+            linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,.12),
+                    transparent
+            );
+
+    transform:translateX(-130%);
+
+}
+
+.metric:hover::before{
+
+    animation:metricShine .9s linear;
+
+}
+
+/* Hover */
+
+.metric:hover{
+
+    transform:
+            translateY(-5px)
+            scale(1.03);
+
+    border-color:
+
+            rgba(0,229,255,.28);
+
+    box-shadow:
+
+            0 12px 28px rgba(0,229,255,.15);
+
+}
+
+/* ==========================================================
+   METRIC ICON
+========================================================== */
+
+.metric svg{
+
+    font-size:22px;
+
+    color:#00E5FF;
+
+    flex-shrink:0;
+
+    transition:.35s;
+
+}
+
+.metric:hover svg{
+
+    transform:scale(1.12);
+
+    color:#5CEEFF;
+
+}
+
+/* ==========================================================
+   METRIC TEXT
+========================================================== */
+
+.metric strong{
+
+    display:block;
+
+    color:#FFFFFF;
+
+    font-size:1rem;
 
     font-weight:700;
 
-    color:var(--color-primary);
+    letter-spacing:.2px;
 
 }
+
+.metric span{
+
+    display:block;
+
+    margin-top:2px;
+
+    color:#9FB3C8;
+
+    font-size:.73rem;
+
+    letter-spacing:.3px;
+
+}
+
+/* ==========================================================
+   RIGHT SECTION
+========================================================== */
+
+.right{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    align-items:center;
+
+    z-index:5;
+
+}
+
+/* ==========================================================
+   CLOCK CARD
+========================================================== */
+
+.clockCard{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    gap:8px;
+
+    min-width:180px;
+
+    padding:14px 18px;
+
+    border-radius:16px;
+
+    background:
+            linear-gradient(
+                    180deg,
+                    rgba(255,255,255,.06),
+                    rgba(255,255,255,.03)
+            );
+
+    border:1px solid rgba(255,255,255,.07);
+
+    backdrop-filter:blur(12px);
+
+    transition:.35s;
+
+}
+
+.clockCard:hover{
+
+    transform:translateY(-3px);
+
+    border-color:
+
+            rgba(0,229,255,.25);
+
+    box-shadow:
+
+            0 10px 24px rgba(0,229,255,.12);
+
+}
+
+/* ==========================================================
+   CLOCK HEADER
+========================================================== */
+
+.clockHeader{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:#8CA9C5;
+
+    font-size:.72rem;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    text-transform:uppercase;
+
+}
+
+.clockHeader svg{
+
+    color:#00E5FF;
+
+    font-size:16px;
+
+}
+
+/* ==========================================================
+   TIME
+========================================================== */
+
+.clockCard strong{
+
+    color:#FFFFFF;
+
+    font-size:1.05rem;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    font-family:
+
+            "Consolas",
+
+            "Courier New",
+
+            monospace;
+
+}
+
+/* ==========================================================
+   BACKEND STATUS
+========================================================== */
+
+.backendOnline,
+.backendOffline{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    width:max-content;
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    font-size:.72rem;
+
+    font-weight:700;
+
+    letter-spacing:.5px;
+
+}
+
+/* ONLINE */
+
+.backendOnline{
+
+    color:#22C55E;
+
+    background:
+
+            rgba(34,197,94,.12);
+
+    border:
+
+            1px solid rgba(34,197,94,.28);
+
+}
+
+/* OFFLINE */
+
+.backendOffline{
+
+    color:#EF4444;
+
+    background:
+
+            rgba(239,68,68,.12);
+
+    border:
+
+            1px solid rgba(239,68,68,.28);
+
+}
+
+/* ==========================================================
+   STATUS DOTS
+========================================================== */
+
+.statusDotOnline,
+.statusDotOffline{
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+}
+
+.statusDotOnline{
+
+    background:#22C55E;
+
+    box-shadow:
+
+            0 0 8px #22C55E,
+
+            0 0 16px rgba(34,197,94,.6);
+
+    animation:onlinePulse 2s infinite;
+
+}
+
+.statusDotOffline{
+
+    background:#EF4444;
+
+    box-shadow:
+
+            0 0 8px #EF4444;
+
+}
+
+/* ==========================================================
+   SPECIAL METRIC COLORS
+========================================================== */
+
+.metric:nth-child(1) svg{
+
+    color:#00E5FF;
+
+}
+
+.metric:nth-child(2) svg{
+
+    color:#4ADE80;
+
+}
+
+.metric:nth-child(3) svg{
+
+    color:#A855F7;
+
+}
+
+.metric:nth-child(4) svg{
+
+    color:#EF4444;
+
+}
+/* ==========================================================
+   FLOATING PARTICLES
+========================================================== */
+
+.particle1,
+.particle2,
+.particle3,
+.particle4,
+.particle5,
+.particle6{
+
+    position:absolute;
+
+    width:4px;
+
+    height:4px;
+
+    border-radius:50%;
+
+    background:#00E5FF;
+
+    opacity:.45;
+
+    pointer-events:none;
+
+    box-shadow:0 0 10px #00E5FF;
+
+}
+
+/* Particle Positions */
+
+.particle1{
+
+    top:18%;
+
+    left:14%;
+
+    animation:floatParticle1 8s linear infinite;
+
+}
+
+.particle2{
+
+    top:72%;
+
+    left:28%;
+
+    animation:floatParticle2 11s linear infinite;
+
+}
+
+.particle3{
+
+    top:24%;
+
+    left:54%;
+
+    animation:floatParticle3 9s linear infinite;
+
+}
+
+.particle4{
+
+    top:70%;
+
+    right:26%;
+
+    animation:floatParticle4 12s linear infinite;
+
+}
+
+.particle5{
+
+    top:32%;
+
+    right:12%;
+
+    animation:floatParticle5 10s linear infinite;
+
+}
+
+.particle6{
+
+    bottom:18%;
+
+    right:4%;
+
+    animation:floatParticle6 14s linear infinite;
+
+}
+
+/* ==========================================================
+   EMERGENCY MODE
+========================================================== */
+
+.emergencyMode{
+
+    animation:emergencyGlow 1.6s ease-in-out infinite;
+
+}
+
+.emergencyMode .outerRing,
+.emergencyMode .middleRing,
+.emergencyMode .innerRing{
+
+    border-color:rgba(239,68,68,.45);
+
+}
+
+.emergencyMode .scanLine{
+
+    background:
+            linear-gradient(
+                    90deg,
+                    transparent,
+                    #EF4444,
+                    rgba(239,68,68,.18)
+            );
+
+    box-shadow:0 0 14px #EF4444;
+
+}
+
+.emergencyMode .dot1,
+.emergencyMode .dot2,
+.emergencyMode .dot3{
+
+    background:#EF4444;
+
+    box-shadow:0 0 12px #EF4444;
+
+}
+
+/* ==========================================================
+   ANIMATIONS
+========================================================== */
+
+/* Navbar Scan */
+
+@keyframes navbarScan{
+
+    from{
+
+        transform:translateX(-120%);
+
+    }
+
+    to{
+
+        transform:translateX(120%);
+
+    }
+
+}
+
+/* Radar Rings */
+
+@keyframes rotateClockwise{
+
+    from{
+
+        transform:rotate(0deg);
+
+    }
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+@keyframes rotateAnti{
+
+    from{
+
+        transform:rotate(360deg);
+
+    }
+
+    to{
+
+        transform:rotate(0deg);
+
+    }
+
+}
+
+/* Radar Sweep */
+
+@keyframes radarSweep{
+
+    from{
+
+        transform:rotate(0deg);
+
+    }
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+/* Ticker */
+
+@keyframes tickerFade{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(6px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* Online Pulse */
+
+@keyframes onlinePulse{
+
+    0%,
+    100%{
+
+        box-shadow:
+
+                0 0 6px rgba(34,197,94,.30);
+
+    }
+
+    50%{
+
+        box-shadow:
+
+                0 0 18px rgba(34,197,94,.90);
+
+    }
+
+}
+
+/* Metric Shine */
+
+@keyframes metricShine{
+
+    from{
+
+        transform:translateX(-120%);
+
+    }
+
+    to{
+
+        transform:translateX(180%);
+
+    }
+
+}
+
+/* Emergency Glow */
+
+@keyframes emergencyGlow{
+
+    0%,
+    100%{
+
+        box-shadow:
+
+                0 18px 42px rgba(0,0,0,.35),
+
+                0 0 0 rgba(239,68,68,0),
+
+                inset 0 1px 0 rgba(255,255,255,.05);
+
+    }
+
+    50%{
+
+        box-shadow:
+
+                0 18px 42px rgba(0,0,0,.35),
+
+                0 0 26px rgba(239,68,68,.40),
+
+                inset 0 1px 0 rgba(255,255,255,.05);
+
+    }
+
+}
+
+/* ==========================================================
+   PARTICLE ANIMATIONS
+========================================================== */
+
+@keyframes floatParticle1{
+
+    0%{transform:translate(0,0);}
+    50%{transform:translate(16px,-12px);}
+    100%{transform:translate(0,0);}
+
+}
+
+@keyframes floatParticle2{
+
+    0%{transform:translate(0,0);}
+    50%{transform:translate(-12px,-16px);}
+    100%{transform:translate(0,0);}
+
+}
+
+@keyframes floatParticle3{
+
+    0%{transform:translate(0,0);}
+    50%{transform:translate(10px,14px);}
+    100%{transform:translate(0,0);}
+
+}
+
+@keyframes floatParticle4{
+
+    0%{transform:translate(0,0);}
+    50%{transform:translate(-14px,10px);}
+    100%{transform:translate(0,0);}
+
+}
+
+@keyframes floatParticle5{
+
+    0%{transform:translate(0,0);}
+    50%{transform:translate(12px,-10px);}
+    100%{transform:translate(0,0);}
+
+}
+
+@keyframes floatParticle6{
+
+    0%{transform:translate(0,0);}
+    50%{transform:translate(-10px,12px);}
+    100%{transform:translate(0,0);}
+
+}
+/* ==========================================================
+   RESPONSIVE DESIGN
+========================================================== */
+
+/* =======================
+   Large Desktop
+======================= */
+
+@media (max-width: 1700px){
+
+    .navbar{
+
+        grid-template-columns:
+            360px
+            1fr
+            190px;
+
+    }
+
+    .metric{
+
+        min-width:140px;
+
+        padding:0 16px;
+
+    }
+
+}
+
+/* =======================
+   Desktop
+======================= */
+
+@media (max-width:1500px){
+
+    .navbar{
+
+        grid-template-columns:
+            330px
+            1fr
+            180px;
+
+        gap:16px;
+
+    }
+
+    .titleSection h1{
+
+        font-size:1.3rem;
+
+    }
+
+    .metric{
+
+        min-width:130px;
+
+        height:60px;
+
+        padding:0 15px;
+
+    }
+
+    .metric strong{
+
+        font-size:.92rem;
+
+    }
+
+    .metric span{
+
+        font-size:.68rem;
+
+    }
+
+}
+
+/* =======================
+   Laptop
+======================= */
+
+@media (max-width:1300px){
+
+    .navbar{
+
+        grid-template-columns:1fr;
+
+        height:auto;
+
+        padding:20px;
+
+        gap:20px;
+
+    }
+
+    .left{
+
+        justify-content:center;
+
+    }
+
+    .metrics{
+
+        flex-wrap:wrap;
+
+        justify-content:center;
+
+    }
+
+    .right{
+
+        justify-content:center;
+
+    }
+
+    .clockCard{
+
+        min-width:220px;
+
+    }
+
+}
+
+/* =======================
+   Tablet
+======================= */
+
+@media (max-width:900px){
+
+    .left{
+
+        flex-direction:column;
+
+        text-align:center;
+
+    }
+
+    .titleSection{
+
+        align-items:center;
+
+    }
+
+    .metrics{
+
+        display:grid;
+
+        grid-template-columns:
+
+            repeat(2,minmax(160px,1fr));
+
+        gap:14px;
+
+        width:100%;
+
+    }
+
+    .metric{
+
+        width:100%;
+
+    }
+
+}
+
+/* =======================
+   Mobile
+======================= */
+
+@media (max-width:650px){
+
+    .navbar{
+
+        padding:18px 14px;
+
+    }
+
+    .titleSection h1{
+
+        font-size:1.15rem;
+
+        line-height:1.25;
+
+    }
+
+    .ticker{
+
+        text-align:center;
+
+    }
+
+    .metrics{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .metric{
+
+        min-width:100%;
+
+        justify-content:flex-start;
+
+    }
+
+    .clockCard{
+
+        width:100%;
+
+        align-items:center;
+
+        text-align:center;
+
+    }
+
+}
+
+/* =======================
+   Small Mobile
+======================= */
+
+@media (max-width:420px){
+
+    .aiRadar{
+
+        width:72px;
+
+        height:72px;
+
+    }
+
+    .outerRing{
+
+        width:72px;
+
+        height:72px;
+
+    }
+
+    .middleRing{
+
+        width:56px;
+
+        height:56px;
+
+    }
+
+    .innerRing{
+
+        width:38px;
+
+        height:38px;
+
+    }
+
+    .titleSection h1{
+
+        font-size:1rem;
+
+    }
+
+    .clockCard strong{
+
+        font-size:.9rem;
+
+    }
+
+}
+
+/* ==========================================================
+   SMOOTH TRANSITIONS
+========================================================== */
+
+.metric,
+.clockCard,
+.aiCore,
+.scanLine,
+.outerRing,
+.middleRing,
+.innerRing,
+.dot1,
+.dot2,
+.dot3{
+
+    transition:
+
+            all .35s ease;
+
+}
+
+/* ==========================================================
+   PERFORMANCE
+========================================================== */
+
+.navbar::before,
+.outerRing,
+.middleRing,
+.scanLine,
+.metric,
+.aiCore,
+.particle1,
+.particle2,
+.particle3,
+.particle4,
+.particle5,
+.particle6{
+
+    will-change:
+
+            transform,
+            opacity;
+
+    transform:translateZ(0);
+
+    backface-visibility:hidden;
+
+}
+
+/* ==========================================================
+   ACCESSIBILITY
+========================================================== */
+
+.metric:focus-visible,
+.clockCard:focus-visible{
+
+    outline:2px solid #00E5FF;
+
+    outline-offset:4px;
+
+}
+
+/* ==========================================================
+   CUSTOM SCROLL SAFETY
+========================================================== */
+
+*{
+
+    box-sizing:border-box;
+
+}
+
+/* ==========================================================
+   END
+========================================================== */

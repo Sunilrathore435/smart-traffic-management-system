@@ -76,21 +76,13 @@ function CustomTooltip({ active, payload, label }) {
 function VehicleFlowChart({ analytics }) {
 
     const data =
-
         analytics?.trafficHistory?.length > 0
-
             ? analytics.trafficHistory
-
             : [
-
                 {
-
                     time: "--:--",
-
                     vehicles: 0
-
                 }
-
             ];
     return (
 

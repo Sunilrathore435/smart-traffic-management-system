@@ -256,3 +256,96 @@
     box-shadow:0 0 10px rgba(0,229,255,.7);
 
 }
+.right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+.metric{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:10px 14px;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(255,255,255,.06);
+
+    color:#FFF;
+
+}
+
+.metric svg{
+
+    color:#00E5FF;
+
+    font-size:18px;
+
+}
+
+.metric small{
+
+    display:block;
+
+    color:#94A3B8;
+
+    font-size:.72rem;
+
+}
+
+.metric strong{
+
+    font-size:.9rem;
+
+    font-weight:700;
+
+}
+
+.statusBar{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-top:8px;
+
+    font-size:.85rem;
+
+    font-weight:600;
+
+}
+
+.statusBar svg{
+
+    font-size:8px;
+
+}
+
+.subtitle{
+
+    margin-top:4px;
+
+    color:#94A3B8;
+
+    font-size:.9rem;
+
+}
+
+.emergency{
+
+    color:#FF4D4F;
+
+}

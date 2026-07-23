@@ -186,10 +186,7 @@ public class SettingsService {
         runtimeState.setHistoryLimit(
                 settings.getHistoryLimit());
 
-        System.out.println(
-                "Runtime Settings Updated -> " +
-                        runtimeState
-        );
+
     }
 
 }

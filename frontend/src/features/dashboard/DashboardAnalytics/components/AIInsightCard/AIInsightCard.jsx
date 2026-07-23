@@ -7,15 +7,11 @@ import styles from "./AIInsightCard.module.css";
 function AIInsightCard({
 
                            analytics,
-
                            ai,
-
                            emergency,
-
                            signal,
-
                            simulation,
-
+                           traffic,
                            timestamp
 
                        }) {
@@ -26,7 +22,8 @@ function AIInsightCard({
 
             <AIInsightHeader
                 analytics={analytics}
-                ai={ai}
+                simulation={simulation}
+                traffic={traffic}
                 emergency={emergency}
             />
 
@@ -39,6 +36,8 @@ function AIInsightCard({
                 emergency={emergency}
 
                 signal={signal}
+
+                simulation={simulation}
 
             />
 

@@ -4,57 +4,25 @@
 
     flex-direction:column;
 
-    gap:clamp(16px,1.5vw,22px);
+    gap:10px;
 
-    padding:clamp(18px,1.5vw,24px);
+    padding:15px;
 
-    border-radius:18px;
-
-    border:1px solid rgba(255,255,255,.07);
+    border-radius:20px;
 
     background:linear-gradient(
             180deg,
-            rgba(255,255,255,.03),
-            rgba(255,255,255,.015)
+            rgba(255,255,255,.04),
+            rgba(255,255,255,.02)
     );
 
-    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.08);
 
-    transition:.3s ease;
-
-}
-
-.wrapper:hover{
-
-    transform:translateY(-2px);
-
-    border-color:rgba(0,229,255,.18);
-
-    box-shadow:0 12px 28px rgba(0,229,255,.08);
+    backdrop-filter:blur(18px);
 
 }
 
-/* ===========================
-   Heading
-=========================== */
-
-.heading{
-
-    margin:0 0 4px;
-
-    color:#FFFFFF;
-
-    font-size:clamp(1rem,1.2vw,1.2rem);
-
-    font-weight:700;
-
-}
-
-/* ===========================
-   Row
-=========================== */
-
-.row{
+.header{
 
     display:flex;
 
@@ -62,21 +30,77 @@
 
     align-items:center;
 
-    gap:16px;
-
-    transition:.25s;
+    margin-bottom:4px;
 
 }
 
-.row:hover{
+.header h3{
 
-    transform:translateX(3px);
+    margin:0;
+
+    color:#FFF;
+
+    font-size:1.1rem;
+
+    font-weight:700;
 
 }
 
-/* ===========================
-   Left
-=========================== */
+.header span{
+
+    padding:6px 12px;
+
+    border-radius:999px;
+
+    background:rgba(0,229,255,.10);
+
+    color:#00E5FF;
+
+    font-size:.75rem;
+
+    font-weight:700;
+
+}
+
+.card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+    padding:15px;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.03);
+
+    border:1px solid rgba(255,255,255,.06);
+
+    transition:.3s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-3px);
+
+    border-color:rgba(0,229,255,.18);
+
+    box-shadow:0 12px 28px rgba(0,229,255,.08);
+
+}
+
+.top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
 
 .left{
 
@@ -84,85 +108,85 @@
 
     align-items:center;
 
-    gap:12px;
+    gap:14px;
 
 }
 
 .icon{
 
-    font-size:clamp(18px,1.5vw,22px);
+    width:46px;
 
-    transition:.25s;
+    height:46px;
 
-}
+    border-radius:14px;
 
-.row:hover .icon{
+    display:flex;
 
-    transform:scale(1.08);
+    align-items:center;
 
-}
+    justify-content:center;
 
-.label{
+    font-size:22px;
 
-    color:#E2E8F0;
-
-    font-size:clamp(.85rem,.95vw,.95rem);
-
-    font-weight:500;
-
-    line-height:1.35;
+    background:rgba(255,255,255,.05);
 
 }
 
-/* ===========================
-   Value
-=========================== */
+.left h4{
+
+    margin:0;
+
+    color:#FFF;
+
+    font-size:.95rem;
+
+}
+
+.left small{
+
+    color:#94A3B8;
+
+    font-size:.78rem;
+
+}
 
 .value{
 
-    font-size:clamp(2rem,2.2vw,2.5rem);
+    font-size:1.7rem;
 
     font-weight:800;
 
-    line-height:1;
+}
 
-    letter-spacing:-0.5px;
+.progress{
 
-    transition:.25s;
+    height:8px;
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+    background:rgba(255,255,255,.06);
 
 }
 
-.row:hover .value{
+.fill{
 
-    transform:scale(1.03);
+    height:100%;
 
-}
+    border-radius:999px;
 
-/* ===========================
-   Divider
-=========================== */
-
-.row:not(:last-child){
-
-    padding-bottom:14px;
-
-    border-bottom:1px solid rgba(255,255,255,.05);
+    transition:width .8s ease;
 
 }
 
-/* ===========================
-   Responsive
-=========================== */
+@media(max-width:768px){
 
-@media (max-width:768px){
+    .top{
 
-    .wrapper{
+        flex-direction:column;
 
-        padding:18px;
-
-    }
-
-    .row{
+        align-items:flex-start;
 
         gap:12px;
 

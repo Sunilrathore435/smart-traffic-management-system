@@ -1,4 +1,11 @@
-import { dashboardApi, emergencyApi ,pedestrianApi} from "../../services/api";
+import {
+    dashboardApi,
+    historyApi,
+    emergencyApi,
+    pedestrianApi
+} from "../../services/api";
+
+import socketClient from "../../services/websocket/socketClient";
 
 class BackendSimulationEngine {
 
@@ -6,102 +13,274 @@ class BackendSimulationEngine {
         analytics: null,
         traffic: null,
         simulation: null,
-        latestHistory: null
+        history: [],
+        offline: false
     };
 
     listeners = [];
 
-    timer = null;
+    started = false;
+
+    socketListener = null;
+
+    healthCheckTimer = null;
+
+    loading = false;
+
+    // ===================================================
+    // Start Engine
+    // ===================================================
 
     start() {
 
-        if (this.timer) return;
+        if (this.started) {
+            return;
+        }
 
-        this.load();
+        this.started = true;
 
-        this.timer = setInterval(() => {
+        // Initial dashboard load
+        this.load().catch(() => {
+            // Backend may be offline initially
+        });
 
-            this.load();
+        socketClient.connect();
 
-        }, 1000);
+        this.socketListener = async (event) => {
+
+            switch (event.type) {
+
+                case "CONNECTED":
+
+                    this.stopHealthCheck();
+
+                    await this.load();
+
+                    break;
+
+                case "UPDATE":
+
+                    // Refresh dashboard silently
+                    await this.load();
+
+                    break;
+
+                case "DISCONNECTED":
+
+                    if (!this.state.offline) {
+
+                        this.state = {
+                            analytics: null,
+                            traffic: null,
+                            simulation: null,
+                            history: [],
+                            offline: true
+                        };
+
+                        this.notify();
+
+                    }
+
+                    this.startHealthCheck();
+
+                    break;
+
+                default:
+
+                    break;
+
+            }
+
+        };
+
+        socketClient.subscribe(this.socketListener);
 
     }
+
+    // ===================================================
+    // Stop Engine
+    // ===================================================
 
     stop() {
 
-        clearInterval(this.timer);
+        if (!this.started) {
+            return;
+        }
 
-        this.timer = null;
+        this.started = false;
+
+        this.stopHealthCheck();
+
+        if (this.socketListener) {
+
+            socketClient.unsubscribe(this.socketListener);
+
+            this.socketListener = null;
+
+        }
+
+        socketClient.disconnect();
 
     }
 
+    // ===================================================
+    // Health Monitor
+    // ===================================================
+
+    startHealthCheck() {
+
+        if (this.healthCheckTimer) {
+            return;
+        }
+
+        this.healthCheckTimer = setInterval(async () => {
+
+            try {
+
+                await dashboardApi.getLiveDashboard();
+
+                this.stopHealthCheck();
+
+                if (!socketClient.connected) {
+
+                    socketClient.connect();
+
+                }
+
+            } catch (_) {
+
+                // Backend still offline
+
+            }
+
+        }, 3000);
+
+    }
+
+    stopHealthCheck() {
+
+        if (!this.healthCheckTimer) {
+            return;
+        }
+
+        clearInterval(this.healthCheckTimer);
+
+        this.healthCheckTimer = null;
+
+    }
+
+    // ===================================================
+    // Dashboard Loader
+    // ===================================================
+
     async load() {
+
+        if (this.loading) {
+            return;
+        }
+
+        this.loading = true;
 
         try {
 
-            const data =
-                await dashboardApi.getLiveDashboard();
+            const [dashboard, history] = await Promise.all([
 
-            this.state = data;
+                dashboardApi.getLiveDashboard(),
+
+                historyApi.getAll()
+
+            ]);
+
+            const wasOffline = this.state.offline;
+
+            this.state = {
+
+                ...dashboard,
+
+                history: Array.isArray(history)
+                    ? history
+                    : [],
+
+                offline: false
+
+            };
+
+            if (wasOffline) {
+
+                console.log("📡 Dashboard Loaded");
+
+            }
 
             this.notify();
 
-        } catch (error) {
+            return this.state;
 
-            console.error(error);
+        } catch (_) {
+
+            if (!this.state.offline) {
+
+                this.state = {
+
+                    analytics: null,
+                    traffic: null,
+                    simulation: null,
+                    history: [],
+                    offline: true
+
+                };
+
+                this.notify();
+
+            }
+
+        } finally {
+
+            this.loading = false;
 
         }
 
     }
 
+    // ===================================================
+    // Emergency
+    // ===================================================
+
     async triggerEmergency(lane) {
 
-        await emergencyApi.activate(lane);
+        try {
 
-        await this.load();
+            await emergencyApi.activate(lane);
+
+            await this.load();
+
+        } catch (_) {
+
+            // Backend offline
+
+        }
 
     }
 
     async clearEmergency() {
 
-        await emergencyApi.clear();
+        try {
 
-        await this.load();
+            await emergencyApi.clear();
 
-    }
+            await this.load();
 
-    subscribe(listener) {
+        } catch (_) {
 
-        this.listeners.push(listener);
+            // Backend offline
 
-    }
-
-    unsubscribe(listener) {
-
-        this.listeners =
-            this.listeners.filter(
-
-                l => l !== listener
-
-            );
+        }
 
     }
 
-    notify() {
+    // ===================================================
+    // Pedestrian
+    // ===================================================
 
-        this.listeners.forEach(
-
-            listener => listener(this.state)
-
-        );
-
-    }
-
-    getState() {
-
-        return this.state;
-
-    }
     async requestPedestrianCrossing() {
 
         try {
@@ -110,13 +289,65 @@ class BackendSimulationEngine {
 
             await this.load();
 
-        } catch (error) {
+        } catch (_) {
 
-            console.error(error);
+            // Backend offline
 
         }
 
     }
+
+    // ===================================================
+    // Listeners
+    // ===================================================
+
+    subscribe(listener) {
+
+        if (!this.listeners.includes(listener)) {
+
+            this.listeners.push(listener);
+
+        }
+
+    }
+
+    unsubscribe(listener) {
+
+        this.listeners =
+            this.listeners.filter(
+                l => l !== listener
+            );
+
+    }
+
+    notify() {
+
+        this.listeners.forEach(listener => {
+
+            try {
+
+                listener(this.state);
+
+            } catch (error) {
+
+                console.error(error);
+
+            }
+
+        });
+
+    }
+
+    // ===================================================
+    // Getter
+    // ===================================================
+
+    getState() {
+
+        return this.state;
+
+    }
+
 }
 
 export default new BackendSimulationEngine();

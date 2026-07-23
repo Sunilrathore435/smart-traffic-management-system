@@ -88,6 +88,22 @@ function DashboardAI() {
 
         };
 
+    const currentSignalPhase =
+        dashboard.signal?.currentSignalPhase ??
+        dashboard.traffic?.currentSignalPhase ??
+        dashboard.simulation?.currentSignalPhase ??
+        "UNKNOWN";
+
+    const aiSignalPhase =
+        dashboard.ai?.signalPhase ??
+        currentSignalPhase;
+
+    const currentSignalLabel =
+        signalPhaseLabel[currentSignalPhase] ?? currentSignalPhase;
+
+    const aiSignalLabel =
+        signalPhaseLabel[aiSignalPhase] ?? aiSignalPhase;
+
     return (
 
         <GlassCard className={styles.container}>
@@ -129,10 +145,10 @@ function DashboardAI() {
             />
 
             <AISystemStatus
+                ai={ai}
                 vehicles={vehicleCount}
                 signalPhase={
-                    signalPhaseLabel[signalPhase] ??
-                    signalPhase
+                    currentSignalLabel
                 }
                 emergency={emergency.active}
                 aiStatus={
@@ -149,13 +165,9 @@ function DashboardAI() {
 
             <AIDecision
                 signalPhase={
-                    signalPhaseLabel[signalPhase] ??
-                    signalPhase
+                    aiSignalLabel
                 }
-                greenDuration={
-                    dashboard.simulation?.remainingTime ??
-                    0
-                }
+                greenDuration={ai.greenTime}
                 trafficScore={ai.trafficScore ?? 0}
                 priority={
                     emergency.active
@@ -177,20 +189,7 @@ function DashboardAI() {
             />
 
             <AIRecommendation
-
-                queues={queues}
-
-                signalPhase={
-                    signalPhaseLabel[signalPhase] ??
-                    signalPhase
-                }
-
-                greenTime={
-
-                    ai.greenTime || 10
-
-                }
-
+                ai={ai}
                 fuelSaving={
                     analytics.performance?.fuelSaving ??
                     analytics.fuelSaving ??

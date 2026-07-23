@@ -18,11 +18,21 @@ function AISystemStatus({
                             emergency = false,
 
                             aiStatus = "ACTIVE",
+                            ai = {},
 
                             recommendation = "Traffic Flow Normal"
 
                         }) {
 
+    const phaseLabel = {
+        NORTH_SOUTH: "North ↕ South",
+        EAST_WEST: "East ↔ West",
+        ALL_RED: "All Red"
+    };
+
+    const nextPhase =
+        phaseLabel[ai?.signalPhase] ??
+        "Unknown";
     const systems = [
 
         {
@@ -35,8 +45,8 @@ function AISystemStatus({
 
         {
             icon: <FaBrain />,
-            title: "AI Recommendation",
-            value: recommendation,
+            title: "Upcoming Signal Decision",
+            value: nextPhase,
             status: "online",
             label: "AI"
         },

@@ -5,6 +5,7 @@ import com.smarttraffic.backend.model.TrafficSimulationRecord;
 import com.smarttraffic.backend.repository.TrafficSimulationRepository;
 import org.springframework.stereotype.Service;
 import com.smarttraffic.backend.dto.analytics.TrafficHistoryPoint;
+import java.time.format.DateTimeFormatter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -91,7 +92,7 @@ public class AnalyticsService {
                         record.getSimulationTime()
                                 .toLocalTime()
                                 .withNano(0)
-                                .toString(),
+                                .format(TIME_FORMATTER),
 
                         record.getVehiclesPassed()
 
@@ -99,6 +100,8 @@ public class AnalyticsService {
 
                 .toList();
     }
+    private static final DateTimeFormatter TIME_FORMATTER =
+            DateTimeFormatter.ofPattern("hh:mm:ss a");
     /**
      * Calculate total processed vehicles.
      */

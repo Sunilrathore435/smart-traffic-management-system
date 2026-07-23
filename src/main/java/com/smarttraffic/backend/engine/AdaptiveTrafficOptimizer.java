@@ -16,6 +16,7 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
         this.runtimeState = runtimeState;
     }
 
+
     @Override
     public TrafficDecision optimize(Intersection intersection) {
 
@@ -25,26 +26,18 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
 
         if (!runtimeState.isAdaptiveAI()) {
 
-            int vehicles =
-                    runtimeState.getVehiclesPerGreen();
+            int vehicles = runtimeState.getVehiclesPerGreen();
 
             return new TrafficDecision(
-
                     SignalPhase.NORTH_SOUTH,
-
                     Direction.NORTH,
-
                     runtimeState.getMinGreenTime(),
-
                     vehicles,
                     vehicles,
-
                     0,
                     0,
-
                     0,
-
-                    "Adaptive AI Disabled"
+                    "Adaptive AI is disabled. Using fixed traffic signal timing."
             );
         }
 
@@ -54,13 +47,10 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
 
         if (runtimeState.isEmergencyPriority()) {
 
-            TrafficDecision emergency =
-                    checkEmergency(intersection);
+            TrafficDecision emergency = checkEmergency(intersection);
 
             if (emergency != null) {
-
                 return emergency;
-
             }
         }
 
@@ -68,57 +58,34 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
         // Total Vehicles
         // ==========================================
 
-        int totalVehicles =
-                calculateTotalVehicles(intersection);
+        int totalVehicles = calculateTotalVehicles(intersection);
 
         if (totalVehicles == 0) {
 
             return new TrafficDecision(
-
                     SignalPhase.NORTH_SOUTH,
-
                     Direction.NORTH,
-
                     runtimeState.getMinGreenTime(),
-
                     0,
                     0,
                     0,
                     0,
-
                     0,
-
-                    "No vehicles waiting"
+                    "No vehicles are waiting at the intersection."
             );
         }
 
-        LaneAnalysis north =
-                analyzeLane(intersection,
-                        Direction.NORTH,
-                        totalVehicles);
+        LaneAnalysis north = analyzeLane(intersection, Direction.NORTH, totalVehicles);
+        LaneAnalysis south = analyzeLane(intersection, Direction.SOUTH, totalVehicles);
+        LaneAnalysis east = analyzeLane(intersection, Direction.EAST, totalVehicles);
+        LaneAnalysis west = analyzeLane(intersection, Direction.WEST, totalVehicles);
 
-        LaneAnalysis south =
-                analyzeLane(intersection,
-                        Direction.SOUTH,
-                        totalVehicles);
+        double northSouthScore = north.getTrafficScore() + south.getTrafficScore();
+        double eastWestScore = east.getTrafficScore() + west.getTrafficScore();
 
-        LaneAnalysis east =
-                analyzeLane(intersection,
-                        Direction.EAST,
-                        totalVehicles);
-
-        LaneAnalysis west =
-                analyzeLane(intersection,
-                        Direction.WEST,
-                        totalVehicles);
-
-        double northSouthScore =
-                north.getTrafficScore()
-                        + south.getTrafficScore();
-
-        double eastWestScore =
-                east.getTrafficScore()
-                        + west.getTrafficScore();
+        // ==========================================================
+        // NORTH - SOUTH SELECTED
+        // ==========================================================
 
         if (northSouthScore >= eastWestScore) {
 
@@ -137,36 +104,43 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
                             greenTime);
 
             Direction dominant =
-                    north.getTrafficScore()
-                            >= south.getTrafficScore()
-
+                    north.getTrafficScore() >= south.getTrafficScore()
                             ? Direction.NORTH
-
                             : Direction.SOUTH;
 
-            return new TrafficDecision(
+            int nsQueue =
+                    north.getQueueLength() + south.getQueueLength();
 
-                    SignalPhase.NORTH_SOUTH,
+            int ewQueue =
+                    east.getQueueLength() + west.getQueueLength();
 
-                    dominant,
-
-                    greenTime,
-
-                    northAllowed,
-
-                    southAllowed,
-
-                    0,
-
-                    0,
-
+            String reason = String.format(
+                    "North-South selected because it has the highest traffic score (%.1f vs %.1f). Queue: %d vehicles (N:%d, S:%d) compared to East-West: %d vehicles. Planned green time: %ds.",
                     northSouthScore,
-
-                    "North-South phase selected"
-
+                    eastWestScore,
+                    nsQueue,
+                    north.getQueueLength(),
+                    south.getQueueLength(),
+                    ewQueue,
+                    greenTime
             );
 
+            return new TrafficDecision(
+                    SignalPhase.NORTH_SOUTH,
+                    dominant,
+                    greenTime,
+                    northAllowed,
+                    southAllowed,
+                    0,
+                    0,
+                    northSouthScore,
+                    reason
+            );
         }
+
+        // ==========================================================
+        // EAST - WEST SELECTED
+        // ==========================================================
 
         int greenTime =
                 Math.max(
@@ -184,35 +158,38 @@ public class AdaptiveTrafficOptimizer implements TrafficOptimizer {
                         greenTime);
 
         Direction dominant =
-                east.getTrafficScore()
-                        >= west.getTrafficScore()
-
+                east.getTrafficScore() >= west.getTrafficScore()
                         ? Direction.EAST
-
                         : Direction.WEST;
 
-        return new TrafficDecision(
+        int ewQueue =
+                east.getQueueLength() + west.getQueueLength();
 
-                SignalPhase.EAST_WEST,
+        int nsQueue =
+                north.getQueueLength() + south.getQueueLength();
 
-                dominant,
-
-                greenTime,
-
-                0,
-
-                0,
-
-                eastAllowed,
-
-                westAllowed,
-
+        String reason = String.format(
+                "East-West selected because it has the highest traffic score (%.1f vs %.1f). Queue: %d vehicles (E:%d, W:%d) compared to North-South: %d vehicles. Planned green time: %ds.",
                 eastWestScore,
-
-                "East-West phase selected"
-
+                northSouthScore,
+                ewQueue,
+                east.getQueueLength(),
+                west.getQueueLength(),
+                nsQueue,
+                greenTime
         );
 
+        return new TrafficDecision(
+                SignalPhase.EAST_WEST,
+                dominant,
+                greenTime,
+                0,
+                0,
+                eastAllowed,
+                westAllowed,
+                eastWestScore,
+                reason
+        );
     }
     /**
      * Analyze one lane completely.

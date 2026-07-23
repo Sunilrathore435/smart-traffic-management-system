@@ -1,56 +1,43 @@
 import { useEffect, useState } from "react";
 
-import dashboardApi from "../services/api/dashboardApi";
+import BackendSimulationEngine
+    from "../features/traffic/BackendSimulationEngine";
 
 export default function useDashboard() {
 
-    const [dashboard, setDashboard] = useState(null);
+    const [dashboard, setDashboard] = useState(
+        BackendSimulationEngine.getState()
+    );
 
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(
+        BackendSimulationEngine.getState() == null
+    );
 
     const [error, setError] = useState(null);
 
     useEffect(() => {
 
-        loadDashboard();
+        const listener = (state) => {
 
-        const timer = setInterval(
+            setDashboard(state);
 
-            loadDashboard,
+            setLoading(false);
 
-            3000
+            setError(null);
 
-        );
+        };
 
-        return () => clearInterval(timer);
+        BackendSimulationEngine.subscribe(listener);
+
+        BackendSimulationEngine.start();
+
+        return () => {
+
+            BackendSimulationEngine.unsubscribe(listener);
+
+        };
 
     }, []);
-
-    async function loadDashboard() {
-
-        try {
-
-            const data =
-
-                await dashboardApi.getLiveDashboard();
-
-            setDashboard(data);
-
-            setLoading(false);
-
-        }
-
-        catch (err) {
-
-            console.error(err);
-
-            setError(err);
-
-            setLoading(false);
-
-        }
-
-    }
 
     return {
 

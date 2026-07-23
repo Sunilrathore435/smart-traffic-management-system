@@ -1,116 +1,175 @@
+import {
+    FaBrain,
+    FaCircleCheck,
+    FaGaugeHigh
+} from "react-icons/fa6";
+
 import styles from "./AIConfidence.module.css";
 
 function AIConfidence({
 
                           analytics,
-
                           emergency
 
                       }) {
 
-    const percentage =
+    const prediction = analytics?.prediction ?? {};
 
-        emergency?.active
+    const performance = analytics?.performance ?? {};
 
-            ? 100
+    const percentage = emergency?.active
 
-            : analytics?.prediction?.confidence ?? 0;
+        ? 100
+
+        : Math.round(prediction.confidence ?? 0);
+
+    const recommendation =
+
+        prediction.recommendation ??
+
+        "Traffic Stable";
+
+    const efficiency =
+
+        performance.efficiency ??
+
+        0;
 
     let status = "Low";
 
-    if (emergency?.active) {
+    if (emergency?.active)
 
         status = "Emergency Override";
 
-    }
-
-    else if (percentage >= 95) {
+    else if (percentage >= 95)
 
         status = "Excellent";
 
-    }
-
-    else if (percentage >= 85) {
+    else if (percentage >= 85)
 
         status = "Very High";
 
-    }
-
-    else if (percentage >= 70) {
+    else if (percentage >= 70)
 
         status = "High";
 
-    }
-
-    else if (percentage >= 50) {
+    else if (percentage >= 50)
 
         status = "Moderate";
 
-    }
-
-    const radius = 52;
-
-    const circumference = 2 * Math.PI * radius;
-
-    const offset =
-
-        circumference -
-
-        (circumference * percentage) / 100;
-
     return (
 
-        <div className={styles.wrapper}>
+        <section className={styles.wrapper}>
 
-            <div className={styles.circle}>
+            <div className={styles.header}>
 
-                <svg viewBox="0 0 120 120">
+                <h3>
 
-                    <circle
-                        className={styles.bg}
-                        cx="60"
-                        cy="60"
-                        r={radius}
-                    />
+                    AI Confidence
 
-                    <circle
-                        className={styles.progress}
-                        cx="60"
-                        cy="60"
-                        r={radius}
-                        style={{
-                            strokeDasharray: circumference,
-                            strokeDashoffset: offset
-                        }}
-                    />
+                </h3>
 
-                </svg>
+                <span>
 
-                <div className={styles.center}>
+                    Live Prediction
 
-                    <h2>
+                </span>
+
+            </div>
+
+            <div className={styles.card}>
+
+                <div className={styles.top}>
+
+                    <div className={styles.icon}>
+
+                        <FaBrain/>
+
+                    </div>
+
+                    <div className={styles.info}>
+
+                        <h4>
+
+                            Neural Prediction
+
+                        </h4>
+
+                        <small>
+
+                            {recommendation}
+
+                        </small>
+
+                    </div>
+
+                    <div className={styles.percent}>
 
                         {percentage}%
 
-                    </h2>
+                    </div>
 
-                    <span>
+                </div>
 
-                        AI Confidence
+                <div className={styles.progress}>
 
-                    </span>
+                    <div
 
-                    <small>
+                        className={styles.fill}
 
-                        {status}
+                        style={{
 
-                    </small>
+                            width:`${percentage}%`
+
+                        }}
+
+                    />
+
+                </div>
+
+                <div className={styles.metrics}>
+
+                    <div>
+
+                        <small>
+
+                            Status
+
+                        </small>
+
+                        <strong>
+
+                            <FaCircleCheck/>
+
+                            {status}
+
+                        </strong>
+
+                    </div>
+
+                    <div>
+
+                        <small>
+
+                            Efficiency
+
+                        </small>
+
+                        <strong>
+
+                            <FaGaugeHigh/>
+
+                            {efficiency}%
+
+                        </strong>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+        </section>
 
     );
 

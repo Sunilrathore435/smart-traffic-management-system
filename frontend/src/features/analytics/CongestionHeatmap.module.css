@@ -1,12 +1,16 @@
 .card{
 
-    background:var(--color-surface);
+    padding:24px;
 
-    border:1px solid var(--color-border);
+    border-radius:20px;
 
-    border-radius:24px;
+    background:linear-gradient(
+            180deg,
+            rgba(255,255,255,.04),
+            rgba(255,255,255,.02)
+    );
 
-    padding:26px;
+    border:1px solid rgba(255,255,255,.08);
 
     transition:.3s;
 
@@ -14,9 +18,9 @@
 
 .card:hover{
 
-    border-color:rgba(0,229,255,.25);
+    border-color:rgba(0,229,255,.18);
 
-    box-shadow:0 15px 35px rgba(0,229,255,.05);
+    box-shadow:0 15px 35px rgba(0,229,255,.08);
 
 }
 
@@ -28,47 +32,151 @@
 
     align-items:center;
 
-    margin-bottom:28px;
+    margin-bottom:26px;
 
 }
 
-.header span{
+.header h2{
 
-    color:#22C55E;
+    margin:0;
 
-    font-size:.9rem;
-
-    font-weight:600;
+    font-size:1.1rem;
 
 }
 
-.row{
+.header p{
+
+    margin-top:4px;
+
+    color:#94A3B8;
+
+    font-size:.85rem;
+
+}
+
+.live{
 
     display:flex;
 
     align-items:center;
 
-    gap:16px;
+    gap:8px;
 
-    margin-bottom:20px;
+    color:#22C55E;
+
+    font-size:.8rem;
+
+    font-weight:700;
+
+}
+
+.live svg{
+
+    font-size:8px;
+
+    animation:pulse 1.8s infinite;
+
+}
+
+.row{
+
+    margin-bottom:22px;
+
+}
+
+.row:last-child{
+
+    margin-bottom:0;
+
+}
+
+.top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:10px;
 
 }
 
 .name{
 
-    width:70px;
+    color:#FFF;
 
     font-weight:600;
 
+    font-size:.95rem;
+
 }
 
-.bar{
+/* ---------- Status Badge ---------- */
 
-    flex:1;
+.status{
+
+    padding:5px 12px;
+
+    border-radius:999px;
+
+    font-size:.72rem;
+
+    font-weight:700;
+
+    letter-spacing:.4px;
+
+    border:1px solid transparent;
+
+}
+
+.lowBadge{
+
+    color:#22C55E;
+
+    background:rgba(34,197,94,.15);
+
+    border-color:rgba(34,197,94,.35);
+
+}
+
+.mediumBadge{
+
+    color:#FACC15;
+
+    background:rgba(250,204,21,.15);
+
+    border-color:rgba(250,204,21,.35);
+
+}
+
+.highBadge{
+
+    color:#FB923C;
+
+    background:rgba(251,146,60,.15);
+
+    border-color:rgba(251,146,60,.35);
+
+}
+
+.criticalBadge{
+
+    color:#EF4444;
+
+    background:rgba(239,68,68,.15);
+
+    border-color:rgba(239,68,68,.35);
+
+}
+
+/* ---------- Progress ---------- */
+
+.progress{
 
     height:12px;
 
-    border-radius:30px;
+    border-radius:999px;
 
     overflow:hidden;
 
@@ -80,28 +188,86 @@
 
     height:100%;
 
-    border-radius:30px;
+    border-radius:999px;
 
-    background:linear-gradient(
-
-            90deg,
-
-            #00E5FF,
-
-            #2563EB
-
-    );
-
-    transition:width .5s ease;
+    transition:width .6s ease;
 
 }
 
-.row strong{
+.lowFill{
 
-    width:45px;
+    background:linear-gradient(
+            90deg,
+            #22C55E,
+            #4ADE80
+    );
 
-    text-align:right;
+}
 
-    color:#00E5FF;
+.mediumFill{
+
+    background:linear-gradient(
+            90deg,
+            #FACC15,
+            #F59E0B
+    );
+
+}
+
+.highFill{
+
+    background:linear-gradient(
+            90deg,
+            #FB923C,
+            #F97316
+    );
+
+}
+
+.criticalFill{
+
+    background:linear-gradient(
+            90deg,
+            #EF4444,
+            #DC2626
+    );
+
+}
+
+/* ---------- Footer ---------- */
+
+.bottom{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:8px;
+
+}
+
+.bottom small{
+
+    color:#94A3B8;
+
+}
+
+.bottom strong{
+
+    color:#FFF;
+
+    font-weight:700;
+
+}
+
+@keyframes pulse{
+
+    50%{
+
+        opacity:.4;
+
+        transform:scale(.8);
+
+    }
 
 }

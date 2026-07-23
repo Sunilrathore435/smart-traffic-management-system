@@ -73,32 +73,29 @@ public class TrafficSignalStateMachine {
     /**
      * Executes one timer tick.
      */
-    public void tick() {
-        System.out.println(
-                "Tick -> Stage = "
-                        + runtimeState.getCurrentStage()
-                        + " | Pending = "
-                        + (pendingEmergencyDecision != null)
-        );
+    public boolean tick() {
+
         if (!cycleRunning) {
-            return;
+            return false;
         }
 
-        // Emergency waiting while GREEN is active
         if (pendingEmergencyDecision != null
-                && runtimeState.getCurrentStage()
-                == SimulationStage.VEHICLE_GREEN) {
+                && runtimeState.getCurrentStage() == SimulationStage.VEHICLE_GREEN) {
 
             trafficEngine.activateYellowPhase(intersection);
-            return;
+            return true;
         }
 
-        // Normal countdown
         trafficEngine.tick();
 
         if (runtimeState.getRemainingTime() == 0) {
+
             nextStage();
+
+            return true;
         }
+
+        return false;
     }
 
     /**

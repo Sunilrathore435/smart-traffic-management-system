@@ -9,81 +9,52 @@ import {
 import styles from "./AIRecommendation.module.css";
 
 function AIRecommendation({
-
-                              queues = {
-
-                                  north: 0,
-                                  south: 0,
-                                  east: 0,
-                                  west: 0
-
-                              },
-
-                              currentLane = "north",
-
-                              greenTime = 8,
-
+                              ai = {},
                               fuelSaving = 0,
-
                               congestion = 0,
-
                               emergency = false
-
                           }) {
 
     // =====================================
-    // AI Recommended Lane
+    // AI Decision
     // =====================================
 
-    const recommendedLane =
+    const phaseLabel = {
+        NORTH_SOUTH: "North ↕ South",
+        EAST_WEST: "East ↔ West",
+        ALL_RED: "All Red"
+    };
 
-        currentLane ||
+    const nextPhase =
+        phaseLabel[ai?.signalPhase] ??
+        "Unknown";
 
-        Object.keys(queues).reduce(
+    const greenTime =
+        ai?.greenTime ?? 10;
 
-            (a, b) =>
-
-                queues[a] >= queues[b]
-
-                    ? a
-
-                    : b
-
-        );
+    const reason =
+        ai?.reason ??
+        "AI is analyzing live traffic conditions.";
 
     // =====================================
     // Dynamic Metrics
     // =====================================
 
     const reduction = emergency
-
         ? 100
-
-        : Math.max(
-
-            15,
-
-            Math.round(100 - congestion)
-
-        );
+        : Math.max(15, Math.round(100 - congestion));
 
     const nextReview = emergency
-
         ? "Immediate"
-
         : `${greenTime}s`;
 
     const title = emergency
-
-        ? `Emergency Priority → ${recommendedLane.toUpperCase()}`
-
-        : `Extend ${recommendedLane.toUpperCase()} Green Signal`;
+        ? "Emergency Priority Override"
+        : `Next Phase → ${nextPhase}`;
 
     const description = emergency
-
-        ? "Emergency vehicle detected. AI has overridden normal traffic optimization to provide immediate right-of-way."
-
-        : "AI recommendation generated from live traffic density, queue length and adaptive signal optimization.";
+        ? "Emergency vehicle detected. AI has overridden the normal traffic optimization to provide immediate right-of-way."
+        : reason;
 
     return (
 
@@ -92,29 +63,16 @@ function AIRecommendation({
             <div className={styles.header}>
 
                 <h3 className={styles.heading}>
-
-                    AI RECOMMENDATION
-
+                    AI DECISION RECOMMENDATION
                 </h3>
 
                 <div className={styles.badge}>
-
                     <FaTrafficLight />
-
                     <span>
-
-                        {
-
-                            emergency
-
-                                ? "Emergency Override"
-
-                                : "Adaptive AI"
-
-                        }
-
+                        {emergency
+                            ? "Emergency Override"
+                            : "Adaptive AI"}
                     </span>
-
                 </div>
 
             </div>
@@ -128,15 +86,11 @@ function AIRecommendation({
                     <div>
 
                         <strong>
-
                             {title}
-
                         </strong>
 
                         <span>
-
                             {description}
-
                         </span>
 
                     </div>
@@ -150,15 +104,11 @@ function AIRecommendation({
                         <FaChartLine />
 
                         <span>
-
                             Traffic Reduction
-
                         </span>
 
                         <strong>
-
                             {reduction}%
-
                         </strong>
 
                     </div>
@@ -168,15 +118,11 @@ function AIRecommendation({
                         <FaGasPump />
 
                         <span>
-
                             Fuel Saving
-
                         </span>
 
                         <strong>
-
                             {fuelSaving}%
-
                         </strong>
 
                     </div>
@@ -186,15 +132,11 @@ function AIRecommendation({
                         <FaClock />
 
                         <span>
-
-                            Next Review
-
+                            Planned Green Time
                         </span>
 
                         <strong>
-
                             {nextReview}
-
                         </strong>
 
                     </div>

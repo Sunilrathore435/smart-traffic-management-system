@@ -5,7 +5,7 @@ import StatisticsBar from "./StatisticsBar";
 import LogsToolbar from "./LogsToolbar";
 import EventTimeline from "./EventTimeline";
 
-import { historyApi } from "../../services/api";
+import BackendSimulationEngine from "../traffic/BackendSimulationEngine";
 
 import styles from "./History.module.css";
 
@@ -19,55 +19,34 @@ function History() {
 
     const [filter, setFilter] = useState("ALL");
 
-    const [refreshing, setRefreshing] = useState(false);
+    useEffect(() => {
 
-    const loadHistory = useCallback(async () => {
+        const update = (state) => {
 
-        if (refreshing) return;
-
-        try {
-
-            setRefreshing(true);
-
-            const history = await historyApi.getAll();
-
-            setEvents(history);
-
-        }
-
-        catch (error) {
-
-            console.error("Failed to load history", error);
-
-        }
-
-        finally {
-
-            setRefreshing(false);
+            setEvents(state.history || []);
 
             setLoading(false);
 
-        }
+        };
 
-    }, [refreshing]);
+        BackendSimulationEngine.subscribe(update);
 
-    useEffect(() => {
+        update(BackendSimulationEngine.getState());
 
-        loadHistory();
+        return () => {
 
-        const timer = setInterval(() => {
+            BackendSimulationEngine.unsubscribe(update);
 
-            if (!document.hidden) {
+        };
 
-                loadHistory();
+    }, []);
 
-            }
+    // Manual refresh from toolbar
+    const reloadHistory = useCallback(() => {
 
-        }, 5000);
+        BackendSimulationEngine.load();
 
-        return () => clearInterval(timer);
-
-    }, [loadHistory]);
+    }, []);
 
     const filteredEvents = useMemo(() => {
 
@@ -76,13 +55,11 @@ function History() {
         return events.filter(event => {
 
             const category =
-
                 event.emergencyTriggered
                     ? "EMERGENCY"
                     : "SIMULATION";
 
             const matchesFilter =
-
                 filter === "ALL" ||
                 filter === category;
 
@@ -104,7 +81,6 @@ function History() {
                 .toLowerCase();
 
             const matchesSearch =
-
                 searchable.includes(keyword);
 
             return matchesFilter && matchesSearch;
@@ -118,35 +94,26 @@ function History() {
         <section className={styles.container}>
 
             <LogsHeader
-                connected={true}
-                live={true}
+                connected={!BackendSimulationEngine.getState().offline}
+                live={!BackendSimulationEngine.getState().offline}
                 uptime="History Mode"
                 database="MongoDB Atlas"
                 api="Spring Boot 3.5"
             />
 
             <StatisticsBar
-
                 events={events}
-
             />
 
             <LogsToolbar
-
                 search={search}
-
                 setSearch={setSearch}
-
                 filter={filter}
-
                 setFilter={setFilter}
-
-                reloadHistory={loadHistory}
-
+                reloadHistory={reloadHistory}
             />
 
             {
-
                 loading ? (
 
                     <div className={styles.loading}>
@@ -154,9 +121,7 @@ function History() {
                         <div className={styles.loader}></div>
 
                         <p>
-
                             Loading traffic history...
-
                         </p>
 
                     </div>
@@ -164,13 +129,10 @@ function History() {
                 ) : (
 
                     <EventTimeline
-
                         events={filteredEvents}
-
                     />
 
                 )
-
             }
 
         </section>

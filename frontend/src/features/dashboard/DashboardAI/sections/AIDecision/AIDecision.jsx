@@ -23,13 +23,13 @@ function AIDecision({
 
         {
             icon: <FaTrafficLight />,
-            label: "Signal Phase",
+            label: "Next Phase",
             value: signalPhase
         },
 
         {
             icon: <FaClock />,
-            label: "Green Time",
+            label: "Planned Green Time",
             value: `${greenDuration}s`
         },
 

@@ -1,7 +1,14 @@
 import {
     FaBrain,
-    FaLightbulb,
-    FaCheckCircle
+    FaRoute,
+    FaTrafficLight,
+    FaClock,
+    FaCar,
+    FaChartLine,
+    FaBolt,
+    FaRobot,
+    FaCheckCircle,
+    FaExclamationTriangle
 } from "react-icons/fa";
 
 import styles from "./AIInsights.module.css";
@@ -9,61 +16,62 @@ import styles from "./AIInsights.module.css";
 function AIInsights({
 
                         analytics = {},
-
                         ai = {},
-
                         emergency = {}
 
                     }) {
 
-    const insights = [
+    const prediction = analytics.prediction || {};
+    const performance = analytics.performance || {};
+
+    const rows = [
 
         {
-
-            title: "Congestion",
-
-            value: `${analytics.congestion ?? 0}%`,
-
-            message:
-                analytics.congestion > 70
-                    ? "High traffic detected"
-                    : analytics.congestion > 40
-                        ? "Moderate traffic"
-                        : "Traffic flowing smoothly"
-
+            icon: <FaTrafficLight />,
+            label: "Signal Phase",
+            value: ai.signalPhase || "-"
         },
 
         {
-
-            title: "Throughput",
-
-            value: `${analytics.throughput ?? 0}/min`,
-
-            message:
-                "Vehicles cleared every minute"
-
+            icon: <FaRoute />,
+            label: "Dominant Lane",
+            value: ai.dominantLane || "-"
         },
 
         {
-
-            title: "Fuel Saving",
-
-            value: `${analytics.fuelSaving ?? 0}%`,
-
-            message:
-                "Estimated optimization"
-
+            icon: <FaClock />,
+            label: "Green Time",
+            value: `${ai.greenTime ?? 0} sec`
         },
 
         {
+            icon: <FaCar />,
+            label: "Vehicles Allowed",
+            value: ai.vehiclesAllowed ?? 0
+        },
 
-            title: "AI Decision",
+        {
+            icon: <FaChartLine />,
+            label: "Traffic Score",
+            value: `${Math.round(ai.trafficScore ?? 0)}%`
+        },
 
-            value: ai.selectedLane || "-",
+        {
+            icon: <FaRobot />,
+            label: "AI Efficiency",
+            value: `${performance.efficiency ?? 0}%`
+        },
 
-            message:
-                ai.reason || "Adaptive optimization"
+        {
+            icon: <FaBolt />,
+            label: "Prediction",
+            value: prediction.recommendation || "-"
+        },
 
+        {
+            icon: <FaBrain />,
+            label: "Confidence",
+            value: `${prediction.confidence ?? 0}%`
         }
 
     ];
@@ -74,62 +82,48 @@ function AIInsights({
 
             <header className={styles.header}>
 
-                <FaBrain />
+                <div className={styles.icon}>
+                    <FaBrain />
+                </div>
 
                 <div>
 
-                    <h2>
+                    <h2>AI Decision Center</h2>
 
-                        AI Insights
-
-                    </h2>
-
-                    <span>
-
-                        Live Optimization Report
-
-                    </span>
+                    <p>
+                        Adaptive Traffic Intelligence
+                    </p>
 
                 </div>
 
             </header>
 
-            <div className={styles.list}>
+            <div className={styles.grid}>
 
                 {
 
-                    insights.map(item => (
+                    rows.map(row => (
 
                         <div
-                            key={item.title}
-                            className={styles.item}
+                            key={row.label}
+                            className={styles.row}
                         >
 
-                            <div className={styles.left}>
+                            <div className={styles.label}>
 
-                                <FaLightbulb />
+                                {row.icon}
 
-                                <div>
+                                <span>
 
-                                    <h4>
+                                    {row.label}
 
-                                        {item.title}
-
-                                    </h4>
-
-                                    <p>
-
-                                        {item.message}
-
-                                    </p>
-
-                                </div>
+                                </span>
 
                             </div>
 
                             <strong>
 
-                                {item.value}
+                                {row.value}
 
                             </strong>
 
@@ -141,17 +135,37 @@ function AIInsights({
 
             </div>
 
-            <footer className={styles.footer}>
-
-                <FaCheckCircle />
+            <footer
+                className={
+                    emergency.active
+                        ? styles.warning
+                        : styles.success
+                }
+            >
 
                 {
 
                     emergency.active
 
-                        ? "Emergency Override Active"
+                        ?
 
-                        : "AI Optimizer Running Normally"
+                        <>
+
+                            <FaExclamationTriangle />
+
+                            Emergency Override Active
+
+                        </>
+
+                        :
+
+                        <>
+
+                            <FaCheckCircle />
+
+                            AI Optimizer Running Normally
+
+                        </>
 
                 }
 

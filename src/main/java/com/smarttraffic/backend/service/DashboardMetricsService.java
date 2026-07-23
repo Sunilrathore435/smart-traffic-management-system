@@ -60,39 +60,50 @@ public class DashboardMetricsService {
                 ));
 
         // =====================================
-        // Congestion
-        // =====================================
+// Congestion
+// =====================================
 
-        int congestion = Math.min(
+        final int MAX_CAPACITY = 80;
+
+        int congestion = (int) Math.min(
                 100,
-                totalVehicles * 5
+                (totalVehicles * 100.0) / MAX_CAPACITY
         );
 
-        // =====================================
-        // Throughput
-        // =====================================
+// =====================================
+// Throughput
+// =====================================
 
         int throughput =
                 (int) analytics.getAverageVehiclesPassed();
 
-        // =====================================
-        // Live Flow
-        // =====================================
+// =====================================
+// Live Flow
+// =====================================
 
         int flowPercentage = Math.min(
                 100,
                 throughput * 2
         );
 
-        int fuelSaving =
-                Math.max(
-                        0,
-                        100 - congestion
-                );
+// =====================================
+// AI Metrics
+// =====================================
 
-        // =====================================
-        // Prediction
-        // =====================================
+        int efficiency = Math.max(
+                40,
+                100 - (congestion / 2)
+        );
+
+        int fuelSaving = Math.max(
+                20,
+                100 - congestion
+        );
+
+// =====================================
+// Prediction
+// =====================================
+
 
         String recommendation =
                 congestion >= 70
@@ -124,11 +135,24 @@ public class DashboardMetricsService {
 
         PerformanceResponse performance =
                 new PerformanceResponse(
-                        100 - congestion,
+                        efficiency,
                         throughput,
                         fuelSaving
                 );
+        // =====================================
+// Traffic Score
+// =====================================
 
+        double trafficScore =
+                (congestion * 0.40) +
+                        ((100 - fuelSaving) * 0.20) +
+                        ((100 - efficiency) * 0.20) +
+                        ((100 - flowPercentage) * 0.20);
+
+        trafficScore = Math.max(
+                0,
+                Math.min(100, trafficScore)
+        );
         // =====================================
         // System Health
         // =====================================
@@ -164,5 +188,6 @@ public class DashboardMetricsService {
         analytics.setPrediction(prediction);
         analytics.setPerformance(performance);
         analytics.setSystemHealth(systemHealth);
+        analytics.setAverageTrafficScore(trafficScore);
     }
 }

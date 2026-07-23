@@ -6,6 +6,8 @@ class SettingsEngine {
 
         this.listeners = [];
 
+        this.loading = false;
+
         this.settings = {
 
             autoSimulation: true,
@@ -46,12 +48,16 @@ class SettingsEngine {
 
     async load() {
 
+        if (this.loading) {
+            return;
+        }
+
+        this.loading = true;
+
         try {
 
             const data =
                 await settingsApi.getSettings();
-
-            console.log("Settings Loaded:", data);
 
             this.settings = data;
 
@@ -63,11 +69,23 @@ class SettingsEngine {
 
         }
 
-        catch (error) {
+        catch (_) {
 
-            console.error(error);
+            // Backend offline
 
-            this.systemInfo.backendConnected = false;
+            if (this.systemInfo.backendConnected) {
+
+                this.systemInfo.backendConnected = false;
+
+                this.notify();
+
+            }
+
+        }
+
+        finally {
+
+            this.loading = false;
 
         }
 
@@ -90,15 +108,19 @@ class SettingsEngine {
 
             this.hasChanges = false;
 
+            this.systemInfo.backendConnected = true;
+
             this.notify();
 
             return true;
 
         }
 
-        catch (error) {
+        catch (_) {
 
-            console.error(error);
+            this.systemInfo.backendConnected = false;
+
+            this.notify();
 
             return false;
 
@@ -121,13 +143,17 @@ class SettingsEngine {
 
             this.hasChanges = false;
 
+            this.systemInfo.backendConnected = true;
+
             this.notify();
 
         }
 
-        catch (error) {
+        catch (_) {
 
-            console.error(error);
+            this.systemInfo.backendConnected = false;
+
+            this.notify();
 
         }
 
@@ -170,15 +196,11 @@ class SettingsEngine {
     update(key, value) {
 
         if (!(key in this.settings)) {
-
             return;
-
         }
 
         if (this.settings[key] === value) {
-
             return;
-
         }
 
         this.settings[key] = value;
@@ -214,7 +236,11 @@ class SettingsEngine {
 
     subscribe(listener) {
 
-        this.listeners.push(listener);
+        if (!this.listeners.includes(listener)) {
+
+            this.listeners.push(listener);
+
+        }
 
     }
 
@@ -233,15 +259,25 @@ class SettingsEngine {
 
             ...this.settings,
 
-            hasChanges: this.hasChanges
+            hasChanges: this.hasChanges,
+
+            systemInfo: {
+
+                ...this.systemInfo
+
+            }
 
         };
 
-        this.listeners.forEach(
+        this.listeners.forEach(listener => {
 
-            listener => listener(state)
+            try {
 
-        );
+                listener(state);
+
+            } catch (_) {}
+
+        });
 
     }
 

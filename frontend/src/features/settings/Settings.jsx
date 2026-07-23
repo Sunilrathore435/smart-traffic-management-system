@@ -56,7 +56,6 @@ function Settings(){
     useEffect(() => {
 
         const listener = (config) => {
-            console.log("React received:", config);
             setSettings(config);
 
         };
